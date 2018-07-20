@@ -1,0 +1,84 @@
+.toast {
+  position: relative;
+  @include flex(block, row, start, center);
+  display: none;
+  min-width: 256px;
+  padding: 12px 16px;
+  @include border-radius(4px);
+  margin: 16px;
+  background-color: #303030;
+  color: color__light(4);
+  @include depth(3);
+  opacity: 0;
+  p {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  &__container {
+    z-index: 999;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    &--left {
+      @extend .toast__container;
+      @include flex(block, row, start, center);
+    }
+    &--center {
+      @extend .toast__container;
+      @include flex(block, row, center, center);
+    }
+    &--right {
+      @extend .toast__container;
+      @include flex(block, row, end, center);
+    }
+  }
+
+  &.active {
+    display: flex;
+    animation: toast-show 400ms curve(deceleration) forwards;
+  }
+  &.closing {
+    display: flex;
+    animation: toast-hide 400ms curve(acceleration) forwards;
+  }
+}
+
+@keyframes toast-show {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@keyframes toast-hide {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .toast {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+    padding: 16px;
+    &__container {
+      &--left, &--center, &--right {
+        @include flex(block, row, center, center);
+      }
+    }
+  }
+}

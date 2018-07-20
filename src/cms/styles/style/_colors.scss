@@ -1,0 +1,67 @@
+// Light colors
+$light: (
+  1: #E0E0E0,
+  2: #F5F5F5,
+  3: #FAFAFA,
+  4: #FFFFFF
+);
+@function color__light($key: 3) {
+  @return map-get($light, $key);
+}
+
+// Theme colors
+/// Primary
+$theme__primary: (
+  50: #F2E7FE,
+  100: #DBB2FF,
+  200: #BB86FC,
+  300: #985EFF,
+  400: #7F39FB,
+  500: #6200EE,
+  600: #5600E8,
+  700: #3700B3,
+  800: #30009C,
+  900: #23036A
+);
+@function color__primary($key: 500) {
+  @return map-get($theme__primary, $key);
+}
+
+/// Accent
+$theme__accent: (
+  50: #C8FFF4,
+  100: #70EFDE,
+  200: #03DAC6,
+  300: #00C4B4,
+  400: #00B3A6,
+  500: #01A299,
+  600: #019592,
+  700: #018786,
+  800: #017374,
+  900: #005457
+);
+@function color__accent($key: 500) {
+  @return map-get($theme__accent, $key);
+}
+
+// Special colors
+$error: #F44336;
+
+$color-brand: (
+  green: #1EB980,
+  orange: #FF6859,
+  yellow: #FFCF44,
+  purple: #B15DFF,
+  blue: #72DEFF
+);
+@function color-brand($key) {
+  @return map-get($color-brand, $key);
+}
+
+$color-theme: (
+  background: #33333D,
+  card: #373740
+);
+@function color-theme($key) {
+  @return map-get($color-theme, $key);
+}

@@ -1,0 +1,71 @@
+.header {
+  &__main {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+
+    background-color: color__light(4);
+    color: rgba(black, .87);
+    @include depth(5, true);
+
+    &.dull {
+      height: 48px;
+      @include depth(0);
+    }
+  }
+
+  &__row {
+    z-index: 2;
+    position: relative;
+    @include layout-row(space-between);
+    width: var(--container-width);
+    margin-left: auto;
+    margin-right: auto;
+
+    &-list {
+      position: relative;
+      width: 100%;
+      &--left {
+        @extend .header__row-list;
+        @include layout-row__list(left);
+      }
+      &--right {
+        @extend .header__row-list;
+        @include layout-row__list(right);
+      }
+      li {
+        position: relative;
+        h1 {
+          margin: 0 8px;
+          font-size: 20px;
+          font-weight: 400;
+        }
+        .button__icon {
+          --fab-size: 48px !important;
+        }
+        a {
+          padding-top: 16px;
+          padding-bottom: 16px;
+
+          color: rgba(black, .87);
+
+          &.active {
+            color: color__primary(500);
+            font-weight: 500;
+          }
+
+        }
+      }
+    }
+  }
+
+  &__logo {
+    a {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-weight: 800;
+      color: black;
+    }
+  }
+}

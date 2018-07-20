@@ -1,0 +1,93 @@
+.form {
+  &__main {
+    position: relative;
+    padding: 32px 0;
+    &--card {
+      @extend .form__main;
+      @include border-radius(4px);
+      background-color: color__light(4);
+      @include depth(1);
+    }
+  }
+  &__row {
+    position: relative;
+    @include layout_row(start);
+    .form__group, .form__group--select {
+      width: 100%;
+      &:first-child {
+        padding-top: 0;
+        margin-top: calc(var(--form-spacing) * 2);
+      }
+      &:last-child {
+        padding-bottom: 0;
+        margin-bottom: calc(var(--form-spacing) * 2);
+      }
+    }
+  }
+  &-row {
+    --form-spacing: 32px;
+    position: relative;
+    padding: 0 var(--form-spacing);
+    margin: var(--form-spacing) 0;
+  }
+  &__group {
+    --form-spacing: 16px;
+    position: relative;
+    @include flex(block, column, start, start);
+    padding: 0 calc(var(--form-spacing) * 2);
+    margin: calc(var(--form-spacing) * 2) 0;
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+
+    &--title {
+      @extend .form__group;
+
+      span {
+        position: relative;
+        display: block;
+        width: 100%;
+
+        &.title {
+          @extend .type__display--1;
+        }
+        &.subtitle {
+          @extend .type__title;
+          color: rgba(black, .57);
+        }
+      }
+    }
+
+    &--right {
+      @extend .form__group;
+      @include flex(block, row-reverse, start, center);
+    }
+
+    &--items {
+      --form-spacing: 16px;
+      position: relative;
+      @include flex(block, column, start, start);
+      width: calc(100% - var(--form-spacing) * 2 * 2);
+      padding: 0 0 12px 0;
+      border: 2px solid color__light(2);
+      @include border-radius(4px);
+
+      h2 {
+        position: relative;
+        width: 100%;
+        padding: 16px;
+        margin-top: 0;
+        color: rgba(black, .87);
+        background-color: color__light(2);
+        font-size: 18px;
+        font-weight: 400;
+      }
+    }
+    &--image {
+      @extend .form__group;
+    }
+    &--select {
+      @extend .form__group;
+    }
+  }
+}

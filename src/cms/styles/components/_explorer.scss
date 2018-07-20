@@ -1,0 +1,55 @@
+.explorer {
+  &__header {
+    @include layout-row(space-between);
+    border-bottom: 1px solid rgba(black, .08);
+    z-index: 1;
+
+    &-list {
+      position: relative;
+      width: 100%;
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+      background-color: color__light(2);
+      &--left {
+        @extend .explorer__header-list;
+        @include layout-row__list(left);
+      }
+      &--right {
+        @extend .explorer__header-list;
+        @include layout-row__list(right);
+      }
+    }
+  }
+  &__container {
+    display: grid;
+    grid-template-columns: 256px 526px;
+    min-width: 768px;
+    max-height: 90vh;
+    aside {
+      background-color: color__light(3);
+      border-right: 1px solid rgba(black, .04);
+      ul {
+        li {
+          cursor: pointer;
+          position: relative;
+          width: 100%;
+          padding: 8px 0 8px 16px;
+          @include transition(280ms, curve());
+          @include user-select();
+          white-space: nowrap;
+          i {
+            margin-right: 16px;
+          }
+
+          &:hover {
+            background-color: rgba(black, .08);
+          }
+          &:active {
+            background-color: rgba(black, .12);
+          }
+        }
+      }
+    }
+    main {}
+  }
+}

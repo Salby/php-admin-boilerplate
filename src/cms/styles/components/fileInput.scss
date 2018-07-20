@@ -1,0 +1,71 @@
+/*.form__group--image {
+
+  label {
+    all: initial;
+
+    background-color: color__primary();
+    color: color__light();
+
+    @include type('Roboto', medium, 16);
+  }
+
+  input[type='file'] {
+    all: initial;
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+}*/
+
+.file {
+  position: relative;
+
+  &__image { @extend .file }
+
+  &__title {
+    display: block;
+    padding: 0 12px;
+    @include type('Roboto', regluar, 16);
+    margin-bottom: 8px !important;
+  }
+  &__label {
+    margin-left: 8px;
+    @include type('Roboto', medium, 14);
+  }
+
+  label {
+    all: initial;
+    cursor: pointer;
+
+    @include flex(block, row, center, center);
+    padding: 8px 12px;
+    border: 2px solid darken(color__light(1), 4%);
+    border-radius: 4px;
+
+    background-color: color__light(1);
+    color: color__primary(600);
+    @include depth(0);
+
+    @include transition(280ms, curve());
+
+    &:hover {
+      background-color: darken(color__light(1), 2%);
+      @include depth(1);
+      transform: translateY(-1px);
+    }
+  }
+
+  input[type='file'] {
+    all: initial;
+
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+}

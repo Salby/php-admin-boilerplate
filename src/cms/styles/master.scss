@@ -1,0 +1,95 @@
+// Helpers
+@import "helpers";
+
+// Style
+@import "style/colors";
+@import "style/typography";
+
+// Layout
+@import "layout/productGrid";
+
+// Components
+@import "components/button";
+@import "components/menu";
+@import "components/card";
+@import "components/form";
+@import "components/textFields";
+@import "components/fileInput";
+@import "components/select";
+@import "components/switch";
+@import "components/formItems";
+@import "components/header";
+@import "components/table";
+@import "components/dialog";
+@import "components/toast";
+@import "components/explorer";
+@import "components/cart";
+@import "components/counter";
+@import "components/order";
+@import "components/checkout";
+
+// General styles
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-kerning: auto;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+*::-moz-focus-inner {
+  border: 0;
+}
+*::selection {
+  background-color: rgba(color__primary(500), .3);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  background-color: color__light(3);
+  min-height: 100vh;
+  &.center {
+    @include flex(block, column, center, center);
+    min-height: 100vh;
+  }
+  &.admin {
+    @include flex(block, column, start, center);
+  }
+}
+
+main {
+  width: 100vw;
+}
+@media only screen and (min-width: 960px) and (max-width: 1259px) {
+  main {
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media only screen and (min-width: 1260px) {
+  main {
+    width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

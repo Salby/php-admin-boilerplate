@@ -1,0 +1,92 @@
+.dialog {
+  &__container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    @include flex(block, column, center, center);
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(white, .64);
+      @include vendor(animation, dialog-overlay-open 280ms curve(deceleration) forwards);
+    }
+
+    &.closing {
+
+      &::after {
+        @include vendor(animation, dialog-overlay-close 75ms curve(acceleration) forwards);
+      }
+
+      .dialog__card {
+        @include vendor(animation, dialog-card-close 75ms curve(acceleration) forwards);
+      }
+    }
+  }
+  &__card {
+    position: relative;
+    @include flex(block, column, start, start);
+    @include border-radius(6px);
+    background-color: color__light(4);
+    color: rgba(black, .87);
+    @include box-shadow(8);
+    @include vendor(animation, dialog-card-open 280ms curve(deceleration) forwards);
+    z-index: 1;
+  }
+  &__header {
+    @include layout-row(space-between);
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+  }
+  &__body {
+    padding: 16px;
+  }
+  &__footer {
+    @include layout-row(end);
+    width: 100%;
+    height: 48px;
+    padding: 0 8px;
+  }
+}
+
+@keyframes dialog-overlay-open {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+@keyframes dialog-overlay-close {
+  from { opacity: 1 }
+  to { opacity: 0 }
+}
+
+@keyframes dialog-card-open {
+  from {
+    transform: translateY(16px) scale(.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes dialog-card-close {
+  from {
+    transform: translateY(0px) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(4px) scale(0.98);
+    opacity: 0;
+  }
+}

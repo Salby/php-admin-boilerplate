@@ -1,0 +1,56 @@
+.order {
+
+  &__container {
+    margin: 0;
+  }
+
+  &-card {
+    position: fixed;
+    top: 56px;
+    left: 16px;
+    width: calc(100vw - 32px);
+    height: calc(100vh - 112px);
+    border-radius: 4px;
+    overflow: hidden;
+    @include depth(2);
+
+    &__progress {
+      position: relative;
+      @include flex(block, row, space-between, center);
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+
+      counter-reset: step-counter;
+
+      li {
+        display: block;
+        @include flex(block, row, center, center);
+        width: 28px;
+        height: 28px;
+        border-radius: 100%;
+        background-color: color__light(2);
+        color: rgba(black, .18);
+        font-weight: 500;
+        font-size: 13px;
+
+        counter-increment: step-counter;
+
+        &::after {
+          pointer-events: none;
+          content: '';
+          position: absolute;
+          top: calc(50% - 4px);
+          left: 14px;
+          height: 8px;
+          background-color: color__primary();
+        }
+
+        &.active {
+          background-color: color__primary();
+          color: color__light();
+        }
+      }
+    }
+  }
+}

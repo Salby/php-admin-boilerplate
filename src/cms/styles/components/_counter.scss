@@ -1,0 +1,92 @@
+.counter {
+  &__container {
+    position: relative;
+    @include flex(inline, row, space-between, center);
+    height: 36px;
+    border-radius: 4px;
+    margin: 16px 0;
+
+    background-color: color__light(4);
+
+    @include depth(1);
+
+    @include transition(300ms, curve());
+
+    overflow: hidden;
+
+    &:hover {
+      @include depth(2);
+      @include transform(
+        translateY(-1px)
+      );
+    }
+
+    input[type='number'] {
+      @include flex(block, row, center, center);
+      width: 36px;
+      height: inherit;
+      border: none;
+
+      background-color: transparent;
+
+      font-weight: 500;
+      text-align: center;
+
+      @include appearance;
+      -moz-appearance: textfield;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        @include appearance;
+        margin: 0;
+      }
+    }
+
+    &--vertical {
+      @extend .counter__container;
+      @include flex(block, column, space-between, center);
+      width: 36px;
+      height: calc(36px * 3);
+
+      .counter__button {
+        &--next, &--prev {
+          i {transform: rotate(-90deg)}
+        }
+      }
+    }
+  }
+  &__button {
+    cursor: pointer;
+    @include appearance;
+    @include flex(block, row, center, center);
+    height: inherit;
+    border: none;
+    background-color: transparent;
+    color: rgba(black, .87);
+    @include transition(280ms, curve());
+    &--next, &--prev {
+      @extend .counter__button;
+    }
+
+    &:hover {
+      background-color: rgba(black, .05);
+    }
+    &:active {
+      background-color: rgba(black, .1);
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .counter {
+    &__container {
+      &:hover {
+        @include depth(1);
+        transform: translateY(0px);
+      }
+      &:active {
+        @include depth(2);
+        transform: translateY(-1px);
+      }
+    }
+  }
+}

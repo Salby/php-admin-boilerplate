@@ -5,7 +5,7 @@ class auth
     /* - GLOBAL VARIABLES - */
     private $db;
 
-    public $auth_user_name;
+    public $auth_username;
     public $auth_password;
     public $auth_user_id;
     public $login_path;
@@ -33,12 +33,12 @@ class auth
 		    session_start();
 	    }
         //Set User Name & Password from POST variables
-        $this->auth_user_name = filter_input(INPUT_POST, "login_user_name", FILTER_SANITIZE_STRING);
+        $this->auth_username = filter_input(INPUT_POST, "login_username", FILTER_SANITIZE_STRING);
         $this->auth_password = filter_input(INPUT_POST, "login_password", FILTER_SANITIZE_STRING);
         $this->logout = filter_input(INPUT_GET, "logout", FILTER_SANITIZE_STRING);
         $this->login_path = DOCROOT . "/cms/incl/login.php";
         //Unset POST login variables
-        unset($_POST['login_user_name']);
+        unset($_POST['login_username']);
         unset($_POST['login_password']);
     }
 
@@ -49,12 +49,13 @@ class auth
             $this->logout();
         }
 
-        if ($this->auth_user_name && $this->auth_password){
+        if ($this->auth_username && $this->auth_password) {
             $this->login();
         }
+
         //Otherwise check if still logged in
         else {
-            if (!$this->check_session()){
+            if (!$this->check_session()) {
                 if ($this->require_login) {
                     echo $this->login_form();
                     exit();
@@ -68,10 +69,10 @@ class auth
     // - INITIATE USER LOGIN
     private function login() {
         //Look for this username in the database
-        $params = array($this->auth_user_name);
+        $params = array($this->auth_username);
         $sql = "SELECT id, password, salt 
                 FROM user 
-                WHERE name = ? 
+                WHERE username = ? 
                 AND deleted = 0";
         //If there is a User with this name
         if ($row = $this->db->fetch_array($sql, $params)) {
@@ -127,15 +128,15 @@ class auth
                 FROM user_session 
                 WHERE session_id = ? 
                 AND logged_in = 1";
-
-        if ($row = $this->db->fetch_array($sql, $params)) {
-            $this->auth_user_id = $row [0] ['user_id'];
+        $row = $this -> db -> fetch_array($sql, $params);
+        if ($row) {
+            $this -> auth_user_id = $row [0] ['user_id'];
             $sql = "SELECT role.name
             FROM user 
             JOIN role
             ON user.role = role.id
             WHERE user.id = $this->auth_user_id";
-            $this->auth_role = $this->db->fetch_value($sql);
+            $this -> auth_role = $this -> db -> fetch_value($sql);
             return $this->auth_user_id;
         }
         else {

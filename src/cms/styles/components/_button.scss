@@ -1,0 +1,220 @@
+.button {
+  --fab-size: 56px;
+
+  cursor: pointer;
+  @include appearance();
+  border: none;
+  @include border-radius(4px);
+  @include transition(280ms, curve());
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  text-decoration: none;
+  &__raised {
+    @extend .button;
+    color: color__light(4);
+    @include depth(1);
+    &--primary {
+      @extend .button__raised;
+      background-color: color__primary(500);
+      &:active {
+        background-color: lighten(color__primary(500), 10%);
+      }
+    }
+    &--accent {
+      @extend .button__raised;
+      background-color: color__accent(500);
+      &:active {
+        background-color: lighten(color__accent(500), 10%);
+      }
+    }
+
+    &:active {
+      @include depth(2);
+    }
+  }
+  &__flat {
+    @extend .button;
+    background-color: transparent;
+    &--primary {
+      @extend .button__flat;
+      background-color: rgba(color__primary(500), 0);
+      color: color__primary(500);
+      &:active {
+        background-color: rgba(color__primary(500), .2);
+      }
+      &-bordered {
+        @extend .button__flat--primary;
+        border: 2px solid color__primary(500);
+      }
+    }
+    &--accent {
+      @extend .button__flat;
+      background-color: rgba(color__accent(500), 0);
+      color: color__accent(500);
+      &:active {
+        background-color: rgba(color__accent(500), .2);
+      }
+      &-bordered {
+        @extend .button__flat--accent;
+        border: 2px solid color__accent(500);
+      }
+    }
+    &--danger {
+      @extend .button__flat;
+      background-color: rgba($error, 0);
+      color: $error;
+      &:active {
+        background-color: rgba($error, .2);
+      }
+      &-bordered {
+        @extend .button__flat--danger;
+        border: 2px solid $error;
+      }
+    }
+  }
+  &__fab {
+    @extend .button;
+    @include depth(2);
+    &--primary {
+      @extend .button__fab;
+      background-color: color__primary(500);
+      &:active {
+        background-color: lighten(color__primary(500), 10%);
+      }
+    }
+    &--accent {
+      @extend .button__fab;
+      background-color: color__accent(500);
+      &:active {
+        background-color: lighten(color__accent(500), 10%);
+      }
+    }
+
+    &:active {
+      @include depth(3);
+    }
+  }
+  &__icon {
+    @extend .button;
+    background-color: transparent;
+    &--primary {
+      @extend .button__icon;
+      background-color: rgba(color__primary(500), 0);
+      color: color__primary(500);
+      &:active {
+        background-color: rgba(color__primary(500), .2);
+      }
+    }
+    &--accent {
+      @extend .button__icon;
+      background-color: rgba(color__accent(500), 0);
+      color: color__accent(500);
+      &:active {
+        background-color: rgba(color__accent(500), .2);
+      }
+    }
+    &--light {
+      @extend .button__icon;
+      background-color: rgba(color__light(4), 0);
+      color: color__light(4);
+      &:active {
+        background-color: rgba(color__light(4), .2);
+      }
+    }
+    &--dark {
+      @extend .button__icon;
+      background-color: rgba(rgba(black, .87), 0);
+      color: rgba(black, .87);
+      &:active {
+        background-color: rgba(rgba(black, .87), .1);
+      }
+    }
+  }
+
+  &__raised, &__flat {
+    padding: 8px 13px;
+  }
+  &__fab, &__icon {
+    @include flex(block, row, space-around, center);
+    min-width: var(--fab-size);
+    height: var(--fab-size);
+    padding: 8px;
+    @include border-radius(var(--fab-size));
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .button {
+    &__raised {
+      &:hover {
+        @include depth(2);
+      }
+    }
+    &__flat {
+      &--primary {
+        &:hover {
+          background-color: rgba(color__primary(500), .1);
+        }
+        &:active {
+          background-color: rgba(color__primary(500), .2);
+        }
+      }
+      &--accent {
+        &:hover {
+          background-color: rgba(color__accent(500), .1);
+        }
+        &:active {
+          background-color: rgba(color__accent(500), .2);
+        }
+      }
+      &--danger {
+        &:hover {
+          background-color: rgba($error, .1);
+        }
+        &:active {
+          background-color: rgba($error, .2);
+        }
+      }
+    }
+    &__fab {
+      &:hover {
+        @include depth(3);
+      }
+    }
+    &__icon {
+      &--primary {
+        &:hover {
+          background-color: rgba(color__primary(500), .1);
+        }
+        &:active {
+          background-color: rgba(color__primary(500), .2);
+        }
+      }
+      &--accent {
+        &:hover {
+          background-color: rgba(color__accent(500), .1);
+        }
+        &:active {
+          background-color: rgba(color__accent(500), .2);
+        }
+      }
+      &--light {
+        &:hover {
+          background-color: rgba(color__light(4), .1);
+        }
+        &:active {
+          background-color: rgba(color__light(4), .2);
+        }
+      }
+      &--dark {
+        &:hover {
+          background-color: rgba(rgba(black, .87), .05);
+        }
+        &:active {
+          background-color: rgba(rgba(black, .87), .1);
+        }
+      }
+    }
+  }
+}

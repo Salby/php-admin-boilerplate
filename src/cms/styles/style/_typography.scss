@@ -1,0 +1,115 @@
+.type {
+  font-family: 'Roboto', sans-serif;
+  &__display {
+    @extend .type;
+    &--1 {
+      @extend .type__display;
+      font-family: 'Roboto', sans-serif;
+      font-size: 34px;
+      font-weight: 400;
+    }
+    &--2 {
+      @extend .type__display;
+      font-size: 45px;
+      font-weight: 400;
+    }
+    &--3 {
+      @extend .type__display;
+      font-size: 56px;
+      font-weight: 400;
+    }
+    &--4 {
+      @extend .type__display;
+      font-size: 112px;
+      font-weight: 300;
+    }
+  }
+  &__headline {
+    @extend .type;
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+  }
+  &__title {
+    @extend .type;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  &__body {
+    @extend .type;
+    font-size: 14px;
+    &--1 {
+      font-weight: 400;
+    }
+    &--2 {
+      font-weight: 500;
+    }
+  }
+  &__caption {
+    @extend .type;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &--align {
+    &-left {
+      text-align: left;
+    }
+    &-right {
+      text-align: right;
+    }
+  }
+
+  &--transform {
+    &-uppercase {
+      text-transform: uppercase;
+    }
+    &-capitalize {
+      text-transform: capitalize;
+    }
+  }
+}
+
+@function type-size($size) {
+  $calc: 0.0625 * $size;
+  @return #{$calc}rem;
+}
+
+$font-weight: (
+  light: 300,
+  regular: 400,
+  medium: 500
+);
+
+@mixin type($typeface, $weight, $size, $transform: initial) {
+  font-family: $typeface, sans-serif;
+  font-weight: map-get($font-weight, $weight);
+  font-size: type-size($size);
+  text-transform: $transform;
+}
+
+h1 {
+  @include type('Roboto', light, 96);
+}
+h2 {
+  @include type('Roboto', light, 60);
+}
+h3 {
+  @include type('Roboto', regular, 48);
+}
+h4 {
+  @include type('Roboto', regular, 34);
+}
+h5 {
+  @include type('Roboto', regular, 24);
+}
+h6 {
+  @include type('Roboto', medium, 20);
+}
+p {
+  @include type('Roboto', regular, 14);
+}
+label {
+  @include type('Roboto', regular, 12);
+}
