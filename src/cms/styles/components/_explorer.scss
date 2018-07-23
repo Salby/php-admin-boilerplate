@@ -9,7 +9,7 @@
       width: 100%;
       padding-top: 8px !important;
       padding-bottom: 8px !important;
-      background-color: color__light(2);
+      background-color: color-light(2);
       &--left {
         @extend .explorer__header-list;
         @include layout-row__list(left);
@@ -26,7 +26,7 @@
     min-width: 768px;
     max-height: 90vh;
     aside {
-      background-color: color__light(3);
+      background-color: color-light(3);
       border-right: 1px solid rgba(black, .04);
       ul {
         li {

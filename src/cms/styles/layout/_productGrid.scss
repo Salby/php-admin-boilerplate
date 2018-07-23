@@ -34,7 +34,7 @@
 
     opacity: 0;
 
-    background-color: color__light(4);
+    background-color: color-light(4);
     @include depth(1);
 
     overflow: hidden;

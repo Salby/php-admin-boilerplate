@@ -5,7 +5,7 @@
     &--card {
       @extend .form__main;
       @include border-radius(4px);
-      background-color: color__light(4);
+      background-color: color-light(4);
       @include depth(1);
     }
   }
@@ -69,7 +69,7 @@
       @include flex(block, column, start, start);
       width: calc(100% - var(--form-spacing) * 2 * 2);
       padding: 0 0 12px 0;
-      border: 2px solid color__light(2);
+      border: 2px solid color-light(2);
       @include border-radius(4px);
 
       h2 {
@@ -78,7 +78,7 @@
         padding: 16px;
         margin-top: 0;
         color: rgba(black, .87);
-        background-color: color__light(2);
+        background-color: color-light(2);
         font-size: 18px;
         font-weight: 400;
       }

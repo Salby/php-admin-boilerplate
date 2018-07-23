@@ -12,20 +12,20 @@
   text-decoration: none;
   &__raised {
     @extend .button;
-    color: color__light(4);
+    color: color-light(4);
     @include depth(1);
     &--primary {
       @extend .button__raised;
-      background-color: color__primary(500);
+      background-color: color-primary(500);
       &:active {
-        background-color: lighten(color__primary(500), 10%);
+        background-color: lighten(color-primary(500), 10%);
       }
     }
     &--accent {
       @extend .button__raised;
-      background-color: color__accent(500);
+      background-color: color-accent(500);
       &:active {
-        background-color: lighten(color__accent(500), 10%);
+        background-color: lighten(color-accent(500), 10%);
       }
     }
 
@@ -38,26 +38,26 @@
     background-color: transparent;
     &--primary {
       @extend .button__flat;
-      background-color: rgba(color__primary(500), 0);
-      color: color__primary(500);
+      background-color: rgba(color-primary(500), 0);
+      color: color-primary(500);
       &:active {
-        background-color: rgba(color__primary(500), .2);
+        background-color: rgba(color-primary(500), .2);
       }
       &-bordered {
         @extend .button__flat--primary;
-        border: 2px solid color__primary(500);
+        border: 2px solid color-primary(500);
       }
     }
     &--accent {
       @extend .button__flat;
-      background-color: rgba(color__accent(500), 0);
-      color: color__accent(500);
+      background-color: rgba(color-accent(500), 0);
+      color: color-accent(500);
       &:active {
-        background-color: rgba(color__accent(500), .2);
+        background-color: rgba(color-accent(500), .2);
       }
       &-bordered {
         @extend .button__flat--accent;
-        border: 2px solid color__accent(500);
+        border: 2px solid color-accent(500);
       }
     }
     &--danger {
@@ -78,16 +78,16 @@
     @include depth(2);
     &--primary {
       @extend .button__fab;
-      background-color: color__primary(500);
+      background-color: color-primary(500);
       &:active {
-        background-color: lighten(color__primary(500), 10%);
+        background-color: lighten(color-primary(500), 10%);
       }
     }
     &--accent {
       @extend .button__fab;
-      background-color: color__accent(500);
+      background-color: color-accent(500);
       &:active {
-        background-color: lighten(color__accent(500), 10%);
+        background-color: lighten(color-accent(500), 10%);
       }
     }
 
@@ -100,26 +100,26 @@
     background-color: transparent;
     &--primary {
       @extend .button__icon;
-      background-color: rgba(color__primary(500), 0);
-      color: color__primary(500);
+      background-color: rgba(color-primary(500), 0);
+      color: color-primary(500);
       &:active {
-        background-color: rgba(color__primary(500), .2);
+        background-color: rgba(color-primary(500), .2);
       }
     }
     &--accent {
       @extend .button__icon;
-      background-color: rgba(color__accent(500), 0);
-      color: color__accent(500);
+      background-color: rgba(color-accent(500), 0);
+      color: color-accent(500);
       &:active {
-        background-color: rgba(color__accent(500), .2);
+        background-color: rgba(color-accent(500), .2);
       }
     }
     &--light {
       @extend .button__icon;
-      background-color: rgba(color__light(4), 0);
-      color: color__light(4);
+      background-color: rgba(color-light(4), 0);
+      color: color-light(4);
       &:active {
-        background-color: rgba(color__light(4), .2);
+        background-color: rgba(color-light(4), .2);
       }
     }
     &--dark {
@@ -154,18 +154,18 @@
     &__flat {
       &--primary {
         &:hover {
-          background-color: rgba(color__primary(500), .1);
+          background-color: rgba(color-primary(500), .1);
         }
         &:active {
-          background-color: rgba(color__primary(500), .2);
+          background-color: rgba(color-primary(500), .2);
         }
       }
       &--accent {
         &:hover {
-          background-color: rgba(color__accent(500), .1);
+          background-color: rgba(color-accent(500), .1);
         }
         &:active {
-          background-color: rgba(color__accent(500), .2);
+          background-color: rgba(color-accent(500), .2);
         }
       }
       &--danger {
@@ -185,26 +185,26 @@
     &__icon {
       &--primary {
         &:hover {
-          background-color: rgba(color__primary(500), .1);
+          background-color: rgba(color-primary(500), .1);
         }
         &:active {
-          background-color: rgba(color__primary(500), .2);
+          background-color: rgba(color-primary(500), .2);
         }
       }
       &--accent {
         &:hover {
-          background-color: rgba(color__accent(500), .1);
+          background-color: rgba(color-accent(500), .1);
         }
         &:active {
-          background-color: rgba(color__accent(500), .2);
+          background-color: rgba(color-accent(500), .2);
         }
       }
       &--light {
         &:hover {
-          background-color: rgba(color__light(4), .1);
+          background-color: rgba(color-light(4), .1);
         }
         &:active {
-          background-color: rgba(color__light(4), .2);
+          background-color: rgba(color-light(4), .2);
         }
       }
       &--dark {

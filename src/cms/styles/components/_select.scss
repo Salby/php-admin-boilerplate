@@ -63,7 +63,7 @@
     --animate-padding-top: 8px;
     --animate-padding-bottom: 8px;
 
-    background-color: color__light(4);
+    background-color: color-light(4);
     @include depth(2);
 
     opacity: 0;

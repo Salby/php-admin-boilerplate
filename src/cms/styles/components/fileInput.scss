@@ -42,17 +42,17 @@
 
     @include flex(block, row, center, center);
     padding: 8px 12px;
-    border: 2px solid darken(color__light(1), 4%);
+    border: 2px solid darken(color-light(1), 4%);
     border-radius: 4px;
 
-    background-color: color__light(1);
-    color: color__primary(600);
+    background-color: color-light(1);
+    color: color-primary(600);
     @include depth(0);
 
     @include transition(280ms, curve());
 
     &:hover {
-      background-color: darken(color__light(1), 2%);
+      background-color: darken(color-light(1), 2%);
       @include depth(1);
       transform: translateY(-1px);
     }

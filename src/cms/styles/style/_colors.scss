@@ -5,7 +5,7 @@ $light: (
   3: #FAFAFA,
   4: #FFFFFF
 );
-@function color__light($key: 3) {
+@function color-light($key: 3) {
   @return map-get($light, $key);
 }
 
@@ -23,7 +23,7 @@ $theme__primary: (
   800: #30009C,
   900: #23036A
 );
-@function color__primary($key: 500) {
+@function color-primary($key: 500) {
   @return map-get($theme__primary, $key);
 }
 
@@ -40,8 +40,18 @@ $theme__accent: (
   800: #017374,
   900: #005457
 );
-@function color__accent($key: 500) {
+@function color-accent($key: 500) {
   @return map-get($theme__accent, $key);
+}
+
+// Text colors
+$color-text--dark: (
+  high: rgba(black, .87),
+  medium: rgba(black, .60),
+  disabled: rgba(black, .38)
+);
+@function color-text($emphasis: high, $theme: $color-text--dark) {
+  @return map-get($theme, $emphasis);
 }
 
 // Special colors

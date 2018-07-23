@@ -38,7 +38,7 @@
     border-radius: 4px;
 
     color: rgba(black, .87);
-    background-color: color__light(4);
+    background-color: color-light(4);
     @include depth(2);
     opacity: 0;
     transition: 300ms curve();

@@ -1,10 +1,11 @@
 .card {
   position: relative;
   @include border-radius(4px);
-  background-color: color__light(4);
+  background-color: color-light(4);
   color: rgba(black, .87);
-  @include depth(1);
+  @include shadow();
   font-weight: 400;
+  overflow: hidden;
   &__header {
     position: relative;
     top: 0;
@@ -46,11 +47,12 @@
         display: none !important;
         width: 100%;
         height: inherit;
-        background-color: color__primary(50);
-        color: rgba(black, .87);
+        background-color: color-primary(50);
+        color: color-primary();
         ul {
           .contextualAmount {
             padding: 0 8px;
+            @include type('Roboto', medium, 14);
           }
         }
 

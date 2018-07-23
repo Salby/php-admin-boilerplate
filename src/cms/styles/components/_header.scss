@@ -1,71 +1,91 @@
-.header {
-  &__main {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 100;
+.drawer {
+  position: sticky;
+  top: 0;
+  grid-area: d;
+  z-index: 1000;
 
-    background-color: color__light(4);
-    color: rgba(black, .87);
-    @include depth(5, true);
+  border-right: 1px solid color-light(1);
 
-    &.dull {
-      height: 48px;
-      @include depth(0);
-    }
-  }
+  background-color: color-light(4);
+  color: color-text(high);
 
-  &__row {
-    z-index: 2;
+  overflow-y: auto;
+
+  &__header {
     position: relative;
-    @include layout-row(space-between);
-    width: var(--container-width);
-    margin-left: auto;
-    margin-right: auto;
-
-    &-list {
-      position: relative;
-      width: 100%;
-      &--left {
-        @extend .header__row-list;
-        @include layout-row__list(left);
-      }
-      &--right {
-        @extend .header__row-list;
-        @include layout-row__list(right);
-      }
-      li {
-        position: relative;
-        h1 {
-          margin: 0 8px;
-          font-size: 20px;
-          font-weight: 400;
-        }
-        .button__icon {
-          --fab-size: 48px !important;
-        }
-        a {
-          padding-top: 16px;
-          padding-bottom: 16px;
-
-          color: rgba(black, .87);
-
-          &.active {
-            color: color__primary(500);
-            font-weight: 500;
-          }
-
-        }
-      }
-    }
+    @include flex(block, row, start, center);
+    height: var(--header-height);
+    padding: 0 16px;
+  }
+  &__title {
+    @include type('Roboto', medium, 20);
   }
 
-  &__logo {
-    a {
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-weight: 800;
-      color: black;
+  &__list {
+    padding: 8px 0;
+    border-bottom: 1px solid color-light(1);
+
+    &:last-child {
+      border-bottom: none;
     }
+  }
+  &__link {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    @include flex(block, row, start, center);
+    height: 48px;
+    padding: 0 16px;
+
+    color: color-text();
+    @include type('Roboto', medium, 14);
+
+    i {
+      margin-right: 36px;
+      color: #757575;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      width: calc(100% - 16px);
+      height: calc(100% - 8px);
+      border-radius: 4px;
+      background-color: transparent;
+      z-index: -1;
+      @include transition(180ms, curve());
+    }
+
+    &:hover {
+      &::after { background-color: rgba(black, .05) }
+    }
+    &:focus {
+      &::after { background-color: rgba(black, .1) }
+    }
+
+    &.active {
+      color: color-primary();
+      i { color: color-primary() }
+      &::after { background-color: rgba(color-primary(), .1) }
+    }
+  }
+}
+
+.appbar {
+  position: sticky;
+  top: 0;
+  grid-area: h;
+  z-index: -1;
+
+  padding: 0 16px;
+
+  background-color: color-primary();
+  color: color-light(3);
+
+  h1 {
+    height: var(--header-height);
+    @include type('Roboto', medium, 20);
   }
 }

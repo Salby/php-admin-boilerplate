@@ -40,7 +40,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(color__light(3), .8);
+      background-color: rgba(color-light(3), .8);
       opacity: 0;
     }
 
@@ -74,7 +74,7 @@
     overflow-y: auto;
     opacity: 0;
 
-    background-color: color__light(4);
+    background-color: color-light(4);
     .header__row {
       height: 56px;
       @include depth(2, true);
@@ -154,7 +154,7 @@
     @include flex(block, row, space-between, center);
     width: 100%;
     height: 64px;
-    background-color: color__light(4);
+    background-color: color-light(4);
     @include depth(5);
     span {
       margin: 0 16px;

@@ -36,7 +36,7 @@
       height: 24px;
       border-radius: 24px;
 
-      background-color: color__light(4);
+      background-color: color-light(4);
       @include depth();
 
       @include transition(280ms, curve());
