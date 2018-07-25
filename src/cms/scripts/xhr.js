@@ -51,16 +51,33 @@ var xhr = {
       }
   }*/
   request: obj => {
-    obj.data = obj.data || {};
 
+    let params;
     let GET = obj.method.toUpperCase() === 'GET';
     let POST = obj.method.toUpperCase() === 'POST';
-    let params = typeof obj.data == 'string' ? obj.data : Object.keys(obj.data).map(key => {
-      return encodeURIComponent(key) + '=' + encodeURIComponent(data[k]);
-    }).join('&');
-    let request = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    let u = GET ? obj.url + '?' + params : obj.url;
-    if (GET || POST) var m = obj.method.toUpperCase();
+    /*let params = obj.data
+      ? typeof obj.data === 'string'? obj.data : Object.keys(obj.data).map(key => {
+          return encodeURIComponent(key) + '=' + encodeURIComponent(data[key]);
+        }).join('&')
+      : '';*/
+    if (obj.data) {
+      params = obj.data === 'string'
+        ? obj.data
+        : Object.keys(obj.data).map(key => {
+          return encodeURIComponent(key) + '=' + encodeURIComponent(obj.data[key]);
+        }).join('&');
+    } else {
+      params = '';
+    }
+    let request = window.XMLHttpRequest
+      ? new XMLHttpRequest()
+      : new ActiveXObject('Microsoft.XMLHTTP');
+    let u = GET
+      ? obj.url + '?' + params
+      : obj.url;
+    const m = GET || POST
+      ? obj.method.toUpperCase()
+      : 'GET';
     request.open(m, u);
     request.onreadystatechange = () => {
       if (request.readyState > 3 && request.status === 200) obj.success(request.responseText);

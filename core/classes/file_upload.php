@@ -8,20 +8,29 @@
 
 class file_upload {
 
+    public $allowed_mimes = array(
+        'image' => [
+            'png' => 'image/png',
+            'jpeg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'svg' => 'image/svg+xml'
+        ],
+    );
+
     public function image($conf) {
 
         $defaults = array(
-            'format' => 'jpeg',
+            'type' => 'jpeg',
             'quality' => 80,
-            'max_size' => 100
+            'max_dimension' => 1920
         );
         $conf = array_merge($defaults, $conf);
 
         $destination_folder = $conf['destination'];
         $name = $conf['name'];
-        $format = $conf['format'];
+        $type = $conf['type'];
         $quality = $conf['quality'];
-        $max_size = $conf['max_size'];
+        $max_dimension = $conf['max_dimension'];
 
         $allowed_mimes = array(
             'png' => 'image/png',
@@ -37,20 +46,37 @@ class file_upload {
             if ($validate) { // File is image.
 
                 if (in_array($mime, $allowed_mimes)) { // Mime is allowed.
-                    save_image($tmp, $destination_folder.$name.'.'.$format, array_search($mime, $allowed_mimes), $quality, $max_size);
-                    return $destination_folder.$name.'.'.$format;
+                    $name = $this -> file_exists($destination_folder.$name.'.'.$type);
+                    save_image($tmp, $name, $type, $quality, $max_dimension);
+                    return $name;
                 } else { // Mime isn't allowed.
-                    echo "This isn't the right format, sorry :/";
+                    return false;
                 }
 
             } else { // File is not image.
-                echo "Sorry, this isn't right :(";
+                return false;
+            }
+        }
+    }
+
+    public function file_exists($name) {
+        $file = $name;
+        $exists = file_exists($file);
+
+        $i = 0;
+        while ($exists) {
+            $i++;
+            $exploded = explode('.', $name);
+            $new_file = $exploded[0] . '_' . $i . '.' . $exploded[1];
+            if (!file_exists($new_file)) {
+                return $new_file;
+                break;
             }
         }
     }
 }
 
-function save_image($source_image, $destination, $mime, $quality, $max_size) {
+function save_image($source_image, $destination, $type, $quality, $max_size) {
 
     $size = getimagesize($source_image);
     if ($size[0] > $max_size || $size[1] > $max_size) {
@@ -70,18 +96,18 @@ function save_image($source_image, $destination, $mime, $quality, $max_size) {
     $image = imagecreatetruecolor($width, $height);
     imagecopyresampled($image, $src, 0, 0, 0, 0, $width, $height, $size[0], $size[1]);
     imagedestroy($src);
-    switch (strtoupper($mime)) {
+    switch (strtoupper($type)) {
+        case 'SVG':
+            move_uploaded_file($source_image, $destination);
+            break;
         case 'GIF':
-            //$image = imagecreatefromgif($source_image);
             imagegif($image, $destination);
             break;
         case 'PNG':
-            //$image = imagecreatefrompng($source_image);
             imagepng($image, $destination, $quality);
             break;
         default:
         case 'JPEG':
-            //$image = imagecreatefromjpeg($source_image);
             imagejpeg($image, $destination, $quality);
             break;
     }

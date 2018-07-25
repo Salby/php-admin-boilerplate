@@ -43,7 +43,7 @@
     opacity: 0;
     transition: 300ms curve();
 
-    li {
+    li, input[type='submit'] {
       user-select: none;
       cursor: pointer;
       position: relative;
@@ -68,7 +68,7 @@
 @media (min-width: 769px) {
   .menu {
     ul {
-      li {
+      li, input[type='submit'] {
         height: 32px;
         padding: 0 15px 0 16px;
 

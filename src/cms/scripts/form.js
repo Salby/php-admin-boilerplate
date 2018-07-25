@@ -1,4 +1,5 @@
 class Form {
+
   constructor(formId, config) {
     config = config || {};
     this.validate = config.validate || true;
@@ -11,6 +12,16 @@ class Form {
       errorEmpty: 'Field is empty',
       errorIncorrect: 'Input is incorrect'
     };
+
+    this.types = [
+      'text',
+      'email',
+      'password',
+      'number',
+      'datetime',
+      'tel',
+      'file'
+    ];
 
     this.form = document.getElementById(formId);
     this.inputs = this.form.querySelectorAll('input, textarea, select');
@@ -26,7 +37,7 @@ class Form {
       let input = this.inputs[i];
       let type = this.inputs[i].type;
       if (input.tagName === 'INPUT') {
-        if (type === 'text' || type === 'email' || type === 'password' || type === 'number' || type === 'datetime' || type === 'tel') {
+        if (this.types.find(el => el === type)) {
           this.initField(this.inputs[i]);
         }
       } else if (input.tagName === 'TEXTAREA') {
@@ -68,6 +79,9 @@ class Form {
       });
     }
     field.addEventListener('focusout', () => {
+      if (field.label && !this.customStyles) {
+        field.label.classList.remove('focus');
+      }
       field.updateState();
       if (this.validate && field.required) {
         this.validateField(field, false);
@@ -82,7 +96,7 @@ class Form {
       let input = this.inputs[i];
       let type = input.type;
       if (input.required) {
-        if (type === 'text' || type === 'email' || type === 'password' || type === 'number' || type === 'datetime' || type) {
+        if (this.types.find(el => el === type)) {
           if (!this.validateField(input)) return false;
         } else if (input.tagName === 'TEXTAREA') {
           if (!this.validateField(input)) return false;
@@ -121,7 +135,10 @@ class Form {
   }
 
   fieldError(field, message) {
-    if (!field.container.classList.contains('error')) field.container.classList.add('error');
+    //if (!field.container.classList.contains('error')) field.container.classList.add('error');
+    if (field.container && field.container.classList.contains('error')) {
+      field.container.classList.add('error');
+    }
     if (!findSibling(field, 'small')) {
       field.messageContainer = document.createElement('small');
       field.messageContainer.innerText = message;

@@ -1,10 +1,10 @@
 class Toast {
-    constructor(message, config) {
+    constructor(config) {
         config = config || {};
         this.position = config.position || 'center';
         this.timeout = config.timeout || 3000;
 
-        this.message = message;
+        this.message = config.message;
 
         this.create();
     }

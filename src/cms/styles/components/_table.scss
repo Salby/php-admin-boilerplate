@@ -5,6 +5,7 @@
   border-spacing: 0;
   font-family: 'Roboto', sans-serif;
   border-collapse: collapse;
+  margin-bottom: 4px;
   tr {
     border-top: 1px solid color-light(1);
     border-bottom: 1px solid color-light(1);
@@ -50,22 +51,15 @@
           height: 48px;
           padding-right: 0;
           padding-left: 9%;
-          .menu__container {
-            position: relative;
-            right: 8px;
-            @include flex(block, row, end, center);
-            width: unset;
-            height: unset;
-            .menu__button {
-              @include flex(block, row, center, center);
-              right: 0;
-              width: unset !important;
-              height: unset !important;
-              padding: 0 !important;
-              border-radius: 42px;
-              margin: 0 12px;
-              &:hover, &:active { background-color: transparent !important }
-            }
+          form {
+            width: 100%;
+          }
+          input[type='submit'] {
+            appearance: none;
+            border: none;
+            background-color: transparent;
+            width: 100%;
+            padding: 0 !important;
           }
         }
 
@@ -116,6 +110,78 @@
       @include transform(rotate(45deg) rotateX(90deg) translateY(-1px) scale(0));
       opacity: 0;
       @include transition(560ms, curve());
+    }
+  }
+
+  &-footer {
+    position: relative;
+    @include flex(block, row-reverse, start, center);
+    width: 100%;
+    height: 56px;
+    padding: 8px;
+
+    &__next, &__prev {
+      cursor: pointer;
+      appearance: none;
+      position: relative;
+      @include flex(block, row, center, center);
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 48px;
+
+      background-color: transparent;
+      color: color-text(medium);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 100%;
+        background-color: rgba(black, .1);
+        opacity: 0;
+        transform: scale(0);
+        transition: opacity 180ms curve(), transform 280ms curve();
+      }
+
+      &:active {
+        &::after {
+          opacity: 1;
+          transform: scale(.6);
+        }
+      }
+
+      &.disabled {
+        pointer-events: none;
+        color: color-text(disabled);
+        &::after {
+          width: 0;
+          height: 0;
+        }
+      }
+    }
+    &__status {
+      padding: 0 16px;
+      @include type('Roboto', medium, 11);
+      color: color-text(medium);
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .table {
+    &-footer {
+      &__next, &__prev {
+        &:hover {
+          &::after {
+            opacity: 1;
+            transform: scale(.6);
+          }
+        }
+      }
     }
   }
 }

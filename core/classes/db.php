@@ -113,7 +113,7 @@ class db {
 
     /**
      * DB Fetch Array
-     * Send a SQL select query with or without parametres
+     * Send a SQL select query with or without parameters
      * and returns an array with given values
      * @param string $sql
      * @param array $params
@@ -296,6 +296,11 @@ class db {
      */
     public function close() {
         $this->db->close();
+    }
+
+    public function get_amount($table_name) {
+        $sql = "SELECT * FROM ".$table_name;
+        return count($this->fetch_array($sql));
     }
 }
 

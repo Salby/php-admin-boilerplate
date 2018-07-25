@@ -56,6 +56,13 @@
       @include depth(1);
       transform: translateY(-1px);
     }
+
+    &.hovering {
+      transform: translateY(0px);
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
   }
 
   input[type='file'] {

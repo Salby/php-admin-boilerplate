@@ -108,7 +108,10 @@ class form_builder {
             }
         }
 
-        return $table_data;
+        $return = array(
+            'columns' => $table_data
+        );
+        return $return;
     }
 
     /**
@@ -126,6 +129,9 @@ class form_builder {
         $standalone = isset($conf['standalone'])
             ? $conf['standalone']
             : false;
+        $source = isset($conf['source'])
+            ? $conf['source']
+            : [];
         $table_data = $this -> analyze_table($conf['table_name'], $standalone); // Get columns from table
 
         echo "<form class='form__main' id='$conf[table_name]' action='$conf[action]' method='$conf[method]' novalidate enctype='multipart/form-data'>";
@@ -137,7 +143,7 @@ class form_builder {
             echo $this -> title($labels['_form_title'], $subTitle);
         }
 
-        foreach ($table_data as $col) {
+        foreach ($table_data['columns'] as $col) {
 
             if ($col['Key'] !== 'PRI') { // Make sure column isn't a primary key.
 
@@ -151,7 +157,9 @@ class form_builder {
                     ? 'required' // Required.
                     : ''; // Not required.
 
-                $regex = $this -> regex; // Get regex from class.
+                $input -> value = array_key_exists($col['Field'], $source)
+                    ? $source[$col['Field']]
+                    : null;
                 
                 $input -> id = $conf['table_name'] . '_' . $col['Field']; // Build identifier.
 
@@ -260,7 +268,10 @@ class form_builder {
                             // Build select box options from foreign values.
                             $options = "";
                             foreach ($foreign_values as $row) {
-                                $options .= "<option value='$row[id]'>$row[name]</option>"; // Insert option.
+                                $selected = array_key_exists($col['Field'], $source) && $row['name'] === $source[$col['Field']]
+                                    ? 'selected'
+                                    : '';
+                                $options .= "<option value='$row[id]' $selected>$row[name]</option>"; // Insert option.
                             }
 
                             // Build select box and insert options.
@@ -313,6 +324,8 @@ class form_builder {
         $input -> required = $config -> required;
         $input -> contained = $config -> contained;
 
+        $input -> value = $config -> value;
+
         if ($column['Comment'] === 'file') { // Comment - file upload.
             return $input -> image();
         }
@@ -343,7 +356,7 @@ class form_builder {
 
         elseif ($column['Type'] == 'tinyint(1)') { // Tinyint(1) - switch.
 
-            return $input ->switch($column['Default']);
+            return $input -> toggle($column['Default']);
 
         }
 
@@ -501,7 +514,7 @@ class Input {
      *
      * @return string
      */
-    public function switch($checked = false) {
+    public function toggle($checked = false) {
 
         if (!isset($this->name)) {
             $this -> name = $this -> id;
@@ -574,7 +587,7 @@ class Input {
 
 class Icon {
 
-    public const ICONS = array(
+    const ICONS = array(
         'arrow_back' => '<i class="material-icons">arrow_back</i>',
         'cloud_upload' => '<i class="material-icons">cloud_upload</i>',
         'menu' => '<i class="material-icons">menu</i>',

@@ -1,6 +1,9 @@
 .drawer {
   position: sticky;
   top: 0;
+  left: 0;
+  width: var(--drawer-width);
+  height: 100vh;
   grid-area: d;
   z-index: 1000;
 
@@ -74,7 +77,7 @@
 }
 
 .appbar {
-  position: sticky;
+  position: relative;
   top: 0;
   grid-area: h;
   z-index: -1;
@@ -85,7 +88,9 @@
   color: color-light(3);
 
   h1 {
+    @include flex(block, row, start, center);
     height: var(--header-height);
-    @include type('Roboto', medium, 20);
+    @include type('Roboto', regular, 28);
+    margin: 0;
   }
 }

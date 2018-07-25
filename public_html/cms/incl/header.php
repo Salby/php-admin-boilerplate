@@ -48,7 +48,7 @@ function links($links, $activeName) {
                 'users.php',
                 'people'
             ]
-        ], $pageTitle)?>
+        ], explode(' ', $pageTitle)[0])?>
         </ul>
         <ul class="drawer__list">
         <?=links([
@@ -62,7 +62,7 @@ function links($links, $activeName) {
                 'categories.php',
                 'bookmark'
             ]
-        ], $pageTitle)?>
+        ], explode(' ', $pageTitle)[0])?>
         </ul>
     </nav>
 

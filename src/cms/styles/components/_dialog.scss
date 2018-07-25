@@ -1,7 +1,104 @@
 .dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 10000;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: color-light(4);
+    opacity: 0;
+    transition: opacity 280ms curve();
+    z-index: -1;
+  }
 
-  &__card {}
-  &__title {}
-  &__body {}
-  &__actions {}
+  &__card {
+    width: 280px;
+    border-radius: 4px;
+
+    background-color: color-light(4);
+    @include shadow(24);
+
+    overflow: hidden;
+  }
+
+  &__title {
+    @include type('Roboto', regular, 20);
+    padding: 24px 24px 0 24px;
+    margin: 0;
+    color: color-text(high);
+  }
+
+  &__body {
+    @include type('Roboto', regular, 16);
+    padding: 24px 24px 0 24px;
+    margin: 0;
+    color: color-text(medium);
+  }
+
+  &__actions {
+    height: calc(52px + 28px);
+    padding: 28px 8px 0 24px;
+    @include flex(block, row-reverse, start, center);
+
+    button {
+      margin-left: 8px;
+      text-transform: capitalize;
+    }
+  }
+
+
+  &.active {
+    @include flex(block, column, center, center);
+    &::after { animation: dialog-overlay---open 180ms curve(deceleration) forwards }
+
+    .dialog__card { animation: dialog__card---open 180ms curve(deceleration) forwards }
+  }
+  &.closing {
+    @include flex(block, column, center, center);
+    &::after { animation: dialog-overlay---close 180ms curve(acceleration) forwards }
+
+    .dialog__card { animation: dialog__card---close 180ms curve(acceleration) forwards }
+  }
+}
+
+@keyframes dialog-overlay---open {
+  from { opacity: 0 }
+  to { opacity: .8 }
+}
+@keyframes dialog-overlay---close {
+  from { opacity: .8 }
+  to { opacity: 0 }
+}
+
+@keyframes dialog__card---open {
+  from {
+    opacity: 0;
+    transform: scale(.8) translateY(16px);
+    @include shadow(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0px);
+    @include shadow(24);
+  }
+}
+@keyframes dialog__card---close {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0px);
+    @include shadow(24);
+  }
+  to {
+    opacity: 0;
+    transform: scale(.9) translateY(8px);
+    @include shadow(0);
+  }
 }

@@ -64,7 +64,7 @@ class Select {
             elem.selectedIndex = i;
             selectBox.innerHTML = option.innerHTML;
             let selected = selectList.querySelectorAll('.same-as-selected');
-            selected.forEach((o) => {
+            selected.forEach(o => {
               o.classList.remove('same-as-selected');
             });
             option.classList.add('same-as-selected');
