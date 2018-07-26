@@ -2,10 +2,6 @@
 
 class form_builder {
 
-    public $regex = array(
-        'numbers_only' => '/^\d+$/'
-    );
-
     protected $db;
 
     public function __construct() {
@@ -36,7 +32,12 @@ class form_builder {
                       REFERENCED_TABLE_NAME = '$table_name'";
             $table_rel_data = $this->db->fetch_array($sql);
 
-            if (!empty($table_rel_data)) {
+            $relates = $this -> outer_relations([
+                'table_name' => $table_name,
+                'table_rel_data' => $table_rel_data
+            ]);
+
+            if ($relates) {
                 foreach ($table_rel_data as $row) {
                     $table_rel_name = $row['TABLE_NAME'];
                     $sql = "SHOW FULL COLUMNS FROM " . $table_rel_name;
@@ -112,6 +113,17 @@ class form_builder {
             'columns' => $table_data
         );
         return $return;
+    }
+
+    public function outer_relations($config) {
+        if ($config['table_name'] && $config['table_rel_data']) {
+            foreach ($config['table_rel_data'] as $rel) {
+                if ($rel['REFERENCED_TABLE_NAME'] != $config['table_name']) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     /**

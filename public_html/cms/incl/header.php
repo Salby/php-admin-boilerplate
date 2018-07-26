@@ -51,6 +51,7 @@ function links($links, $activeName) {
         ], explode(' ', $pageTitle)[0])?>
         </ul>
         <ul class="drawer__list">
+            <li class="drawer__list-title">Product</li>
         <?=links([
             [
                 'Products',
@@ -63,6 +64,21 @@ function links($links, $activeName) {
                 'bookmark'
             ]
         ], explode(' ', $pageTitle)[0])?>
+        </ul>
+        <ul class="drawer__list">
+            <li class="drawer__list-title">Blog</li>
+        <?=links([
+            [
+                'Posts',
+                'posts.php',
+                'library_books'
+            ],
+            [
+                'Tags',
+                'tags.php',
+                'label'
+            ]
+        ], $pageTitle)?>
         </ul>
     </nav>
 

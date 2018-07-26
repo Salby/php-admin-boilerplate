@@ -58,8 +58,8 @@ class Table {
       this.updateNext();
       this.updatePrev();
 
-      this.next.addEventListener('click', () => this.updateSource('next'));
-      this.prev.addEventListener('click', () => this.updateSource('prev'));
+      this.next.addEventListener('click', () => this.updateSource('next', callback));
+      this.prev.addEventListener('click', () => this.updateSource('prev', callback));
 
     } else {
       callback();
@@ -67,7 +67,10 @@ class Table {
   }
 
   updateNext() {
-    if (this.step === Math.ceil(this.max/this.limit)) {
+    const PAGES = Math.ceil(this.max/this.limit) === 0
+      ? 1
+      : Math.ceil(this.max/this.limit);
+    if (this.step === PAGES) {
       this.next.classList.add('disabled');
     } else {
       this.next.classList.remove('disabled');
@@ -81,7 +84,7 @@ class Table {
     }
   }
 
-  updateSource(method) {
+  updateSource(method, callback) {
 
     let step;
     if (method === 'next') {
@@ -105,15 +108,18 @@ class Table {
         this.updateNext();
         this.updatePrev();
         this.update();
+        this.contextual.update(this.table.checked);
         new Menu('*[class^=menu]');
+        callback();
       }
     });
   }
-
-
   updateStatus(step) {
     this.step = step;
-    const max = Math.ceil(this.max/this.limit);
+    let max = Math.ceil(this.max/this.limit);
+    if (max === 0) {
+      max = 1;
+    }
     this.status.innerText = `${this.step} / ${max}`;
   }
 

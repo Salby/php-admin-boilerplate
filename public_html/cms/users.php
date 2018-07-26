@@ -65,7 +65,7 @@ switch (strtoupper($mode)) {
         });
 
         let deleteDialog = new Dialog({
-          title: 'Careful.',
+          title: 'Caution.',
           body: 'Are you sure you want to delete the selected user(s)?',
           actions: {
             confirm: 'TableActions.delete(\'users.php?mode=delete\', \'users\'); Dialog.close(deleteDialog.dialog)',
@@ -194,7 +194,7 @@ switch (strtoupper($mode)) {
                         <td><?=$user['email']?></td>
                         <td><?=$user['role']?></td>
                         <td class="type--align-right"><?=$user['suspended']?></td>
-                        <td class="options">
+                        <td align="right" class="options">
                             <div class="menu--right">
                                 <button><i class="material-icons">more_vert</i></button>
                                 <ul>

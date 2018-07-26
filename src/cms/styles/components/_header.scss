@@ -31,6 +31,14 @@
     &:last-child {
       border-bottom: none;
     }
+
+    &-title {
+      @include flex(block, row, start, center);
+      @include type('Roboto', medium, 13);
+      height: 28px;
+      padding: 0 16px;
+      color: color-text(medium);
+    }
   }
   &__link {
     cursor: pointer;

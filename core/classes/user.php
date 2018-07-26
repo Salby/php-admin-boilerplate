@@ -40,7 +40,7 @@ class User extends file_upload {
 
         return $this -> db -> fetch_array($sql);
     }
-    public function get_item($id, $return_row = false) {
+    public function get_item($id) {
         $params = array($id);
         $sql = "SELECT user.*,
                   role.name AS role
@@ -50,23 +50,7 @@ class User extends file_upload {
                 WHERE
                   user.id = ?";
         $row = $this -> db -> fetch_array($sql, $params);
-        if (!empty($row)) {
-            $row = call_user_func_array('array_merge', $row);
-
-            if ($return_row) {
-                return $row;
-            } else {
-                $this->id = $row['id'];
-                $this->username = $row['username'];
-                $this->password = $row['password'];
-                $this->email = $row['email'];
-                $this->avatar = $row['avatar'];
-                $this->role = $row['role'];
-                $this->suspended = $row['suspended'];
-                $this->deleted = $row['deleted'];
-                $this->salt = $row['salt'];
-            }
-        }
+        return call_user_func_array('array_merge', $row);
     }
 
     public function save($destination, $image_type = 'jpeg') {
@@ -76,7 +60,7 @@ class User extends file_upload {
         if ($this -> id) { // Update:
 
             // Find previous avatar and compare.
-            $user = $this -> get_item($this->id, true);
+            $user = $this -> get_item($this->id);
             $original_avatar = $user['avatar'];
 
             // Replace image_url if avatar is set.
@@ -156,8 +140,8 @@ class User extends file_upload {
                     WHERE
                       id IN ($update)";
         } else { // Soft delete - Sets deleted column to 1:
-            $sql = "UPDATE user
-                    SET deleted = 1
+            $sql = "UPDATE user SET
+                      deleted = 1
                     WHERE
                       id IN ($update)";
         }
