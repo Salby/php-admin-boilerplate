@@ -83,6 +83,59 @@ switch (strtoupper($mode)) {
         break;
 
 
+    case 'EDIT':
+
+        $labels = arrray();
+        $exceptions = array(
+            'deleted' => ''
+        );
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
+            $pageTitle = "Posts · Edit";
+            $form_source = $post -> get_item($_POST['id']);
+            $labels['_form_title'] = "Edit post";
+        } else {
+            $pageTitle = "Posts · Create";
+            $form_source = [];
+            $labels['_form_title'] = "New post";
+        }
+        require_once('incl/header.php');
+        $form = new form_builder();
+        ?>
+    <main>
+        <div class="card">
+            <?php
+            $form -> build([
+                'table_name' => 'blog',
+                'action' => 'posts.php?mode=save',
+                'method' => 'post',
+                'source' => $form_source
+            ], $labels, $exceptions);
+            ?>
+        </div>
+    </main>
+        <?php
+        break;
+
+
+    case 'SAVE':
+
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+        $post -> id = isset($_POST['id']) && !empty($_POST['id'])
+            ? $_POST['id']
+            : 0;
+        $post -> author = $_POST['blog_author'];
+        $post -> thumbnail = $_POST['blog_thumbnail'];
+        $post -> title = $_POST['blog_title'];
+        $post -> content = $_POST['blog_content'];
+        $post -> is_private = $_POST['is_private'];
+
+        $post -> save(DOCROOT.'/cms/upload/');
+        header('Location: posts.php');
+
+        break;
+
+
     case 'GETLIST':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
