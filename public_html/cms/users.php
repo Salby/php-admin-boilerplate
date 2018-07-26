@@ -131,7 +131,7 @@ switch (strtoupper($mode)) {
         $user -> id = isset($_POST['id']) && !empty($_POST['id'])
             ? $_POST['id']
             : 0;
-        $user -> username = $_POST['user_username'];
+        $user -> name = $_POST['user_username'];
         $user -> password = isset($_POST['user_password']) && !empty($_POST['user_password'])
             ? $_POST['user_password']
             : '';

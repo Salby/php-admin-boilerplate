@@ -85,7 +85,9 @@ switch (strtoupper($mode)) {
 
     case 'EDIT':
 
-        $labels = arrray();
+        $labels = array(
+            'is_private' => 'Private'
+        );
         $exceptions = array(
             'deleted' => ''
         );
@@ -114,6 +116,10 @@ switch (strtoupper($mode)) {
             ?>
         </div>
     </main>
+    <script src="assets/script.js"></script>
+    <script>
+        new Form('blog');
+    </script>
         <?php
         break;
 

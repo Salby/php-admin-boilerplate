@@ -9,7 +9,7 @@
 class User extends file_upload {
 
     public $id;
-    public $username;
+    public $name;
     public $password;
     public $email;
     public $address;
@@ -55,7 +55,7 @@ class User extends file_upload {
 
     public function save($destination, $image_type = 'jpeg') {
 
-        $image_name = strtolower(str_replace(' ', '_', $this->username)) . '_avatar';
+        $image_name = strtolower(str_replace(' ', '_', $this->name)) . '_avatar';
 
         if ($this -> id) { // Update:
 
@@ -74,7 +74,7 @@ class User extends file_upload {
 
             // Set parameters.
             $params = array(
-                $this -> username,
+                $this -> name,
                 $this -> email,
                 $this -> address,
                 $avatar,
@@ -83,7 +83,7 @@ class User extends file_upload {
                 $this -> id
             );
             $sql = "UPDATE user SET
-                      username = ?,
+                      name = ?,
                       email = ?,
                       address = ?,
                       avatar = ?,
@@ -113,7 +113,7 @@ class User extends file_upload {
             $password_hashed = password_hash($this->password . $salt_string, PASSWORD_BCRYPT);
 
             $params = array(
-                $this -> username,
+                $this -> name,
                 $password_hashed,
                 $this -> email,
                 $this -> address,
@@ -123,7 +123,7 @@ class User extends file_upload {
             );
             $sql = "INSERT INTO 
                       user 
-                        (username, password, email, address, avatar, role, salt) 
+                        (name, password, email, address, avatar, role, salt) 
                     VALUES 
                       (?, ?, ?, ?, ?, ?, ?)";
             $this -> db -> query($sql, $params);

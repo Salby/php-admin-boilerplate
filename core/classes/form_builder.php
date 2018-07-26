@@ -118,7 +118,7 @@ class form_builder {
     public function outer_relations($config) {
         if ($config['table_name'] && $config['table_rel_data']) {
             foreach ($config['table_rel_data'] as $rel) {
-                if ($rel['REFERENCED_TABLE_NAME'] != $config['table_name']) {
+                if ($rel['TABLE_NAME'] != $config['table_name'] && $rel['REFERENCED_TABLE_NAME'] == $config['table_name']) {
                     return true;
                 }
             }
@@ -343,39 +343,32 @@ class form_builder {
         }
 
         elseif (startsWith($column['Type'], 'varchar')) { // Varchar - Regular text field.
-
             switch($column['Field']) {
                 case 'email': $type = 'email'; break;
                 case 'password': $type = 'password'; break;
                 default: $type = 'text';
             }
-
             return $input -> field($type);
-
         }
 
         elseif ($column['Type'] == 'tinytext') { // Tinytext - small textarea.
-
             return $input -> textarea(3);
-
         }
 
-        elseif ($column['Type'] == 'text') { // Text - medium-sized textarea.
-
+        elseif ($column['Type'] == 'mediumtext') { // Mediumtext - medium-sized textarea.
             return $input -> textarea(5);
+        }
 
+        elseif ($column['Type'] == 'text') { // Text - large textarea.
+            return $input -> textarea(7);
         }
 
         elseif ($column['Type'] == 'tinyint(1)') { // Tinyint(1) - switch.
-
             return $input -> toggle($column['Default']);
-
         }
 
         elseif ($column['Type'] == 'int(11)') { // Int - number field.
-
             return $input->number();
-
         }
     }
 }
