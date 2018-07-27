@@ -86,12 +86,16 @@ switch (strtoupper($mode)) {
 
         $exceptions = array(
             'deleted' => '',
-            'salt' => ''
+            'salt' => '',
+            'thumbnail' => '',
+            'title' => '',
+            'content' => '',
+            'is_private' => ''
         );
         $labels = array();
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $pageTitle = "Users · Edit";
-            $form_source = $user -> get_item($_POST['id'], true);
+            $form_source = $user -> get_item($_POST['id']);
             $exceptions['password'] = '<input type="hidden" name="id" value="'.$_POST['id'].'">';
             $labels['_form_title'] = 'Edit user';
         } else {
@@ -131,12 +135,13 @@ switch (strtoupper($mode)) {
         $user -> id = isset($_POST['id']) && !empty($_POST['id'])
             ? $_POST['id']
             : 0;
-        $user -> name = $_POST['user_username'];
+        $user -> name = $_POST['user_name'];
         $user -> password = isset($_POST['user_password']) && !empty($_POST['user_password'])
             ? $_POST['user_password']
             : '';
         $user -> email = $_POST['user_email'];
         $user -> address = $_POST['user_address'];
+        $user -> avatar = $_FILES['user_avatar'];
         $user -> role = $_POST['user_role'];
         $user -> suspended = isset($_POST['user_suspended']) && !empty($_POST['user_suspended'])
             ? $_POST['user_suspended']
@@ -190,7 +195,7 @@ switch (strtoupper($mode)) {
                     <tr>
                         <td class="select"><input type="checkbox" name="users" class="table__checkbox" value="<?=$user['id']?>"></td>
                         <td class="type--align-right"><?=$user['id']?></td>
-                        <td><?=$user['username']?></td>
+                        <td><?=$user['name']?></td>
                         <td><?=$user['email']?></td>
                         <td><?=$user['role']?></td>
                         <td class="type--align-right"><?=$user['suspended']?></td>

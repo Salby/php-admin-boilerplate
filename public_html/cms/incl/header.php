@@ -2,6 +2,7 @@
 
 function links($links, $activeName) {
     $items = "";
+    $activeName = explode(' ', $activeName)[0];
     foreach ($links as $li) {
 
         $active = strtolower($activeName) === strtolower($li[0])
@@ -48,7 +49,7 @@ function links($links, $activeName) {
                 'users.php',
                 'people'
             ]
-        ], explode(' ', $pageTitle)[0])?>
+        ], $pageTitle)?>
         </ul>
         <ul class="drawer__list">
             <li class="drawer__list-title">Product</li>
@@ -63,7 +64,7 @@ function links($links, $activeName) {
                 'categories.php',
                 'bookmark'
             ]
-        ], explode(' ', $pageTitle)[0])?>
+        ], $pageTitle)?>
         </ul>
         <ul class="drawer__list">
             <li class="drawer__list-title">Blog</li>
@@ -79,6 +80,15 @@ function links($links, $activeName) {
                 'label'
             ]
         ], $pageTitle)?>
+        </ul>
+        <ul class="drawer__list--bottom">
+            <?=links([
+                [
+                    'Log out',
+                    'index.php?action=logout',
+                    'exit_to_app'
+                ]
+            ], $pageTitle)?>
         </ul>
     </nav>
 

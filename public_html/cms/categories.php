@@ -128,7 +128,7 @@ switch (strtoupper($mode)) {
             ? $_POST['id']
             : 0;
         $category -> name = $_POST['category_name'];
-        $category -> image = $_POST['category_image'];
+        $category -> image = $_FILES['category_image'];
 
         $category -> save(DOCROOT.'/cms/upload/');
         header('Location: categories.php');

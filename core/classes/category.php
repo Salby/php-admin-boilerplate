@@ -42,18 +42,20 @@ class Category extends file_upload {
     public function save($destination, $type = 'svg') {
 
         $image_name = strtolower(str_replace(' ', '_', $this->name));
+        $image_config = array(
+            'destination' => $destination,
+            'name' => $image_name,
+            'type' => $type
+        );
 
         if ($this -> id) { // Update:
+            echo "Update";
 
             // Check if image is different from old image.
-            $original_image = $this -> get_item($this -> id)['image'];
-            $image_url = $this -> image
-                ? parent::image([
-                    'destination' => $destination,
-                    'name' => $image_name,
-                    'type' => $type
-                ])
-                : $original_image;
+            $original = $this -> get_item($this -> id);
+            $image_url = !empty($this->image)
+                ? parent::image($image_config)
+                : $original['image'];
 
             // Set parameters and SQL.
             $params = array(
@@ -72,13 +74,10 @@ class Category extends file_upload {
             return $this -> db -> getinsertid();
 
         } else { // Create:
+            echo "Create";
 
             // Upload image.
-            $image_url = parent::image([
-                'destination' => $destination,
-                'name' => $image_name,
-                'type' => $type
-            ]);
+            $image_url = parent::image($image_config);
 
             // Set parameters and SQL.
             $params = array(

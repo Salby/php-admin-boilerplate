@@ -86,7 +86,8 @@ switch (strtoupper($mode)) {
     case 'EDIT':
 
         $labels = array(
-            'is_private' => 'Private'
+            'is_private' => 'Private',
+            'tag_tag_id' => 'Tag'
         );
         $exceptions = array(
             'deleted' => ''
@@ -131,13 +132,33 @@ switch (strtoupper($mode)) {
             ? $_POST['id']
             : 0;
         $post -> author = $_POST['blog_author'];
-        $post -> thumbnail = $_POST['blog_thumbnail'];
+        $post -> thumbnail = $_FILES['blog_thumbnail'];
         $post -> title = $_POST['blog_title'];
         $post -> content = $_POST['blog_content'];
-        $post -> is_private = $_POST['is_private'];
+        $post -> is_private = $_POST['blog_is_private'];
+
+        $post -> tags = $_POST['blog_tag_id'];
 
         $post -> save(DOCROOT.'/cms/upload/');
         header('Location: posts.php');
+
+        break;
+
+
+    case 'DELETE':
+
+        $rows = filter_input(INPUT_POST, 'selected', FILTER_SANITIZE_STRING);
+        if (substr_count($rows, ',')) {
+            $rows = explode(',', $rows);
+        } else {
+            $rows = array($rows);
+        }
+        $post -> delete($rows);
+
+        $str_end = count($rows) > 1
+            ? ' posts'
+            : ' post';
+        echo "Deleted ".count($rows).$str_end;
 
         break;
 
@@ -171,11 +192,11 @@ switch (strtoupper($mode)) {
             <td><?=$post['author']?></td>
             <td><?=$private?></td>
             <td><?=$post['created']?></td>
-            <td align="right" class="options"><div class="menu">
+            <td align="right" class="options"><div class="menu--right">
                     <button><i class="material-icons">more_vert</i></button>
                     <ul>
                         <li><form action="posts.php?mode=edit" method="post">
-                                <input type="hidden" name="id" value="<?=$_POST['id']?>">
+                                <input type="hidden" name="id" value="<?=$post['id']?>">
                                 <input type="submit" value="Edit">
                             </form></li>
                     </ul>

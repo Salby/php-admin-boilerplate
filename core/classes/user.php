@@ -56,21 +56,22 @@ class User extends file_upload {
     public function save($destination, $image_type = 'jpeg') {
 
         $image_name = strtolower(str_replace(' ', '_', $this->name)) . '_avatar';
+        $image_config = array(
+            'destination' => $destination,
+            'name' => $image_name,
+            'type' => $image_type,
+            'max_dimension' => 512
+        );
 
         if ($this -> id) { // Update:
 
             // Find previous avatar and compare.
             $user = $this -> get_item($this->id);
             $original_avatar = $user['avatar'];
-
             // Replace image_url if avatar is set.
-            $avatar = !$_FILES['user_avatar']['tmp_name']
-                ? $original_avatar
-                : parent::image([
-                    'destination' => $destination,
-                    'name' => $image_name,
-                    'type' => $image_type
-                ]);
+            $avatar = !empty($_FILES)
+                ? parent::image($image_config)
+                : $original_avatar;
 
             // Set parameters.
             $params = array(
@@ -95,16 +96,8 @@ class User extends file_upload {
 
         } else { // Create:
 
-            // Upload image.
-            $image_url = parent::image([
-                'destination' => $destination,
-                'name' => $image_name,
-                'type' => $image_type
-            ]);
-            // Set image_url to blank string if no image was uploaded.
-            if (!$image_url) {
-                $image_url = '';
-            }
+            // Set image url and upload.
+            $avatar = parent::image($image_config);
 
             // Hash password
             /** @noinspection PhpUnhandledExceptionInspection */
@@ -117,7 +110,7 @@ class User extends file_upload {
                 $password_hashed,
                 $this -> email,
                 $this -> address,
-                $image_url,
+                $avatar,
                 $this -> role,
                 $salt_string
             );

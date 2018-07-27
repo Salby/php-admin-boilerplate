@@ -17,45 +17,32 @@ class file_upload {
         ],
     );
 
-    public function image($conf) {
-
+    public function image($config) {
+        // Define defaults for configuration.
         $defaults = array(
             'type' => 'jpeg',
             'quality' => 80,
-            'max_dimension' => 1920
+            'max_dimension' => 1920,
+            'placeholder' => 'https://placem.at/places?txt=Image+not+found'
         );
-        $conf = array_merge($defaults, $conf);
+        // Merge defaults with user-defined config.
+        $config = array_merge($defaults, $config);
 
-        $destination_folder = $conf['destination'];
-        $name = $conf['name'];
-        $type = $conf['type'];
-        $quality = $conf['quality'];
-        $max_dimension = $conf['max_dimension'];
-
-        $allowed_mimes = array(
-            'png' => 'image/png',
-            'jpeg' => 'image/jpeg',
-            'gif' => 'image/gif',
-        );
-
-        foreach ($_FILES as $image) {
-            $tmp = $image['tmp_name'];
-
-            $validate = getimagesize($tmp);
-            $mime = $validate['mime'];
-            if ($validate) { // File is image.
-
-                if (in_array($mime, $allowed_mimes)) { // Mime is allowed.
-                    $name = $this -> file_exists($destination_folder.$name.'.'.$type);
-                    save_image($tmp, $name, $type, $quality, $max_dimension);
-                    return $name;
-                } else { // Mime isn't allowed.
-                    return false;
+        if (!empty($_FILES)) {
+            foreach ($_FILES as $image) {
+                $tmp = $image['tmp_name']; // Get tmp name.
+                $info = getimagesize($tmp); // Get file info.
+                $mime = $info['mime']; // Get file mime.
+                if (in_array($mime, $this->allowed_mimes['image'])) { // Check if mime is allowed.
+                    $file = $this->file_exists($config['destination'] . $config['name'] . '.' . $config['type']); // Check if file already exists.
+                    save_image($tmp, $file.'.'.$config['type'], $config['type'], $config['quality'], $config['max_dimension']); // Save image.
+                    return $file . '.' . $config['type']; // Return image url.
+                } else {
+                    return $config['placeholder'];
                 }
-
-            } else { // File is not image.
-                return false;
             }
+        } else {
+            return $config['placeholder'];
         }
     }
 
@@ -64,14 +51,18 @@ class file_upload {
         $exists = file_exists($file);
 
         $i = 0;
-        while ($exists) {
-            $i++;
-            $exploded = explode('.', $name);
-            $new_file = $exploded[0] . '_' . $i . '.' . $exploded[1];
-            if (!file_exists($new_file)) {
-                return $new_file;
-                break;
+        if ($exists) {
+            while ($exists) {
+                $i++;
+                $exploded = explode('.', $name);
+                $new_file = $exploded[0] . '_' . $i . '.' . $exploded[1];
+                if (!file_exists($new_file)) {
+                    return explode('.', $new_file)[0];
+                    break;
+                }
             }
+        } else {
+            return explode('.', $file)[0];
         }
     }
 }
@@ -104,6 +95,8 @@ function save_image($source_image, $destination, $type, $quality, $max_size) {
             imagegif($image, $destination);
             break;
         case 'PNG':
+            $quality = ($quality - 100) / 11.111111;
+            $quality = round(abs($quality));
             imagepng($image, $destination, $quality);
             break;
         default:
