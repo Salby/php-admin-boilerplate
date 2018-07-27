@@ -48,7 +48,8 @@ class Tag {
                   AND 
                   id = ?";
 
-        return $this -> db -> fetch_array($sql, $params);
+        $row = $this -> db -> fetch_array($sql, $params);
+        return call_user_func_array('array_merge', $row);
 
     }
 
@@ -88,7 +89,7 @@ class Tag {
 
     }
 
-    public function delete($selected, $permanent) {
+    public function delete($selected, $permanent = false) {
 
         $update = implode(', ', $selected);
 

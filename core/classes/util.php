@@ -14,11 +14,13 @@ class util {
         );
         $config = array_merge($defaults, $config);
 
-        for ($i = 0; $i < count($config['target']); $i++) {
-            $concat = $config['target'][$i][$config['source']];
-            $arr = explode($config['separator'], $concat);
-            $config['target'][$i][$config['source']] = $arr;
+        $source = $config['target'][$config['source']];
+        unset($config['target'][$config['source']]);
+        $exploded = explode($config['separator'], $source);
+        foreach ($exploded as $val) {
+            $config['target'][$config['source']] = $val;
         }
+
     }
 
 }

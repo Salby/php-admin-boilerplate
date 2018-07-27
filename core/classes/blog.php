@@ -52,10 +52,12 @@ class Blog extends file_upload {
             $sql .= " LIMIT $config[limit] OFFSET $config[offset]";
         }
         $row = $this -> db -> fetch_array($sql, $params);
-        util::merge_concat([
-            'target' => $row,
-            'source' => 'tag'
-        ]);
+        foreach ($row as $r) {
+            util::merge_concat([
+                'target' => $r,
+                'source' => 'tag'
+            ]);
+        }
         return $row;
     }
     public function get_item($id, $config = array()) {
@@ -85,6 +87,7 @@ class Blog extends file_upload {
                   $private
                 GROUP BY blog.id";
         $row = $this -> db -> fetch_array($sql, $params);
+        $row = call_user_func_array('array_merge', $row);
         util::merge_concat([
             'target' => $row,
             'source' => 'tag'
@@ -161,9 +164,11 @@ class Blog extends file_upload {
                 $params = array();
                 $markers = array();
                 foreach ($this->tags as $tag) {
-                    $params[] = $blog_id;
-                    $params[] = $tag;
-                    $markers[] = "(?, ?)";
+                    if ($tag != 0) {
+                        $params[] = $blog_id;
+                        $params[] = $tag;
+                        $markers[] = "(?, ?)";
+                    }
                 }
                 $markers = implode(', ', $markers);
                 $sql = "INSERT INTO
