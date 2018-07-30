@@ -20,10 +20,16 @@ class Category extends file_upload {
     }
 
     public function get_list($config = array()) {
+
+        $search = isset($config['query'])
+            ? util::search([ 'query' => $config['query'] ])
+            : '';
+
         $sql = "SELECT *
                   FROM category
                 WHERE
-                  deleted = 0";
+                  deleted = 0
+                  $search";
         if (!empty($config)) {
             $sql .= " LIMIT $config[limit] OFFSET $config[offset]";
         }

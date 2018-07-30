@@ -21,10 +21,15 @@ class Tag {
 
     public function get_list($config) {
 
+        $search = isset($config['query'])
+            ? util::search([ 'query' => $config['query'] ])
+            : '';
+
         $sql = "SELECT *
                   FROM tag
                 WHERE
-                  deleted = 0";
+                  deleted = 0
+                  $search";
 
         if (isset($config['limit'])) {
             $sql .= " LIMIT $config[limit]";

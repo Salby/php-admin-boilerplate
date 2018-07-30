@@ -28,12 +28,23 @@ class Blog extends file_upload {
 
     public function get_list($config = array()) {
         $params = array();
+
         if (isset($config['private'])) {
-            $params['private'] = $config['private'];
+            $params['private'] = $config['private']
+                ? 1
+                : 0;
         }
         $private = isset($config['private'])
             ? ' AND is_private = ?'
             : '';
+
+        $search = isset($config['query'])
+            ? util::search([
+                'target' => 'blog.title',
+                'query' => $config['query']
+            ])
+            : '';
+
         $sql = "SELECT blog.*,
                   user.name AS author,
                   GROUP_CONCAT(tag.name SEPARATOR '-----') AS tag
@@ -47,6 +58,7 @@ class Blog extends file_upload {
                 WHERE
                   blog.deleted = 0
                   $private
+                  $search
                 GROUP BY blog.id";
         if (isset($config['limit']) && isset($config['offset'])) {
             $sql .= " LIMIT $config[limit] OFFSET $config[offset]";

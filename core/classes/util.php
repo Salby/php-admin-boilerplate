@@ -23,4 +23,13 @@ class util {
 
     }
 
+    static function search($config) {
+        $defaults = array(
+            'target' => 'name'
+        );
+        $config = array_merge($defaults, $config);
+
+        return " AND $config[target] LIKE '%$config[query]%'";
+    }
+
 }

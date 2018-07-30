@@ -27,14 +27,23 @@ class User extends file_upload {
     }
 
     public function get_list($config = array()) {
+
+        $search = isset($config['query'])
+            ? util::search([
+                'target' => 'user.name',
+                'query' => $config['query']
+            ])
+            : '';
+
         $sql = "SELECT user.*,
                   r.name as role
                   FROM user
                 JOIN role r on user.role = r.id
                 WHERE
-                  user.deleted = 0";
+                  user.deleted = 0
+                  $search";
 
-        if (!empty($config)) {
+        if (isset($config['limit']) && isset($config['offset'])) {
             $sql .= " LIMIT $config[limit] OFFSET $config[offset]";
         }
 
