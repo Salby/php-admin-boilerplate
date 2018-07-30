@@ -229,7 +229,8 @@ class form_builder {
                                         $sql = "SELECT *
                                               FROM $foreign_table
                                             WHERE
-                                              deleted = 0";
+                                              deleted = 0
+                                            ORDER BY name";
                                         $foreign_values = $this->db->fetch_array($sql);
 
                                         // Build options
