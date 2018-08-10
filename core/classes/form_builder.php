@@ -2,6 +2,9 @@
 
 class form_builder extends dblyze {
 
+    public $labels;
+    public $exceptions;
+
     protected $db;
 
     public function __construct() {
@@ -19,8 +22,8 @@ class form_builder extends dblyze {
         ];
         $config = array_merge($defaults, $config);
 
-        $labels = $config['labels'];
-        $exceptions = $config['exceptions'];
+        $this -> labels = $config['labels'];
+        $this -> exceptions = $config['exceptions'];
 
         $table_info = parent::table_info($config['table']);
 
@@ -33,11 +36,11 @@ class form_builder extends dblyze {
             enctype='multipart/form-data'
         >";
 
-        if (!empty($labels['__form_title'])) {
-            $subtitle = !empty($labels['__form_subtitle'])
-                ? $labels['__form_subtitle']
+        if (!empty($this->labels['__form_title'])) {
+            $subtitle = !empty($this->labels['__form_subtitle'])
+                ? $this->labels['__form_subtitle']
                 : "";
-            echo $this -> title($labels['__form_title'], $subtitle);
+            echo $this -> title($this->labels['__form_title'], $subtitle);
         }
 
         // Iterate over table info and add inputs.
@@ -48,9 +51,9 @@ class form_builder extends dblyze {
                 // Define input id.
                 $id = $config['table'].'_'.$column['Field'];
                 // Define input label.
-                $label = array_key_exists($column['Field'], $labels)
+                $label = array_key_exists($column['Field'], $this->labels)
                     // Set label.
-                    ? $labels[$column['Field']]
+                    ? $this->labels[$column['Field']]
                     // Use styled column name as label.
                     : ucfirst(str_replace('_', ' ', $column['Field']));
                 // Define input required state.
@@ -67,10 +70,10 @@ class form_builder extends dblyze {
                     : null;
 
                 // Check if input is in exceptions.
-                if (array_key_exists($column['Field'], $exceptions)) {
-                    if ($exceptions[$column['Field']]) {
+                if (array_key_exists($column['Field'], $this->exceptions)) {
+                    if ($this->exceptions[$column['Field']]) {
                         // Set input as  defined in exception.
-                        $input = $exceptions[$column['Field']];
+                        $input = $this->exceptions[$column['Field']];
                         // Insert handled input.
                         echo $this -> handle_exception(
                             $input,
@@ -94,6 +97,45 @@ class form_builder extends dblyze {
 
         // Return finished form.
         return $form;
+    }
+
+    public function many_to_many($column) {
+        $foreign_table = $column['Field'];
+        $columns = $column['Columns'];
+        $title = ucfirst(str_replace('_', ' ', $foreign_table));
+
+        $class_name = count($columns) === 1
+            // One column - inline inputs.
+            ? "form__group-items"
+            // More columns - inputs grouped in rows.
+            : "form__group-items--rows";
+
+        // Add some initial markup.
+        $many_to_many = "<div class='$class_name form_items'>
+                            <div class='title'>$title</div>
+                            <div class='form_items_model'>";
+
+        foreach ($columns as $column) {
+            // Don't add primary keys.
+            if ($column['Key'] !== 'PRI') {
+                // Define input id.
+                $id = $foreign_table.'_'.$column['Field'];
+                // Define input name.
+                $name = $id.'[]';
+                // Define input label.
+                $label = array_key_exists($column['Field'], $this->labels)
+                    // Set label.
+                    ? $this->labels[$column['Field']]
+                    // Use styled column name as label.
+                    : ucfirst(str_replace('_', ' ', $column['Field']));
+
+                // TODO: Handle one-to-many.
+                // TODO: Handle regular inputs.
+            }
+        }
+
+        // Return input(s).
+        return $many_to_many;
     }
 
     public function handle_exception($input, $id, $label, $required, $value) {
@@ -120,6 +162,26 @@ class form_builder extends dblyze {
         if ($subtitle) $title_string .= "<span class='subtitle'>$subtitle</span>";
         $title_string .= "</div>";
         return $title_string;
+    }
+
+    public function foreign_data($config) {
+        $defaults = [
+            'order_by' => '',
+            'filter_deleted' => true
+        ];
+        $config = array_merge($defaults, $config);
+
+        // Build SQL query.
+        $sql = "SELECT *
+                  FROM $config[table]";
+
+        if ($config['filter_deleted'])
+            $sql .= " WHERE deleted = 0";
+        if (!empty($config['order_by']))
+            $sql .= " ORDER BY $config[order_by]";
+
+        // Return foreign data.
+        return $this -> db -> fetch_array($sql);
     }
 
 }
