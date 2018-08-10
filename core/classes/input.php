@@ -6,7 +6,7 @@
  * - __string__ id
  * - __string__ name
  * - __string__ label
- * - __bool__ required
+ * - __string__ required
  * - __string__ value
  * - __bool__ contained
  */
@@ -21,10 +21,6 @@ class Input {
         $config = array_merge($defaults, $config);
 
         $this -> config = $config;
-
-        $this -> config['required'] = $config['required']
-            ? "required"
-            : "";
     }
 
     /**
