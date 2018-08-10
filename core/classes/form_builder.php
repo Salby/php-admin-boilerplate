@@ -32,6 +32,21 @@ class form_builder extends dblyze {
             novalidate
             enctype='multipart/form-data'
         >";
+
+        if (!empty($labels['__form_title'])) {
+            $subtitle = !empty($labels['__form_subtitle'])
+                ? $labels['__form_subtitle']
+                : "";
+            echo $this -> title($labels['__form_title'], $subtitle);
+        }
+    }
+
+    public function title($title, $subtitle) {
+        $title_string = "< class='form__group--title'>";
+        $title_string .= "<span class='title'>$title</span>";
+        if ($subtitle) $title_string .= "<span class='subtitle'>$subtitle</span>";
+        $title_string .= "</div>";
+        return $title_string;
     }
 
 }
