@@ -2,7 +2,7 @@
   @extend .form__group;
 
   .input {
-    @extend input[type='text'];
+    @extend input[type='text'] !optional;
     cursor: text;
     text-align: left;
   }
