@@ -39,6 +39,12 @@ class form_builder extends dblyze {
                 : "";
             echo $this -> title($labels['__form_title'], $subtitle);
         }
+
+        // End form tag.
+        $form .= "</form>";
+
+        // Return finished form.
+        return $form;
     }
 
     public function title($title, $subtitle) {
