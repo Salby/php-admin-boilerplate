@@ -17,6 +17,27 @@ class form_builder extends dblyze {
         parent::__construct();
     }
 
+    /**
+     * Builds form from configuration.
+     *
+     * ## Config:
+     *
+     * __String__ --_table_
+     *
+     * __String__ --_action_
+     *
+     * __String__ --_method_
+     *
+     * __Array__ _source_
+     *
+     * __Array__ _labels_
+     *
+     * __Array__ _exceptions_
+     *
+     * @param array $config
+     *
+     * @return string
+     */
     public function build($config) {
         $defaults = [
             'labels' => [],
