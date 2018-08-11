@@ -2,6 +2,8 @@
 
 class form_builder extends dblyze {
 
+    public $table;
+    public $source;
     public $labels;
     public $exceptions;
 
@@ -22,14 +24,16 @@ class form_builder extends dblyze {
         ];
         $config = array_merge($defaults, $config);
 
+        $this -> table = $config['table'];
+        $this -> source = $config['source'];
         $this -> labels = $config['labels'];
         $this -> exceptions = $config['exceptions'];
 
-        $table_info = parent::table_info($config['table']);
+        $table_info = parent::table_info($this->table);
 
         $form = "<form
             class='form__main'
-            id='$config[table_name]'
+            id='$this->table'
             action='$config[action]'
             method='$config[method]'
             novalidate
@@ -40,7 +44,7 @@ class form_builder extends dblyze {
             $subtitle = !empty($this->labels['__form_subtitle'])
                 ? $this->labels['__form_subtitle']
                 : "";
-            echo $this -> title($this->labels['__form_title'], $subtitle);
+            $form .= $this -> title($this->labels['__form_title'], $subtitle);
         }
 
         // Iterate over table info and add inputs.
@@ -48,26 +52,7 @@ class form_builder extends dblyze {
             // Don't add primary keys.
             if ($column['Key'] !== 'PRI') {
 
-                // Define input id.
-                $id = $config['table'].'_'.$column['Field'];
-                // Define input label.
-                $label = array_key_exists($column['Field'], $this->labels)
-                    // Set label.
-                    ? $this->labels[$column['Field']]
-                    // Use styled column name as label.
-                    : ucfirst(str_replace('_', ' ', $column['Field']));
-                // Define input required state.
-                $required = $column['Null'] === 'NO'
-                    // Required.
-                    ? "required"
-                    // Not required.
-                    : "";
-                // Define input value.
-                $value = array_key_exists($column['Field'], $config['source'])
-                    // Set value.
-                    ? $config['source'][$column['Field']]
-                    // No value.
-                    : null;
+                $icfg = $this -> input_config($column);
 
                 // Check if input is in exceptions.
                 if (array_key_exists($column['Field'], $this->exceptions)) {
@@ -75,28 +60,181 @@ class form_builder extends dblyze {
                         // Set input as  defined in exception.
                         $input = $this->exceptions[$column['Field']];
                         // Insert handled input.
-                        echo $this -> handle_exception(
+                        $form .= $this -> handle_exception(
                             $input,
-                            $id,
-                            $label,
-                            $required,
-                            $value
+                            $icfg['id'],
+                            $icfg['label'],
+                            $icfg['required'],
+                            $icfg['value']
                         );
                     }
                 } else {
                     // TODO: Handle many-to-many case.
+                    // Handle many-to-many.
+                    if ($column['Key'] === 'MTM')
+                        $form .= $this -> many_to_many($column);
+
                     // TODO: Handle one-to-many case.
+                    // Handle one-to-many.
+                    if ($column['Key'] === 'MUL')
+                        $form .= $this -> one_to_many($column, $icfg);
+
                     // TODO: Handle regular input cases.
+                    // Handle regular input.
+                    else
+                        $form .= $this -> input($column, $icfg);
+
                 }
 
             }
         }
+
+        // Add submit button.
+        $submit_child = array_key_exists('__submit_child', $this->labels)
+            ? $this -> labels['__submit_child']
+            : "Submit";
+        $form .= "<div class='form__group--right'>
+                      <button class='button__raised--primary'>$submit_child</button>
+                  </div>";
 
         // End form tag.
         $form .= "</form>";
 
         // Return finished form.
         return $form;
+    }
+
+    public function input($column, $input_config) {
+        if (!isset($input_config['name']))
+            $input_config['name'] = $input_config['id'];
+        if (!isset($input_config['contained']))
+            $input_config['contained'] = true;
+
+        $input = new Input([
+            'id' => $input_config['id'],
+            'name' => $input_config['name'],
+            'label' => $input_config['label'],
+            'required' => $input_config['required'],
+            'value' => $input_config['value'],
+            'contained' => $input_config['contained']
+        ]);
+
+        // Image.
+        if ($column['Comment'] === "file(image)")
+            return $input -> image();
+
+        // Regular input field.
+        elseif (starts_with('varchar', $column['Type'])) {
+            switch ($column['Field']) {
+                case 'email': $type = "email"; break;
+                case 'password': $type = "password"; break;
+                default: $type = "text"; break;
+            }
+            return $input -> field($type);
+        }
+
+        // Small text-area.
+        elseif ($column['Type'] == 'tinytext')
+            return $input -> textarea(3);
+
+        // Medium-sized text-area.
+        elseif ($column['Type'] == 'mediumtext')
+            return $input -> textarea(5);
+
+        // Large text-area.
+        elseif ($column['Type'] == 'text')
+            return $input -> textarea(7);
+
+        // Toggle.
+        elseif ($column['Type'] == 'tinyint(1)')
+            return $input -> toggle($column['Default']);
+
+        // Number field.
+        elseif ($column['Type'] == 'int(11)')
+            return $input -> number();
+
+        // Return regular input field if you don't know what to do.
+        else
+            return $input -> field();
+    }
+
+    public function input_config($column) {
+        $config = [];
+        // Define input id.
+        $config['id'] = $this -> table."_".$column['Field'];
+        // Define input label.
+        $config['label'] = array_key_exists($column['Field'], $this->labels)
+            // Set label as defined in labels array.
+            ? $this->labels[$column['Field']]
+            // Use styled column name as label.
+            : ucfirst(str_replace('_', ' ', $column['Field']));
+        // Define input required state.
+        $config['required'] = $column['Null'] === 'NO'
+            // Required.
+            ? "required"
+            // Not required.
+            : "";
+        // Define input value.
+        $config['value'] = array_key_exists($column['Field'], $this->source)
+            // Value is defined in source array.
+            ? $this -> source[$column['Field']]
+            // No value given.
+            : null;
+
+        // Return input config.
+        return $config;
+    }
+
+    public function one_to_many($column, $input_config, $table = "") {
+        if (empty($table)) {
+            $table_rel_out = parent::relations([
+                'TABLE_NAME' => $this -> table
+            ]);
+            foreach ($table_rel_out as $relation) {
+                if ($relation['REFERENCED_TABLE_NAME']) {
+                    $table = $relation['REFERENCED_TABLE_NAME'];
+                }
+            }
+        }
+
+        // Get data from foreign table.
+        $foreign_data = $this -> foreign_data([
+            'table' => $table,
+            'order_by' => "2"
+        ]);
+
+        // Build select box options from foreign data.
+        $options = "";
+        foreach ($foreign_data as $row) {
+            $selected = array_key_exists($column['Field'], $this->source)
+                        &&
+                        $row[1] === $this->source[$column['Field']]
+                ? "selected"
+                : "";
+            $options .= "<option value='$row[id]' $selected>$row[name]</option>";
+        }
+
+        if (!isset($input_config['name']))
+            $input_config['name'] = $input_config['id'];
+        if (!isset($input_config['contained']))
+            $input_config['contained'] = true;
+
+        $input = new Input([
+            'id' => $input_config['id'],
+            'name' => $input_config['name'],
+            'label' => $input_config['label'],
+            'required' => $input_config['required'],
+            'value' => $input_config['value'],
+            'contained' => $input_config['contained']
+        ]);
+
+        // Return input.
+        if (count($foreign_data) > 5) {
+            $json_list = json_encode($foreign_data);
+            return $input -> search_box($json_list);
+        } else {
+            return $input -> select([ 'options' => $options ]);
+        }
     }
 
     public function many_to_many($column) {
@@ -118,19 +256,17 @@ class form_builder extends dblyze {
         foreach ($columns as $column) {
             // Don't add primary keys.
             if ($column['Key'] !== 'PRI') {
-                // Define input id.
-                $id = $foreign_table.'_'.$column['Field'];
-                // Define input name.
-                $name = $id.'[]';
-                // Define input label.
-                $label = array_key_exists($column['Field'], $this->labels)
-                    // Set label.
-                    ? $this->labels[$column['Field']]
-                    // Use styled column name as label.
-                    : ucfirst(str_replace('_', ' ', $column['Field']));
 
-                // TODO: Handle one-to-many.
-                // TODO: Handle regular inputs.
+                // Define input config.
+                $icfg = $this -> input_config($column);
+                $icfg['name'] = $icfg['id']."[]";
+                $icfg['contained'] = false;
+
+                // Handle one-to-many.
+                $many_to_many .= $this -> one_to_many($column, $icfg, $foreign_table);
+
+                // Handle regular inputs.
+
             }
         }
 
@@ -138,6 +274,17 @@ class form_builder extends dblyze {
         return $many_to_many;
     }
 
+    /**
+     * Handles given input template.
+     *
+     * @param $input - Template input.
+     * @param $id
+     * @param $label
+     * @param $required
+     * @param $value
+     *
+     * @return mixed
+     */
     public function handle_exception($input, $id, $label, $required, $value) {
         if (strpos($input, '___id___'))
             // Replace id placeholder with actual id.
@@ -156,14 +303,36 @@ class form_builder extends dblyze {
         return $input;
     }
 
+    /**
+     * Build title component for form.
+     *
+     * @param $title
+     * @param $subtitle
+     * @return string
+     */
     public function title($title, $subtitle) {
-        $title_string = "< class='form__group--title'>";
+        $title_string = "<div class='form__group--title'>";
         $title_string .= "<span class='title'>$title</span>";
         if ($subtitle) $title_string .= "<span class='subtitle'>$subtitle</span>";
         $title_string .= "</div>";
         return $title_string;
     }
 
+    /**
+     * Returns foreign data from table.
+     *
+     * ## Config
+     *
+     * *__String__ table
+     *
+     * __String__ order_by
+     *
+     * __Bool__ filter_deleted
+     *
+     * @param $config
+     *
+     * @return array
+     */
     public function foreign_data($config) {
         $defaults = [
             'order_by' => '',
@@ -184,4 +353,9 @@ class form_builder extends dblyze {
         return $this -> db -> fetch_array($sql);
     }
 
+}
+
+function starts_with($needle, $haystack) {
+    $length = strlen($needle);
+    return substr($haystack, 0, $length) === $needle;
 }

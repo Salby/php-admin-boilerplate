@@ -97,12 +97,12 @@ switch (strtoupper($mode)) {
             $pageTitle = "Users · Edit";
             $form_source = $user -> get_item($_POST['id']);
             $exceptions['password'] = '<input type="hidden" name="id" value="'.$_POST['id'].'">';
-            $labels['_form_title'] = 'Edit user';
+            $labels['__form_title'] = 'Edit user';
         } else {
             $pageTitle = "Users · Create";
             $form_source = array();
             $exceptions['suspended'] = '';
-            $labels['_form_title'] = 'New user';
+            $labels['__form_title'] = 'New user';
         }
         require_once('incl/header.php');
         $form = new form_builder();
@@ -111,12 +111,20 @@ switch (strtoupper($mode)) {
     <main>
         <div class="card">
             <?php
-            $form -> build([
+            /*$form -> build([
                 'table_name' => 'user',
                 'action' => 'users.php?mode=save',
                 'method' => 'post',
                 'source' => $form_source
-            ], $labels, $exceptions);
+            ], $labels, $exceptions);*/
+            echo $form -> build([
+                'table' => 'user',
+                'action' => 'users.php?mode=save',
+                'method' => 'post',
+                'source' => $form_source,
+                'labels' => $labels,
+                'exceptions' => $exceptions
+            ]);
             ?>
         </div>
     </main>
