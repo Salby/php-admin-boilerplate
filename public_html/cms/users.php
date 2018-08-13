@@ -111,12 +111,6 @@ switch (strtoupper($mode)) {
     <main>
         <div class="card">
             <?php
-            /*$form -> build([
-                'table_name' => 'user',
-                'action' => 'users.php?mode=save',
-                'method' => 'post',
-                'source' => $form_source
-            ], $labels, $exceptions);*/
             echo $form -> build([
                 'table' => 'user',
                 'action' => 'users.php?mode=save',

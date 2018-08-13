@@ -120,11 +120,13 @@ class SearchBox {
     config = config || {};
     const NAME = config.name || '';
 
-    const DATA = Object.values(obj);
-    const ID = guid();
+    const DATA = Object.values(obj); // Parse object as array.
+    const ID = guid(); // Generate new id.
     let item = document.createElement('li');
-    item.innerHTML = `<input type="radio" name="${NAME}" id="${ID}" value="${DATA[0]}"><label for="${ID}">${DATA[1]}</label>`;
-    return item;
+    let label = `${capitalize(DATA[1])}`; // Capitalize first letter in label.
+    label = label.replace('_', ' '); // Replace underscores with spaces (it's prettier).
+    item.innerHTML = `<input type="radio" name="${NAME}" id="${ID}" value="${DATA[0]}"><label for="${ID}">${label}</label>`;
+    return item; // Return list item.
   }
 
   open(el) {
@@ -161,7 +163,7 @@ const addMultipleListeners = (el, events, handler, useCapture = false, args) => 
   }
   let handlerFunction = (e) => {
     handler.apply(this, args && args instanceof Array ? args : []);
-  }
+  };
   events.forEach(event => {
     el.addEventListener(event, handlerFunction(), useCapture);
   });
@@ -177,4 +179,7 @@ const isOpen = el => el.className.contains('open');
 const s4 = () => (1+Math.random()*0x10000|0).toString(16).substring(1);
 const guid = () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 
+const capitalize = string => string[0].toUpperCase() + string.slice(1);
+
 new SearchBox('.form__group--searchbox');
+

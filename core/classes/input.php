@@ -13,14 +13,32 @@ class Input {
     public $config = array();
 
     /**
-     * # Configuring Input class:
+     * # Config
      *
-     * - __string__ id
-     * - __string__ name
-     * - __string__ label
-     * - __string__ required
-     * - __string__ value
-     * - __bool__ contained
+     * __String__ --_id_
+     *
+     * __String__ _name_
+     *
+     * __String__ --_label_
+     *
+     * __String__ --_required_
+     *
+     * __String__ _value_
+     *
+     * __Bool__ _contained_
+     *
+     * # Example
+     *
+     * ```
+     * $input = new Input([
+     *      'id' => 'input_id',
+     *      'name' => 'input_name',
+     *      'label' => 'label',
+     *      'required' => 'required',
+     *      'value' => 'abcdefg',
+     *      'contained' => true
+     * ]);
+     * ```
      *
      * @param array $config
      */
@@ -36,7 +54,9 @@ class Input {
             : $config['id'];
         $this -> label = $config['label'];
         $this -> required = $config['required'];
-        $this -> value = $config['value'];
+        $this -> value = isset($config['value'])
+            ? $config['value']
+            : "";
         $this -> contained = isset($config['contained'])
             ? $config['contained']
             : true;
@@ -58,6 +78,15 @@ class Input {
     }
 
     /**
+     * # Regular input field.
+     *
+     * ## Example
+     *
+     * ```
+     * $input = new Input([...]);
+     * echo $input -> field('email')
+     * ```
+     *
      * @param string $type - Defines input type. Could be email, password, etc.
      *
      * @return string $input
@@ -81,6 +110,17 @@ class Input {
     }
 
     /**
+     * # Textarea
+     *
+     * A textarea with defined rows
+     *
+     * ## Example
+     *
+     * ```
+     * $input = new Input([...]);
+     * echo $input -> textarea(5);
+     * ```
+     *
      * @param int $rows - Number of initial rows.
      *
      * @return string $input
@@ -103,6 +143,17 @@ class Input {
     }
 
     /**
+     * # Number
+     *
+     * A regular number field.
+     *
+     * ## Example
+     *
+     * ```
+     * $input = new Input([...]);
+     * echo $input -> number();
+     * ```
+     *
      * @return string $input
      */
     public function number() {
@@ -124,10 +175,20 @@ class Input {
     }
 
     /**
+     * # Select box
+     *
      * ## Config
-     * *__String__ options - Select box options.
+     * __String__ --options - Select box options.
      *
      * __Bool__ hovering - Toggles floating label.
+     *
+     * ## Examples
+     * ```
+     * $input = new Input([...]);
+     * echo $input -> select([
+     *      'options' => '<option value="1">Foo</option>'
+     * ]);
+     * ```
      *
      * @param array $config
      *
@@ -167,8 +228,8 @@ class Input {
 
     public function search_box($json) {
         $input = "
-            <label for='$this->id'>$this->label</label>
             <button type='button' class='input'></button>
+            <label for='$this->id' class='label'>$this->label</label>
             <div class='search-box' data-list='$json' data-name='$this->name'>
                 <input class='search-box__input' type='text'>
                 <div class='search-box__container'></div>

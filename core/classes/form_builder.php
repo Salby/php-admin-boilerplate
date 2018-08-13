@@ -221,17 +221,6 @@ class form_builder extends dblyze {
             'order_by' => "2"
         ]);
 
-        // Build select box options from foreign data.
-        $options = "";
-        foreach ($foreign_data as $row) {
-            $selected = array_key_exists($column['Field'], $this->source)
-                        &&
-                        $row[1] === $this->source[$column['Field']]
-                ? "selected"
-                : "";
-            $options .= "<option value='$row[id]' $selected>$row[name]</option>";
-        }
-
         if (!isset($input_config['name']))
             $input_config['name'] = $input_config['id'];
         if (!isset($input_config['contained']))
@@ -247,10 +236,23 @@ class form_builder extends dblyze {
         ]);
 
         // Return input.
-        if (count($foreign_data) > 5) {
+        if (count($foreign_data) > 0) {
+            // Encode foreign values as JSON.
             $json_list = json_encode($foreign_data);
+            // Return search box.
             return $input -> search_box($json_list);
         } else {
+            // Build select box options from foreign data.
+            $options = "";
+            foreach ($foreign_data as $row) {
+                $selected = array_key_exists($column['Field'], $this->source)
+                &&
+                $row[1] === $this->source[$column['Field']]
+                    ? "selected"
+                    : "";
+                $options .= "<option value='$row[id]' $selected>$row[name]</option>";
+            }
+            // Return select box.
             return $input -> select([ 'options' => $options ]);
         }
     }
@@ -341,11 +343,11 @@ class form_builder extends dblyze {
      *
      * ## Config
      *
-     * *__String__ table
+     * __String__ --_table_
      *
-     * __String__ order_by
+     * __String__ _order_by_
      *
-     * __Bool__ filter_deleted
+     * __Bool__ _filter_deleted_
      *
      * @param $config
      *
