@@ -90,17 +90,14 @@ class form_builder extends dblyze {
                         );
                     }
                 } else {
-                    // TODO: Handle many-to-many case.
                     // Handle many-to-many.
                     if ($column['Key'] === 'MTM')
                         $form .= $this -> many_to_many($column);
 
-                    // TODO: Handle one-to-many case.
                     // Handle one-to-many.
                     if ($column['Key'] === 'MUL')
                         $form .= $this -> one_to_many($column, $icfg);
 
-                    // TODO: Handle regular input cases.
                     // Handle regular input.
                     else
                         $form .= $this -> input($column, $icfg);

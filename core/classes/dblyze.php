@@ -31,13 +31,21 @@ class dblyze {
     }
 
     /**
+     * # Relations
+     *
      * Finds relational information from parameters given:
      *
-     * - __string__ TABLE_NAME
-     * - __string__ COLUMN_NAME
-     * - __string__ CONSTRAINT_NAME
-     * - __string__ REFERENCED_TABLE_NAME
-     * - __string__ REFERENCED_COLUMN_NAME
+     * ## Parameters
+     *
+     * __String__ _TABLE_NAME_
+     *
+     * __String__ _COLUMN_NAME_
+     *
+     * __String__ _CONSTRAINT_NAME_
+     *
+     * __String__ _REFERENCED_TABLE_NAME_
+     *
+     * __String__ _REFERENCED_COLUMN_NAME_
      *
      * ## Example
      * ```
@@ -74,6 +82,8 @@ class dblyze {
     }
 
     /**
+     * # Relational table
+     *
      * Finds table column info from outer relation via a relational table.
      *
      * @param string $base_table
@@ -124,6 +134,15 @@ class dblyze {
         return $columns;
     }
 
+    /**
+     * # Table info
+     *
+     * Finds column information based on table name.
+     *
+     * @param string $table_name
+     *
+     * @return array
+     */
     public function table_info($table_name) {
         // Get column information for base table.
         $table_info = $this -> columns($table_name);

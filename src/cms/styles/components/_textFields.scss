@@ -1,32 +1,11 @@
 .form__group {
 
-  label {
-    z-index: 1;
-    pointer-events: none;
-    position: absolute;
-    top: calc(28px - 8px);
-    left: 44px;
-
-    color: rgba(black, .57);
-
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-
-    @include transition(300ms, curve());
-
-    &.hovering {
-      font-size: 12px;
-      @include transform(
-        translateY(-10px)
-      );
-    }
-    &.focus {
-      color: color-primary(500);
-    }
-  }
-
-  input, select, textarea {
+  .input,
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  input[type='datetime'], select, textarea {
     @include appearance;
     position: relative;
     min-width: 280px;
@@ -61,7 +40,34 @@
       -webkit-box-shadow: 0 0 0 1000px rgba(transparent, 0) inset;
       transition: background-color 5000s ease-in-out 0s;
     }
+
+    & ~ label {
+      z-index: 1;
+      pointer-events: none;
+      position: absolute;
+      top: calc(28px - 8px);
+      left: 44px;
+
+      color: rgba(black, .57);
+
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+
+      @include transition(300ms, curve());
+
+      &.hovering {
+        font-size: 12px;
+        @include transform(
+                        translateY(-10px)
+        );
+      }
+      &.focus {
+        color: color-primary(500);
+      }
+    }
   }
+
   textarea {
     height: inherit;
     min-height: 56px;
