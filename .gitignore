@@ -1,3 +1,9 @@
+# Jetbrains IDE project configuration
 .idea
 
+# Node modules (There's a lot of them)
 node_modules
+
+# File uploads
+public_html/cms/upload/*
+public_html/upload/*
