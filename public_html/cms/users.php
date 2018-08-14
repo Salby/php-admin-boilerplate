@@ -115,7 +115,7 @@ switch (strtoupper($mode)) {
                 'labels' => $labels,
                 'exceptions' => $exceptions,
                 'exclude' => [
-                        'blog'
+                    'blog'
                 ]
             ]);
             ?>

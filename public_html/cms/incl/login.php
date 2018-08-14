@@ -22,12 +22,12 @@
                 <span class="title">Login</span>
             </div>
             <div class="form__group">
-                <label for="login_username">Username</label>
                 <input type="text" name="login_username" id="login_username" required>
+                <label for="login_username">Username</label>
             </div>
             <div class="form__group">
-                <label for="login_password">Password</label>
                 <input type="password" name="login_password" id="login_password" required>
+                <label for="login_password">Password</label>
             </div>
             <div class="form__group--right">
                 <button class="button__raised--primary">Login</button>

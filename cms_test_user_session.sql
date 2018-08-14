@@ -1,0 +1,1 @@
+INSERT INTO cms_test.user_session (session_id, user_id, logged_in, last_action) VALUES ('1efb2b374acbe3b9a170d06906c8131e', 12, 1, 1534148127);

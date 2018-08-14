@@ -3,7 +3,9 @@ class SearchBox {
     // Set configurations.
     config = config || {};
     this.placeholder = config.placeholder || 'Search';
-    this.emptyState = config.emptyState || "<div class='search-box__empty-state'>No results</div>";
+    this.emptyState = config.emptyState || "<div class='search-box__empty-state'>" +
+                                             "<button type='button' class='button__flat--primary' id='add-new'>Add new</button>" +
+                                           "</div>";
 
     // Get results from query.
     this.queryRes = document.querySelectorAll(query);
@@ -25,6 +27,10 @@ class SearchBox {
 
     // Find input element.
     el.input = el.querySelector('.input');
+    this.event = new Event('input-value-changed');
+    el.input.addEventListener('input-value-changed', () => {
+      this.updateInput(el.input);
+    });
     // Find searchbox element.
     el.box = el.querySelector('.search-box');
     // Get name for inputs.
@@ -36,6 +42,11 @@ class SearchBox {
     // Remove attribute.
     el.box.removeAttribute('data-list');
 
+    // Find hidden input if it exists.
+    el.newItem = el.querySelector('#new-item')
+      ? el.querySelector('#new-item')
+      : false;
+
     // Get list container.
     el.listContainer = el.box.querySelector('.search-box__container');
     // Get initial list.
@@ -46,9 +57,12 @@ class SearchBox {
     el.update = list => {
       let listItems = list.querySelectorAll('li');
       listItems.forEach(item => {
-        let label = item.querySelector('label');
-        item.addEventListener('click', () => {
-          el.input.innerHTML = label.innerHTML;
+        item.addEventListener('click', event => {
+          event.stopPropagation();
+          console.log('click!');
+          el.input.innerHTML = item.innerText;
+          this.addNew(el, item.innerText);
+          this.close(el.box);
         });
       });
     };
@@ -71,6 +85,9 @@ class SearchBox {
         let indexes = this.search(el.json, QUERY);
         if (!indexes.length) {
           el.listContainer.innerHTML = this.emptyState;
+          el.addNew = el.listContainer.querySelector('#add-new');
+          el.addNew.addEventListener('click', () => this.addNew(el, el.search.value));
+          this.close(el.box);
         } else {
           // Update list.
           const RESULT = this.list(el.json, {
@@ -107,11 +124,13 @@ class SearchBox {
     let list = document.createElement('ul');
     if (!INDEXES.length) {
       json.forEach(obj => {
-        list.appendChild(this.listItem(obj, config));
+        let item = this.listItem(obj, config);
+        list.appendChild(item);
       });
     } else {
       INDEXES.forEach(index => {
-        list.appendChild(this.listItem(json[index], config));
+        let item = this.listItem(json[index], config);
+        list.appendChild(item);
       });
     }
     return list;
@@ -121,23 +140,25 @@ class SearchBox {
     const NAME = config.name || '';
 
     const DATA = Object.values(obj); // Parse object as array.
-    const ID = guid(); // Generate new id.
     let item = document.createElement('li');
     let label = `${capitalize(DATA[1])}`; // Capitalize first letter in label.
     label = label.replace('_', ' '); // Replace underscores with spaces (it's prettier).
-    item.innerHTML = `<input type="radio" name="${NAME}" id="${ID}" value="${DATA[0]}"><label for="${ID}">${label}</label>`;
+    //item.innerHTML = `<input type="radio" name="${NAME}" id="${ID}" value="${DATA[0]}"><label for="${ID}">${label}</label>`;
+    item.innerText = label;
+    item.setAttribute('data-name', NAME);
+    item.setAttribute('data-value', DATA[0]);
     return item; // Return list item.
   }
 
   open(el) {
-    /*if (el.classList.contains('closing'))
-      el.classList.remove('closing');*/
+    console.log('open');
     el.classList.add('open');
     let input = el.querySelector('input');
     input.focus();
   }
 
   close(el) {
+    console.log('close');
     el.classList.replace('open', 'closing');
     el.addEventListener('animationend', () => el.classList.remove('closing'));
   }
@@ -148,36 +169,33 @@ class SearchBox {
     callback(container.childNodes[0]);
   }
 
+  addNew(el, value) {
+    const newItem = capitalize(value);
+    el.input.innerHTML = newItem;
+    el.input.dispatchEvent(this.event);
+
+    // Create new hidden input if it doesn't exist.
+    if (!el.newItem) {
+      el.innerHTML += `<input type="hidden" name="${el.name}" id="new-item" value="">`;
+      el.newItem = el.querySelector('#new-item');
+    }
+
+    // Insert new item value.
+    el.newItem.value = newItem;
+  }
+
+  updateInput(input) {
+    let label = findSibling(input, '.label');
+    let empty = input.innerText.length > 0;
+    if (empty)
+      label.classList.add('hovering');
+    else
+      label.classList.remove('hovering');
+  }
+
 }
 
-/*const addMultipleListeners = (el, listeners, fun) => {
-  listeners.forEach(listener => {
-    el.addEventListener(listener, fun(event));
-  });
-};*/
-const addMultipleListeners = (el, events, handler, useCapture = false, args) => {
-  if (!(events instanceof Array)) {
-    throw `addMultipleListeners: \n
-           Please supply an array of events \n
-           (like ['click', 'mouseover'])`;
-  }
-  let handlerFunction = (e) => {
-    handler.apply(this, args && args instanceof Array ? args : []);
-  };
-  events.forEach(event => {
-    el.addEventListener(event, handlerFunction(), useCapture);
-  });
-};
-const removeMultipleListeners = (el, listeners, action = undefined) => {
-  listeners.forEach(listener => {
-    el.removeEventListener(listener, action);
-  })
-};
-
 const isOpen = el => el.className.contains('open');
-
-const s4 = () => (1+Math.random()*0x10000|0).toString(16).substring(1);
-const guid = () => `${s4()}${s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`;
 
 const capitalize = string => string[0].toUpperCase() + string.slice(1);
 
