@@ -86,11 +86,7 @@ switch (strtoupper($mode)) {
 
         $exceptions = array(
             'deleted' => '',
-            'salt' => '',
-            'thumbnail' => '',
-            'title' => '',
-            'content' => '',
-            'is_private' => ''
+            'salt' => ''
         );
         $labels = array();
         if (isset($_POST['id']) && !empty($_POST['id'])) {
@@ -117,7 +113,10 @@ switch (strtoupper($mode)) {
                 'method' => 'post',
                 'source' => $form_source,
                 'labels' => $labels,
-                'exceptions' => $exceptions
+                'exceptions' => $exceptions,
+                'exclude' => [
+                        'blog'
+                ]
             ]);
             ?>
         </div>

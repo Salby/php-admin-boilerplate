@@ -41,7 +41,8 @@ class form_builder extends dblyze {
     public function build($config) {
         $defaults = [
             'labels' => [],
-            'exceptions' => []
+            'exceptions' => [],
+            'exclude' => []
         ];
         $config = array_merge($defaults, $config);
 
@@ -50,7 +51,9 @@ class form_builder extends dblyze {
         $this -> labels = $config['labels'];
         $this -> exceptions = $config['exceptions'];
 
-        $table_info = parent::table_info($this->table);
+        $table_info = parent::table_info($this->table, [
+            'exclude' => $config['exclude']
+        ]);
 
         $form = "<form
             class='form__main'

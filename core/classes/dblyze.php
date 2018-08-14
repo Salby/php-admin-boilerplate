@@ -140,10 +140,16 @@ class dblyze {
      * Finds column information based on table name.
      *
      * @param string $table_name
+     * @param string $config
      *
      * @return array
      */
-    public function table_info($table_name) {
+    public function table_info($table_name, $config = []) {
+        $defaults = [
+            'exclude' => []
+        ];
+        $config = array_merge($defaults, $config);
+
         // Get column information for base table.
         $table_info = $this -> columns($table_name);
 
@@ -154,6 +160,12 @@ class dblyze {
         if (!empty($table_rel_in)) {
             foreach ($table_rel_in as $column) {
                 $foreign_table = $column['TABLE_NAME'];
+                // Check if table is excluded in config.
+                $exclude_table = in_array($foreign_table, $config['exclude']);
+                if ($exclude_table)
+                    // Skip iteration.
+                    continue;
+
                 $foreign_table_info = $this -> columns($foreign_table);
 
                 // Count primary keys in table.
