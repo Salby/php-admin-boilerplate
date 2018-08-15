@@ -1,1 +1,0 @@
-INSERT INTO cms_test.user (id, name, password, email, address, avatar, role, suspended, deleted, salt) VALUES (12, 'admin', '$2y$10$0ee5M0LFrNPaCk30r2WVee28Wka0m/BgZwZEaTDdomPRpl25ZDw.u', 'admin@admin.dk', 'admin admin 123', '', 3, 0, 0, '');
