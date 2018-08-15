@@ -4,8 +4,8 @@ class SearchBox {
     config = config || {};
     this.placeholder = config.placeholder || 'Search';
     this.emptyState = config.emptyState ||  "<div class='search-box__empty'>" +
-                                              "No results found" +
-                                              "<button class='button__flat--primary' id='add-new'>" +
+                                              "No results found." +
+                                              "<button type='button' class='button__flat--primary' id='add-new'>" +
                                                 "Add new" +
                                               "</button>" +
                                             "</div>";
@@ -83,6 +83,15 @@ class SearchBox {
 
         if (!result.length) {
           elem.list.innerHTML = this.emptyState;
+
+          let addNew = document.querySelector('#add-new');
+          addNew.addEventListener('click', () => {
+            const toSave = q.deStyle();
+            this.updateInput(elem.hiddenInput, toSave);
+            const toDisplay = q.style();
+            this.updateDummy(elem.input, toDisplay);
+            this.close(elem.box);
+          });
         } else {
           elem.insertList(result);
         }
@@ -94,8 +103,10 @@ class SearchBox {
 
     // Open & close.
     elem.input.addEventListener('click', () => {
-      if (!elem.box.classList.contains('open'))
+      if (!elem.box.classList.contains('open')) {
         this.open(elem.box);
+        elem.search.focus();
+      }
     });
     window.addEventListener('click', event => {
       if (!event.target.closest('.form__group--searchbox'))
@@ -166,8 +177,7 @@ class SearchList {
     // Create list item element.
     let item = document.createElement('li');
     // Set item content.
-    data[1] = data[1].replace('_', ' ');
-    item.innerText = data[1].capitalize();
+    item.innerText = data[1].style();
     // Set item data-value.
     item.setAttribute('data-value', data[0]);
     // Return list item.
@@ -181,6 +191,13 @@ String.prototype.capitalize = function() {
 Object.prototype.querySibling = function(query) {
   let parent = this.parentNode;
   return parent.querySelector(query);
+};
+
+String.prototype.style = function() {
+  return this.replace('_', ' ').capitalize();
+};
+String.prototype.deStyle = function() {
+  return this.replace(' ', '_').toLowerCase();
 };
 
 new SearchBox('.form__group--searchbox');
