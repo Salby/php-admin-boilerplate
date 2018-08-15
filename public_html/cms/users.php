@@ -19,7 +19,6 @@ switch (strtoupper($mode)) {
     case 'LIST':
         $pageTitle = "Users";
         require_once('incl/header.php');
-        $userList = $user -> get_list();
         ?>
 
     <main>
