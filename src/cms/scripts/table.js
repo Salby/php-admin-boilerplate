@@ -31,6 +31,8 @@ class Table {
   init(callback) {
     if (this.source) {
       this.limit = this.source.limit;
+      this.table.innerHTML =
+        "<div class='progress'><div class='progress__indeterminate'></div></div>";
 
       xhr.request({
         url: this.source.url,

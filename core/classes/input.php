@@ -230,10 +230,11 @@ class Input {
         $input = "
             <button type='button' class='input'></button>
             <label for='$this->id' class='label'>$this->label</label>
-            <div class='search-box' data-list='$json' data-name='$this->name'>
+            <div class='search-box' data-list='$json'>
                 <input class='search-box__input' type='text'>
                 <div class='search-box__container'></div>
             </div>
+            <input type='hidden' name='$this->name' id='input' value=''>
         ";
 
         if ($this->contained)

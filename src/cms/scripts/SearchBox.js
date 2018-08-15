@@ -1,3 +1,4 @@
+/*
 class SearchBox {
   constructor(query, config) {
     // Set configurations.
@@ -201,3 +202,4 @@ const capitalize = string => string[0].toUpperCase() + string.slice(1);
 
 new SearchBox('.form__group--searchbox');
 
+*/
