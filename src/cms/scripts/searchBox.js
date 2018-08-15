@@ -4,10 +4,11 @@ class SearchBox {
     config = config || {};
     this.placeholder = config.placeholder || 'Search';
     this.emptyState = config.emptyState ||  "<div class='search-box__empty'>" +
+                                              "No results found" +
                                               "<button class='button__flat--primary' id='add-new'>" +
                                                 "Add new" +
                                               "</button>" +
-                                            "</div>"
+                                            "</div>";
 
     // Get results from query.
     this.nodeList = document.querySelectorAll(query);
@@ -47,6 +48,8 @@ class SearchBox {
     elem.insertList = (indexes = []) => {
       // Create new list.
       let list = SearchList.list(elem.JSON, indexes);
+      // Remove content from list container.
+      elem.list.innerHTML = '';
       // Insert list into container.
       elem.list.appendChild(list);
       // Find list items and initialize.
@@ -64,12 +67,30 @@ class SearchBox {
     };
 
     // Initial list.
-    elem.insertList(elem.list, elem.JSON);
+    elem.insertList();
 
     // Search.
     elem.search = elem.querySelector('.search-box__input');
     // Set placeholder.
     elem.search.placeholder = this.placeholder;
+    // Search function.
+    elem.search.addEventListener('keyup', () => {
+      const q = elem.search.value;
+
+      if (q.length) {
+        let result = SearchJSON.match(JSON.parse(elem.JSON), q);
+        result = result.indexes;
+
+        if (!result.length) {
+          elem.list.innerHTML = this.emptyState;
+        } else {
+          elem.insertList(result);
+        }
+      } else {
+        elem.insertList();
+      }
+
+    });
 
     // Open & close.
     elem.input.addEventListener('click', () => {
@@ -116,7 +137,8 @@ class SearchBox {
 
 // Search box list class.
 class SearchList {
-  static list(json, indexes) {
+  static list(json, indexes = []) {
+    console.log(indexes);
     // Parse JSON.
     const parsedJSON = JSON.parse(json);
     // Create list element.
