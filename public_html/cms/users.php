@@ -19,67 +19,11 @@ switch (strtoupper($mode)) {
     case 'LIST':
         $pageTitle = "Users";
         require_once('incl/header.php');
-        ?>
-
-    <main>
-        <div class="card">
-            <div class="card__header">
-                <ul class="header__row">
-                    <li><ul class="header__row-list--left">
-                            <li><h1>List</h1></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><a href="users.php?mode=edit" class="button__icon--primary"><i class="material-icons">add</i></a></li>
-                        </ul></li>
-                </ul>
-                <ul class="header__row--contextual" id="users-contextual">
-                    <li><ul class="header__row-list--left">
-                            <li class="contextualAmount"></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><button id="users-delete" class='button__icon--dark'>
-                                    <i class='material-icons'>delete</i>
-                                </button></li>
-                        </ul></li>
-                </ul>
-            </div>
-            <table class="table" id="users" data-contextual="users-contextual">
-            </table>
-            <div class="table-footer">
-                <button class="table-footer__next" id="users-next"><i class="material-icons">chevron_right</i></button>
-                <button class="table-footer__prev" id="users-prev"><i class="material-icons">chevron_left</i></button>
-                <p class="table-footer__status" id="users-status"></p>
-            </div>
-        </div>
-    </main>
-
-    <script src="assets/script.js"></script>
-    <script>
-        new Table('users', {
-          source: {
-            url: 'users.php?mode=getlist',
-            limit: 10,
-            max: <?=$db -> get_amount('user')?>
-          }
-        });
-
-        let deleteDialog = new Dialog({
-          title: 'Caution.',
-          body: 'Are you sure you want to delete the selected user(s)?',
-          actions: {
-            confirm: 'TableActions.delete(\'users.php?mode=delete\', \'users\'); Dialog.close(deleteDialog.dialog)',
-            cancel: 'Dialog.close(deleteDialog.dialog)'
-          }
-        });
-        let deleteButton = document.getElementById('users-delete');
-        deleteButton.addEventListener('click', () => {
-            Dialog.open(deleteDialog.dialog);
-        });
-    </script>
-
-        <?php
-        break;
-
+        echo html_tool::table_frame([
+            'table' => 'user',
+            'element_id' => 'users',
+            'max' => $db -> get_amount('user')
+        ]);
 
     case 'EDIT':
 
