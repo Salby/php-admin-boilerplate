@@ -42,13 +42,14 @@ class Table {
           offset: this.source.offset
             ? this.source.offset
             : 0
-        },
-        success: res => {
-          this.table.innerHTML = res;
-          new Menu('*[class^=menu]');
-          callback();
         }
-      });
+      })
+      .then(res => {
+        this.table.innerHTML = res;
+        new Menu('*[class^=menu]');
+        callback();
+      })
+      .catch(error => this.handleError(error));
 
       const ID = this.table.id;
       this.next = document.getElementById(`${ID}-next`);
@@ -97,7 +98,7 @@ class Table {
       step = this.step - 1;
     }
 
-    xhr.request({
+    /*xhr.request({
       url: this.source.url,
       method: 'POST',
       data: {
@@ -114,7 +115,26 @@ class Table {
         new Menu('*[class^=menu]');
         callback();
       }
-    });
+    });*/
+    xhr.request({
+      url: this.source.url,
+      method: 'POST',
+      data: {
+        limit: this.limit,
+        offset: this.offset
+      }
+    })
+    .then(res => {
+      this.table.innerHTML = res;
+      this.updateStatus(step);
+      this.updateNext();
+      this.updatePrev();
+      this.update();
+      this.contextual.update(this.table.checked);
+      new Menu('*[class^=menu]');
+      callback();
+    })
+    .then(error => this.handleError(error));
   }
   updateStatus(step) {
     this.step = step;
@@ -186,12 +206,19 @@ class Table {
     });
   }
 
+  handleError(message) {
+    new Toast({
+      message: message,
+      position: 'right'
+    });
+  }
+
 }
 
 let TableActions = {
   delete: (url, tableId) => {
     const table = document.getElementById(tableId);
-    xhr.request({
+    xhr.send({
       method: 'POST',
       url: url,
       data: { selected: table.checked },

@@ -13,7 +13,8 @@ class SearchBox {
     // Get results from query.
     this.nodeList = document.querySelectorAll(query);
 
-    if (this.nodeList) {
+    if (this.nodeList.length) {
+      this.className = this.nodeList[0].classList[0];
       // Iterate and initialize searchboxes.
       this.nodeList.forEach(searchBox => {
         if (!searchBox.initialized) {
@@ -73,46 +74,51 @@ class SearchBox {
     elem.search = elem.querySelector('.search-box__input');
     // Set placeholder.
     elem.search.placeholder = this.placeholder;
-    // Search function.
+    // Search functionality.
     elem.search.addEventListener('keyup', () => {
       const q = elem.search.value;
 
       if (q.length) {
+        // Get indexes from JSON search.
         let result = SearchJSON.match(JSON.parse(elem.JSON), q);
         result = result.indexes;
 
         if (!result.length) {
+          // Repalce search-box content.
           elem.list.innerHTML = this.emptyState;
 
           let addNew = document.querySelector('#add-new');
+          // Update hidden value and dummy input.
           addNew.addEventListener('click', () => {
+            // Add destyled value to hidden input.
             const toSave = q.deStyle();
             this.updateInput(elem.hiddenInput, toSave);
+            // Add styled value to dummy input.
             const toDisplay = q.style();
             this.updateDummy(elem.input, toDisplay);
+            // Close search-box.
             this.close(elem.box);
           });
 
-          window.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-              addNew.click();
-              event.preventDefault();
-            }
-          });
         } else {
+          // Replace search-box content with list from query results.
           elem.insertList(result);
-
-          window.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-              event.preventDefault();
-              elem.list.querySelector('li').click();
-            }
-          });
         }
       } else {
+        // Replace search-box content.
         elem.insertList();
       }
 
+      // Listen for enter presses, and "click" target.
+      window.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+          let target = elem.list.querySelector('button')
+            ? elem.list.querySelector('button')
+            : elem.list.querySelector('li');
+          target.click();
+          event.preventDefault();
+        }
+      });
     });
 
     // Open & close.
@@ -123,7 +129,7 @@ class SearchBox {
       }
     });
     window.addEventListener('click', event => {
-      if (!event.target.closest('.form__group--searchbox'))
+      if (!event.target.closest(this.className))
         this.nodeList.forEach(searchBox => {
           this.close(searchBox.box);
         });

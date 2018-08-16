@@ -85,7 +85,8 @@ class html_tool {
                     title: 'Caution',
                     body: 'Are you sure you want to delete the selected rows?',
                     actions: {
-                      confirm: 'TableActions.delete(\'$config[delete_url]\', \'$config[element_id]\');',
+                      confirm: 'TableActions.delete(\'$config[delete_url]\', \'$config[element_id]\');' +
+                               'Dialog.close(deleteDialog.dialog)',
                       cancel: 'Dialog.close(deleteDialog.dialog)'
                     }
                 });
