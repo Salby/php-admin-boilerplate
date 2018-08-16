@@ -34,6 +34,8 @@ class form_builder extends dblyze {
      *
      * __Array__ _exceptions_
      *
+     * __Array__ *exclude*
+     *
      * @param array $config
      *
      * @return string
@@ -292,6 +294,8 @@ class form_builder extends dblyze {
 
             }
         }
+
+        $many_to_many .= "</div></div>";
 
         // Return input(s).
         return $many_to_many;

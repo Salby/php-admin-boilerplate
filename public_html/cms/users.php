@@ -24,6 +24,7 @@ switch (strtoupper($mode)) {
             'element_id' => 'users',
             'max' => $db -> get_amount('user')
         ]);
+        break;
 
     case 'EDIT':
 

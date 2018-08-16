@@ -20,62 +20,12 @@ switch (strtoupper($mode)) {
 
         $pageTitle = "Products";
         require_once('incl/header.php');
+        echo html_tool::table_frame([
+            'table' => 'product',
+            'element_id' => 'products',
+            'max' => $db->get_amount('product')
+        ]);
 
-        ?>
-
-    <main>
-        <div class="card">
-            <div class="card__header">
-                <ul class="header__row">
-                    <li><ul class="header__row-list--left">
-                            <li><h1>List</h1></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><a href="products.php?mode=edit" class="button__icon--primary"><i class="material-icons">add</i></a></li>
-                        </ul></li>
-                </ul>
-                <ul class="header__row--contextual" id="products-contextual">
-                    <li><ul class="header__row-list--left">
-                            <li class="contextualAmount"></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><button id="products-delete" class='button__icon--dark'>
-                                    <i class='material-icons'>delete</i>
-                                </button></li>
-                        </ul></li>
-                </ul>
-            </div>
-            <table class="table" id="products" data-contextual="products-contextual">
-            </table>
-            <div class="table-footer">
-                <button class="table-footer__next" id="products-next"><i class="material-icons">chevron_right</i></button>
-                <button class="table-footer__prev" id="products-prev"><i class="material-icons">chevron_left</i></button>
-                <p class="table-footer__status" id="products-status"></p>
-            </div>
-        </div>
-    </main>
-
-    <script src="assets/script.js"></script>
-    <script>
-        new Table('products', {
-          source: {
-            url: 'products.php?mode=getlist',
-            limit: 10,
-            max: <?=$db->get_amount('product')?>
-          }
-        });
-        let deleteDialog = new Dialog({
-          title: 'Caution.',
-          message: 'Are you sure you want to delete the selected product(s)?',
-          actions: {
-            confirm: 'TableActions.delete(\'products.php?mode=delete\', \'products\'); Dialog.close(deleteDialog.dialog)',
-            cancel: 'Dialog.close(deleteDialog.dialog)'
-          }
-        });
-        document.getElementById('products-delete').addEventListener('click', () => Dialog.open(deleteDialog.dialog));
-    </script>
-
-        <?php
         break;
 
 
@@ -103,12 +53,20 @@ switch (strtoupper($mode)) {
         ?>
     <main><div class="card">
             <?php
-            $form -> build([
+            /*$form -> build([
                 'table_name' => 'product',
                 'action' => 'products.php?mode=save',
                 'method' => 'post',
                 'source' => $form_source
-            ], $labels, $exceptions);
+            ], $labels, $exceptions);*/
+            echo $form -> build([
+                'table' => 'product',
+                'action' => 'products.php?mode=save',
+                'method' => 'post',
+                'source' => $form_source,
+                'labels' => $labels,
+                'exceptions' => $exceptions
+            ]);
             ?>
         </div></main>
     <script src="assets/script.js"></script>
