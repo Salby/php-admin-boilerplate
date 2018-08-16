@@ -18,39 +18,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-'use strict';
-
-var xhr = {
-  /**
-   * Sends data with XHR
-   *
-   * @param {string} method - The method you want to use to send data, either GET or POST
-   * @param {string} url - The url you want to send data to
-   * @param {string/object} data - The data you want to send
-   * @param {function} success - Lets you work with the response in a function
-   */
-  /*request: function(method, url, data, success) {
-      var GET = method.toUpperCase() === 'GET';
-      var POST = method.toUpperCase() === 'POST';
-      var params = typeof data == 'string' ? data : Object.keys(data).map(function (k) {
-          return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
-      }).join('&');
-      var request = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-      var u = GET ? url + '?' + params : url;
-      if (GET || POST) var m = method.toUpperCase();
-      request.open(m, u);
-      request.onreadystatechange = function () {
-          if (request.readyState > 3 && request.status === 200) success(request.responseText);
-      };
-      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      if (POST) {
-          request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          request.send(params);
-      } else {
-          request.send();
-      }
-  }*/
-  send: obj => {
+class xhr {
+  static send(obj) {
 
     let params;
     let GET = obj.method.toUpperCase() === 'GET';
@@ -89,8 +58,8 @@ var xhr = {
     } else {
       request.send();
     }
-  },
-  request: obj => {
+  }
+  static request(obj) {
     return new Promise((resolve, reject) => {
       let params;
       let GET = obj.method.toUpperCase() === 'GET';
@@ -130,52 +99,4 @@ var xhr = {
       }
     });
   }
-};
-
-let request = obj => {
-  return new Promise((resolve, reject) => {
-    let params;
-    let GET = obj.method.toUpperCase() === 'GET';
-    let POST = obj.method.toUpperCase() === 'POST';
-    if (obj.data) {
-      params = obj.data === 'string'
-        ? obj.data
-        : Object.keys(obj.data).map(key => {
-          return encodeURIComponent(key) + '=' + encodeURIComponent(obj.data[key]);
-        }).join('&');
-    } else {
-      params = '';
-    }
-    let request = window.XMLHttpRequest
-      ? new XMLHttpRequest()
-      : new ActiveXObject('Microsoft.XMLHTTP');
-    const url = GET
-      ? obj.url + '?' + params
-      : obj.url;
-    const method = GET || POST
-      ? obj.method.toUpperCase()
-      : 'GET';
-    request.open(method, url);
-    /*request.onreadystatechange = () => {
-      if (request.readyState > 3 && request.status === 200) {
-        resolve(request.response)
-      } else {
-        reject(request.status)
-      }
-    };*/
-    request.onload = () => {
-      if (request.status >= 200 && request.status < 300) {
-        resolve(request.response);
-      } else {
-        reject(request.statusText);
-      }
-    };
-    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    if (POST) {
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send(params);
-    } else {
-      request.send();
-    }
-  });
-};
+}
