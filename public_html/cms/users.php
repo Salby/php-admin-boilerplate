@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 7/21/18
- * Time: 1:49 PM
- */
 
 require_once('incl/init.php');
 

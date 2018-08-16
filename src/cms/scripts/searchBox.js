@@ -28,9 +28,7 @@ class SearchBox {
   init(elem) {
     // Dummy input.
     elem.input = elem.querySelector('.input');
-    // Create event and add listener to input.
-    this.event = new Event('input-changed');
-    elem.input.addEventListener('input-changed', () => this.inputState(elem.input));
+    this.inputState(elem.input);
 
     // Actual input.
     elem.hiddenInput = elem.querySelector('#input');

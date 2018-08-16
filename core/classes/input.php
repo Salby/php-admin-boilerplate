@@ -228,13 +228,13 @@ class Input {
 
     public function search_box($json) {
         $input = "
-            <button type='button' class='input'></button>
+            <button type='button' class='input'>".ucfirst(str_replace('_', ' ', $this->value))."</button>
             <label for='$this->id' class='label'>$this->label</label>
             <div class='search-box' data-list='$json'>
                 <input class='search-box__input' type='text'>
                 <div class='search-box__container'></div>
             </div>
-            <input type='hidden' name='$this->name' id='input' value=''>
+            <input type='hidden' name='$this->name' id='input' value='$this->value'>
         ";
 
         if ($this->contained)
