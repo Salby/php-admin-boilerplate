@@ -22,7 +22,7 @@ switch (strtoupper($mode)) {
         echo html_tool::table_frame([
             'table' => 'user',
             'element_id' => 'users',
-            'max' => $db -> get_amount('user')
+            'max' => $db->get_amount('user')
         ]);
         break;
 

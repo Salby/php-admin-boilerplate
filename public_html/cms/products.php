@@ -25,7 +25,6 @@ switch (strtoupper($mode)) {
             'element_id' => 'products',
             'max' => $db->get_amount('product')
         ]);
-
         break;
 
 

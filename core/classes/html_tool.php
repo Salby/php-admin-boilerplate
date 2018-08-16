@@ -74,7 +74,7 @@ class html_tool {
             </main>
             <script src='assets/script.js'></script>
             <script>
-                new Table('users', {
+                new Table('$config[element_id]', {
                   source: {
                     url: '$config[source_url]',
                     limit: $config[limit],
