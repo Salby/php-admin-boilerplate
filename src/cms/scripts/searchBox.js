@@ -28,6 +28,8 @@ class SearchBox {
   init(elem) {
     // Dummy input.
     elem.input = elem.querySelector('.input');
+    this.event = new Event('input-changed');
+    elem.input.addEventListener('input-changed', () => this.inputState(elem.input));
     this.inputState(elem.input);
 
     // Actual input.
@@ -90,8 +92,22 @@ class SearchBox {
             this.updateDummy(elem.input, toDisplay);
             this.close(elem.box);
           });
+
+          window.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+              addNew.click();
+              event.preventDefault();
+            }
+          });
         } else {
           elem.insertList(result);
+
+          window.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              elem.list.querySelector('li').click();
+            }
+          });
         }
       } else {
         elem.insertList();
@@ -147,7 +163,6 @@ class SearchBox {
 // Search box list class.
 class SearchList {
   static list(json, indexes = []) {
-    console.log(indexes);
     // Parse JSON.
     const parsedJSON = JSON.parse(json);
     // Create list element.

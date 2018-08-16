@@ -242,6 +242,11 @@ class Input {
                 'input' => $input,
                 'class_name' => 'form__group--searchbox'
             ]);
+        else
+            $input = $this -> contain([
+                'input' => $input,
+                'class_name' => 'searchbox'
+            ]);
 
         return $input;
     }
