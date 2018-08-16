@@ -20,61 +20,11 @@ switch (strtoupper($mode)) {
     case 'LIST':
         $pageTitle = 'Categories';
         require_once('incl/header.php');
-        ?>
-
-    <main>
-        <div class="card">
-            <div class="card__header">
-                <ul class="header__row">
-                    <li><ul class="header__row-list--left">
-                            <li><h1>List</h1></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><a href="categories.php?mode=edit" class="button__icon--primary"><i class="material-icons">add</i></a></li>
-                        </ul></li>
-                </ul>
-                <ul class="header__row--contextual" id="categories-contextual">
-                    <li><ul class="header__row-list--left">
-                            <li class="contextualAmount"></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><button id="categories-delete" class='button__icon--dark'>
-                                    <i class='material-icons'>delete</i>
-                                </button></li>
-                        </ul></li>
-                </ul>
-            </div>
-            <table class="table" id="categories" data-contextual="categories-contextual">
-            </table>
-            <div class="table-footer">
-                <button class="table-footer__next" id="categories-next"><i class="material-icons">chevron_right</i></button>
-                <button class="table-footer__prev" id="categories-prev"><i class="material-icons">chevron_left</i></button>
-                <p class="table-footer__status" id="categories-status"></p>
-            </div>
-        </div>
-    </main>
-
-    <script src="assets/script.js"></script>
-    <script>
-        new Table('categories', {
-          source: {
-            url: 'categories.php?mode=getlist',
-            limit: 10,
-            max: <?=$db->get_amount('category')?>
-          }
-        });
-        let deleteDialog = new Dialog({
-          title: 'Caution.',
-          message: 'Are you sure you want to delete the selected category/categories?',
-          actions: {
-            confirm: 'TableActions.delete(\'categories.php?mode=delete\', \'categories\'); Dialog.close(deleteDialog.dialog)',
-            cancel: 'Dialog.close(deleteDialog.dialog)'
-          }
-        });
-        document.getElementById('categories-delete').addEventListener('click', () => Dialog.open(deleteDialog.dialog));
-    </script>
-
-        <?php
+        echo html_tool::table_frame([
+            'table' => 'category',
+            'element_id' => 'categories',
+            'max' => $db->get_amount('category')
+        ]);
         break;
 
 

@@ -22,58 +22,11 @@ switch (strtoupper($mode)) {
 
         $pageTitle = "Tags";
         require_once('incl/header.php');
-        ?>
-    <main>
-        <div class="card">
-            <div class="card__header">
-                <ul class="header__row">
-                    <li><ul class="header__row-list--left">
-                            <li><h1>List</h1></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><a href="tags.php?mode=edit" class="button__icon--primary"><i class="material-icons">add</i></a></li>
-                        </ul></li>
-                </ul>
-                <ul class="header__row--contextual" id="tags-contextual">
-                    <li><ul class="header__row-list--left">
-                            <li class="contextualAmount"></li>
-                        </ul></li>
-                    <li><ul class="header__row-list--right">
-                            <li><button id="tags-delete" class='button__icon--dark'>
-                                    <i class='material-icons'>delete</i>
-                                </button></li>
-                        </ul></li>
-                </ul>
-            </div>
-            <table class="table" id="tags" data-contextual="tags-contextual">
-            </table>
-            <div class="table-footer">
-                <button class="table-footer__next" id="tags-next"><i class="material-icons">chevron_right</i></button>
-                <button class="table-footer__prev" id="tags-prev"><i class="material-icons">chevron_left</i></button>
-                <p class="table-footer__status" id="tags-status"></p>
-            </div>
-        </div>
-    </main>
-    <script src="assets/script.js"></script>
-    <script>
-        new Table('tags', {
-          source: {
-            url: 'tags.php?mode=getlist',
-            limit: 10,
-            max: <?=$db->get_amount('tag')?>
-          }
-        });
-        let deleteDialog = new Dialog({
-          title: 'Caution.',
-          message: 'Are you sure you want to delete the selected tag(s)?',
-          actions: {
-            confirm: 'TableActions.delete(\'tags.php?mode=delete\', \'tags\'); Dialog.close(deleteDialog.dialog)',
-            cancel: 'Dialog.close(deleteDialog.dialog)'
-          }
-        });
-        document.getElementById('tags-delete').addEventListener('click', () => Dialog.open(deleteDialog.dialog));
-    </script>
-        <?php
+        echo html_tool::table_frame([
+            'table' => 'tag',
+            'element_id' => 'tags',
+            'max' => $db->get_amount('tag')
+        ]);
         break;
 
 
