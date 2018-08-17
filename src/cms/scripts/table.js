@@ -1,38 +1,38 @@
 class Table {
   constructor(tableId, config) {
-    config = config || {};
-    this.checkboxesQuery = config.checkboxesQuery || '.table__checkbox';
-    this.checkboxesMaster = config.checkboxesMaster || 'master';
-    this.messageDefault = config.contextualDefault || 'items selected';
-    this.messageOne = config.contextualOne || 'item selected';
+    config = config || {}
+    this.checkboxesQuery = config.checkboxesQuery || '.table__checkbox'
+    this.checkboxesMaster = config.checkboxesMaster || 'master'
+    this.messageDefault = config.contextualDefault || 'items selected'
+    this.messageOne = config.contextualOne || 'item selected'
 
-    this.masterQuery = '.' + this.checkboxesMaster;
+    this.masterQuery = '.' + this.checkboxesMaster
 
-    this.table = document.getElementById(tableId);
-    this.source = config.source || false;
+    this.table = document.getElementById(tableId)
+    this.source = config.source || false
     this.init(() => {
-      this.checkboxes = this.table.querySelectorAll(this.checkboxesQuery);
+      this.checkboxes = this.table.querySelectorAll(this.checkboxesQuery)
       this.checkboxes.forEach(checkbox => {
         if (checkbox.classList.contains(this.checkboxesMaster)) {
-          this.initCheckbox(checkbox, { master: true });
+          this.initCheckbox(checkbox, { master: true })
         } else {
-          this.initCheckbox(checkbox);
+          this.initCheckbox(checkbox)
         }
-      });
-    });
+      })
+    })
 
     this.contextual = new Contextual(this.table.dataset.contextual, {
       messageDefault: this.messageDefault,
       messageOne: this.messageOne
-    });
+    })
 
   }
 
   init(callback) {
     if (this.source) {
-      this.limit = this.source.limit;
+      this.limit = this.source.limit
       this.table.innerHTML =
-        "<div class='progress'><div class='progress__indeterminate'></div></div>";
+        "<div class='progress'><div class='progress__indeterminate'></div></div>"
 
       xhr.request({
         url: this.source.url,
@@ -45,57 +45,57 @@ class Table {
         }
       })
       .then(res => {
-        this.table.innerHTML = res;
-        new Menu('*[class^=menu]');
-        callback();
+        this.table.innerHTML = res
+        new Menu('*[class^=menu]')
+        callback()
       })
-      .catch(error => this.handleError(error));
+      .catch(error => this.handleError(error))
 
-      const ID = this.table.id;
-      this.next = document.getElementById(`${ID}-next`);
-      this.prev = document.getElementById(`${ID}-prev`);
-      this.status = document.getElementById(`${ID}-status`);
+      const ID = this.table.id
+      this.next = document.getElementById(`${ID}-next`)
+      this.prev = document.getElementById(`${ID}-prev`)
+      this.status = document.getElementById(`${ID}-status`)
 
-      this.max = this.source.max;
-      this.updateStatus(1);
-      this.updateNext();
-      this.updatePrev();
+      this.max = this.source.max
+      this.updateStatus(1)
+      this.updateNext()
+      this.updatePrev()
 
-      this.next.addEventListener('click', () => this.updateSource('next', callback));
-      this.prev.addEventListener('click', () => this.updateSource('prev', callback));
+      this.next.addEventListener('click', () => this.updateSource('next', callback))
+      this.prev.addEventListener('click', () => this.updateSource('prev', callback))
 
     } else {
-      callback();
+      callback()
     }
   }
 
   updateNext() {
     const PAGES = Math.ceil(this.max/this.limit) === 0
       ? 1
-      : Math.ceil(this.max/this.limit);
+      : Math.ceil(this.max/this.limit)
     if (this.step === PAGES) {
-      this.next.classList.add('disabled');
+      this.next.classList.add('disabled')
     } else {
-      this.next.classList.remove('disabled');
+      this.next.classList.remove('disabled')
     }
   }
   updatePrev() {
     if (this.step === 1) {
-      this.prev.classList.add('disabled');
+      this.prev.classList.add('disabled')
     } else {
-      this.prev.classList.remove('disabled');
+      this.prev.classList.remove('disabled')
     }
   }
 
   updateSource(method, callback) {
 
-    let step;
+    let step
     if (method === 'next') {
-      this.offset = this.limit * this.step;
-      step = this.step + 1;
+      this.offset = this.limit * this.step
+      step = this.step + 1
     } else if (method === 'prev') {
-      this.offset = this.offset - this.limit;
-      step = this.step - 1;
+      this.offset = this.offset - this.limit
+      step = this.step - 1
     }
 
     /*xhr.request({
@@ -106,16 +106,16 @@ class Table {
         offset: this.offset
       },
       success: res => {
-        this.table.innerHTML = res;
-        this.updateStatus(step);
-        this.updateNext();
-        this.updatePrev();
-        this.update();
-        this.contextual.update(this.table.checked);
-        new Menu('*[class^=menu]');
-        callback();
+        this.table.innerHTML = res
+        this.updateStatus(step)
+        this.updateNext()
+        this.updatePrev()
+        this.update()
+        this.contextual.update(this.table.checked)
+        new Menu('*[class^=menu]')
+        callback()
       }
-    });*/
+    })*/
     xhr.request({
       url: this.source.url,
       method: 'POST',
@@ -125,99 +125,99 @@ class Table {
       }
     })
     .then(res => {
-      this.table.innerHTML = res;
-      this.updateStatus(step);
-      this.updateNext();
-      this.updatePrev();
-      this.update();
-      this.contextual.update(this.table.checked);
-      new Menu('*[class^=menu]');
-      callback();
+      this.table.innerHTML = res
+      this.updateStatus(step)
+      this.updateNext()
+      this.updatePrev()
+      this.update()
+      this.contextual.update(this.table.checked)
+      new Menu('*[class^=menu]')
+      callback()
     })
-    .then(error => this.handleError(error));
+    .then(error => this.handleError(error))
   }
   updateStatus(step) {
-    this.step = step;
-    let max = Math.ceil(this.max/this.limit);
+    this.step = step
+    let max = Math.ceil(this.max/this.limit)
     if (max === 0) {
-      max = 1;
+      max = 1
     }
-    this.status.innerText = `${this.step} / ${max}`;
+    this.status.innerText = `${this.step} / ${max}`
   }
 
   update() {
-    let checked = this.table.checked = [];
-    let checkboxes = this.checkboxes.length - 1;
-    let master = this.table.querySelector(this.masterQuery);
+    let checked = this.table.checked = []
+    let checkboxes = this.checkboxes.length - 1
+    let master = this.table.querySelector(this.masterQuery)
 
     this.checkboxes.forEach(checkbox => {
       if (!checkbox.master && checkbox.checked) {
-        checked.push(checkbox.value);
+        checked.push(checkbox.value)
       }
-    });
+    })
 
-    master.checked = checkboxes === checked.length;
+    master.checked = checkboxes === checked.length
 
     if (checked.length > 0) {
-      this.contextual.update(checked.length);
-      this.contextual.show();
+      this.contextual.update(checked.length)
+      this.contextual.show()
     } else {
-      this.contextual.hide();
+      this.contextual.hide()
     }
   }
 
   toggleRow(row) {
-    row.classList.toggle('selected');
+    row.classList.toggle('selected')
   }
   removeRows(arr) {
     for (let i = 0; i < this.checkboxes.length; i++) {
-      const checkbox = this.checkboxes[i];
+      const checkbox = this.checkboxes[i]
       for (let j = 0; j < arr.length; j++) {
-        if (checkbox.value === arr[j]) checkbox.row.remove();
+        if (checkbox.value === arr[j]) checkbox.row.remove()
       }
     }
   }
 
   initCheckbox(elem, config) {
-    config = config || {};
-    elem.master = config.master || false;
+    config = config || {}
+    elem.master = config.master || false
 
-    elem.row = elem.closest('tr');
+    elem.row = elem.closest('tr')
 
     elem.addEventListener('click', (e) => {
       if (elem.master) {
         if (this.checkboxes.length > 1) {
-          const newState = elem.checked;
+          const newState = elem.checked
           for (let j = 0; j < this.checkboxes.length; j++) {
-            const checkbox = this.checkboxes[j];
+            const checkbox = this.checkboxes[j]
             if (!checkbox.master && checkbox.checked !== newState) {
-              checkbox.checked = newState;
-              this.toggleRow(checkbox.row);
+              checkbox.checked = newState
+              this.toggleRow(checkbox.row)
             }
           }
         } else {
           if (this.checkboxes[0].master) {
-            e.preventDefault();
+            e.preventDefault()
           }
         }
       } else { this.toggleRow(elem.row) }
 
-      this.update();
-    });
+      this.update()
+    })
   }
 
   handleError(message) {
     new Toast({
       message: message,
       position: 'right'
-    });
+    })
   }
 
 }
 
 let TableActions = {
   delete: (url, tableId) => {
-    const table = document.getElementById(tableId);
+    const table = document.getElementById(tableId)
     xhr.send({
       method: 'POST',
       url: url,
@@ -227,48 +227,48 @@ let TableActions = {
         position: 'right',
         timeout: 100000
       })
-    });
-    let ctable = new Table(tableId);
-    ctable.removeRows(table.checked);
-    Select.closeAll();
-    ctable.update();
-    ctable.contextual.update(0);
+    })
+    let ctable = new Table(tableId)
+    ctable.removeRows(table.checked)
+    Select.closeAll()
+    ctable.update()
+    ctable.contextual.update(0)
   },
-};
+}
 
 
 class Contextual {
   constructor(contextualId, config) {
-    config = config || {};
-    this.messageDefault = config.messageDefault || 'items selected';
-    this.messageOne = config.messageOne || 'item selected';
+    config = config || {}
+    this.messageDefault = config.messageDefault || 'items selected'
+    this.messageOne = config.messageOne || 'item selected'
 
-    this.contextual = document.getElementById(contextualId);
+    this.contextual = document.getElementById(contextualId)
   }
 
   update(count) {
-    const toUpdate = this.contextual.querySelector('.contextualAmount');
-    let newString = '0 ' + this.messageDefault;
+    const toUpdate = this.contextual.querySelector('.contextualAmount')
+    let newString = '0 ' + this.messageDefault
     if (count === 1) {
-      newString = count + ' ' + this.messageOne;
+      newString = count + ' ' + this.messageOne
     } else if (count > 1) {
-      newString = count + ' ' + this.messageDefault;
+      newString = count + ' ' + this.messageDefault
     } else if (count === 0) {
-      this.hide();
+      this.hide()
     }
-    toUpdate.innerHTML = newString;
+    toUpdate.innerHTML = newString
   }
 
   show() {
     if (!this.contextual.classList.contains('open')) {
-      this.contextual.classList.add('open');
+      this.contextual.classList.add('open')
     }
   }
   hide() {
     if (this.contextual.classList.contains('open')) {
-      this.contextual.classList.remove('open');
-      this.contextual.classList.add('closing');
-      this.contextual.addEventListener('animationend', () => this.contextual.classList.remove('closing'));
+      this.contextual.classList.remove('open')
+      this.contextual.classList.add('closing')
+      this.contextual.addEventListener('animationend', () => this.contextual.classList.remove('closing'))
     }
   }
 

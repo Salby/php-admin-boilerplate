@@ -10,9 +10,7 @@ var babel = require('gulp-babel');
 var uglify = require('gulp-uglify'),
   concat = require('gulp-concat');
 
-gulp.task('log', function() {
-  gutil.log('== My first task ==');
-});
+var eslint = require('gulp-eslint');
 
 var postcssplugins = [
   autoprefixer({browsers: ['last 1 version']}),
@@ -36,6 +34,17 @@ gulp.task('sass', function() {
 
 gulp.task('js_cms', function() {
   gulp.src('src/cms/scripts/*.js')
+    .pipe(eslint({
+      parser: 'babel-eslint',
+      rules: {
+        semi: [2, 'never']
+      },
+      env: {
+        es6: true,
+        browser: true
+      }
+    }))
+    .pipe(eslint.format())
     .pipe(babel({
       presets: ['es2015']
     }))
