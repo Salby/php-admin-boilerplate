@@ -214,8 +214,9 @@ class form_builder extends dblyze {
                 'TABLE_NAME' => $this -> table
             ]);
             foreach ($table_rel_out as $relation) {
-                if ($relation['REFERENCED_TABLE_NAME']) {
+                if ($relation['REFERENCED_TABLE_NAME'] && $relation['COLUMN_NAME'] === $column['Field']) {
                     $table = $relation['REFERENCED_TABLE_NAME'];
+                    break;
                 }
             }
         }
@@ -225,6 +226,20 @@ class form_builder extends dblyze {
             'table' => $table,
             'order_by' => "2"
         ]);
+
+        $functions = explode(';', $column[ 'Comment']);
+
+        foreach ($functions as $fun) {
+            if (starts_with('merge', $fun)) {
+                $guide = $this -> trim_function($fun);
+                $guide = explode(',', $guide);
+
+                foreach ($foreign_data as &$row) {
+                    $row["" . $guide[0] . ""] = $row["" . $guide[0] . ""] . " " . $row["" . $guide[1] . ""];
+                    unset($row["" . $guide[1] . ""]);
+                }
+            }
+        }
 
         if (!isset($input_config['name']))
             $input_config['name'] = $input_config['id'];
@@ -240,12 +255,20 @@ class form_builder extends dblyze {
             'contained' => $input_config['contained']
         ]);
 
-        // Return input.
         if (count($foreign_data) > 0) {
+            foreach ($functions as $fun) {
+                if (starts_with('user_add', trim($fun))) {
+                    echo "Found function";
+                    $user_add = $this -> trim_function($fun);
+                    break;
+                }
+            }
+            if (!isset($user_add))
+                $user_add = 'true';
             // Encode foreign values as JSON.
             $json_list = json_encode($foreign_data);
             // Return search box.
-            return $input -> search_box($json_list);
+            return $input -> search_box($json_list, $user_add);
         } else {
             // Build select box options from foreign data.
             $options = "";
@@ -291,6 +314,7 @@ class form_builder extends dblyze {
                 $many_to_many .= $this -> one_to_many($column, $icfg, $foreign_table);
 
                 // Handle regular inputs.
+                $many_to_many .= $this -> input($column, $icfg);
 
             }
         }
@@ -378,6 +402,13 @@ class form_builder extends dblyze {
 
         // Return foreign data.
         return $this -> db -> fetch_array($sql);
+    }
+
+    public function trim_function($fun_string) {
+        $params = strstr($fun_string, '(');
+        $trimmed = trim($params, '(');
+        $trimmed = trim($trimmed, ')');
+        return $trimmed;
     }
 
 }

@@ -24,7 +24,7 @@ switch (strtoupper($mode)) {
 
         $exceptions = array(
             'deleted' => '',
-            'salt' => ''
+            'salt' => '',
         );
         $labels = array();
         if (isset($_POST['id']) && !empty($_POST['id'])) {

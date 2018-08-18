@@ -1,76 +1,110 @@
 <?php
-/*
+
 class crud extends dblyze {
 
     public $table;
 
     protected $db;
 
+    /**
+     * crud constructor.
+     *
+     * @param string $table
+     */
     public function __construct($table) {
         // Call database.
         global $db;
         $this -> db = $db;
 
-        // Call parent constructor,
+        // Call parent constructor.
         parent::__construct();
 
-        // Set table.
+        // Set table name.
         $this -> table = $table;
     }
 
+    /**
+     * ## Config
+     *
+     * **Array** *parameters*
+     *
+     * **Array** *exclude*
+     *
+     * @param array $config
+     */
     public function get($config = []) {
         $defaults = [
-            'item' => 0
+            'parameters' => [],
+            'exclude' => []
         ];
         $config = array_merge($defaults, $config);
 
-        if ($config['item'] > 0) {
+        // Get base table column info.
+        $columns_base = parent::columns($this->table);
 
-        } else {
-            $sql = $this -> get_list();
-            echo " <br><br><br> $sql <br><br><br>";
-            return $this -> db -> fetch_array($sql);
-        }
-    }
-
-    public function get_list() {
-
+        // Get relations going out.
         $rel_out = parent::relations([
-            'TABLE_NAME' => $this -> table
-        ]);
-        $rel_in = parent::relations([
             'REFERENCED_TABLE_NAME' => $this -> table
         ]);
-
-        $select_strings = [];
-        $join_strings = [];
-        var_dump($rel_out);
-
+        // Get column info from related tables (out).
+        $tables_out = [];
         foreach ($rel_out as $rel) {
-            if ($rel['REFERENCED_TABLE_NAME'] !== null || $rel['REFERENCED_COLUMN_NAME'] !== null) {
-                $select_strings[] = ", $rel[REFERENCED_TABLE_NAME].$rel[REFERENCED_COLUMN_NAME]
-                                AS $rel[REFERENCED_TABLE_NAME]_$rel[REFERENCED_COLUMN_NAME] ";
-                $join_strings[] = "JOIN $rel[REFERENCED_TABLE_NAME]
-                                        ON $rel[TABLE_NAME].$rel[COLUMN_NAME] = $rel[REFERENCED_TABLE_NAME].$rel[REFERENCED_COLUMN_NAME] ";
-            }
+            if ($rel['TABLE_NAME'] !== $this->table && !in_array($rel['TABLE_NAME'], $config['exclude']))
+                $tables_out[$rel['TABLE_NAME']] = parent::columns($rel['TABLE_NAME']);
         }
-        foreach ($rel_in as $rel) {
-            if ($rel['TABLE_NAME'] !== null || $rel['COLUMN_NAME'] !== null) {
-                $select_strings[] = ", $rel[TABLE_NAME].$rel[COLUMN_NAME]
-                                AS $rel[TABLE_NAME]_$rel[COLUMN_NAME] ";
-                $join_strings[] = "JOIN $rel[TABLE_NAME]
-                                    ON $rel[REFERENCED_TABLE_NAME].$rel[REFERENCED_COLUMN_NAME] = $rel[TABLE_NAME].$rel[COLUMN_NAME]";
+
+        // Build select strings from base columns.
+        $query_select_base = [];
+        foreach ($columns_base as $column) {
+            $table = $this -> table;
+            $column = $column['Field'];
+            $query_select_base[] = $table.".".$column." AS ".$table."_".$column;
+        }
+
+        // Build select strings from related table columns (out).
+        $query_select_out = $this -> query_select($tables_out);
+
+        $select_str = implode(', ', [
+            implode(', ', $query_select_base),
+            implode(', ', $query_select_out)
+        ]);
+
+        $params = [];
+        $query_params = [];
+        if (!empty($config['parameters'])) {
+            foreach ($config['parameters'] as $column => $value) {
+                $params[] = $value;
+
+                $column = substr_count($column, '.')
+                    ? $column
+                    : $this->table.".".$column;
+                $query_params[] = $column." = ?";
             }
         }
 
-        $sql = "SELECT $this->table.* ";
-        $sql .= implode(' ', $select_strings);
-        $sql .= "FROM $this->table ";
-        $sql .= implode(' ', $join_strings);
+        $params_str = !empty($query_params)
+            ? "WHERE ".implode(' AND ', $query_params)
+            : "";
 
-        return $sql;
+        // Build SQL query.
+        $sql = "SELECT ".$select_str." FROM ".$this->table." ".$params_str;
+        $result = $this -> db -> fetch_array($sql, $params);
+        if (count($result) > 1) {
+            return $result;
+        } else {
+            return call_user_func_array('array_merge', $result);
+        }
     }
 
-}*/
-
-// LAV DET HER
+    public function query_select($tables) {
+        $column_selects = [];
+        foreach ($tables as $table_name => $columns) {
+            $table = $table_name;
+            foreach ($columns as $column) {
+                $column = $column['Field'];
+                $column_selects[] = $table.".".$column." AS ".$table."_".$column;
+            }
+        }
+        return $column_selects;
+    }
+}

@@ -3,12 +3,13 @@ class SearchBox {
     // Set config.
     config = config || {}
     this.placeholder = config.placeholder || 'Search'
-    this.emptyState = config.emptyState ||  "<div class='search-box__empty'>" +
+    this.createState = config.createState ||  "<div class='search-box__empty'>" +
                                               "No results found." +
                                               "<button type='button' class='button__flat--primary' id='add-new'>" +
                                                 "Add new" +
                                               "</button>" +
                                             "</div>"
+    this.emptyState = config.emptyState || "<div class='search-box__empty'>No results found.</div>"
 
     // Get results from query.
     this.nodeList = document.querySelectorAll(query)
@@ -34,11 +35,15 @@ class SearchBox {
     this.inputState(elem.input)
 
     // Actual input.
-    elem.hiddenInput = elem.querySelector('#input')
+    elem.hiddenInput = elem.querySelector('input[type=hidden]')
 
     // Searchbox box.
     elem.box = elem.querySelector('.search-box')
     elem.list = elem.querySelector('.search-box__container')
+
+    // Set user-add bool.
+    elem.userAdd = elem.box.dataset.userAdd === 'true'
+    elem.box.removeAttribute('data-user-add');
 
     // JSON.
     elem.JSON = elem.box.getAttribute('data-list')
@@ -79,26 +84,33 @@ class SearchBox {
       const q = elem.search.value
 
       if (q.length) {
+        // Parse JSON.
+        const source = JSON.parse(elem.JSON)
         // Get indexes from JSON search.
-        let result = SearchJSON.match(JSON.parse(elem.JSON), q)
+        let result = SearchJSON.match(source, q, Object.keys(source[0])[1])
         result = result.indexes
 
         if (!result.length) {
-          // Repalce search-box content.
-          elem.list.innerHTML = this.emptyState
+          if (elem.userAdd) {
+            // Repalce search-box content.
+            elem.list.innerHTML = this.createState
 
-          let addNew = document.querySelector('#add-new')
-          // Update hidden value and dummy input.
-          addNew.addEventListener('click', () => {
-            // Add destyled value to hidden input.
-            const toSave = q.deStyle()
-            this.updateInput(elem.hiddenInput, toSave)
-            // Add styled value to dummy input.
-            const toDisplay = q.style()
-            this.updateDummy(elem.input, toDisplay)
-            // Close search-box.
-            this.close(elem.box)
-          })
+            let addNew = document.querySelector('#add-new')
+            // Update hidden value and dummy input.
+            addNew.addEventListener('click', () => {
+              // Add destyled value to hidden input.
+              const toSave = q.deStyle()
+              this.updateInput(elem.hiddenInput, toSave)
+              // Add styled value to dummy input.
+              const toDisplay = q.style()
+              this.updateDummy(elem.input, toDisplay)
+              // Close search-box.
+              this.close(elem.box)
+            })
+          } else {
+            // Replace search-box content.
+            elem.list.innerHTML = this.emptyState
+          }
 
         } else {
           // Replace search-box content with list from query results.
@@ -112,11 +124,21 @@ class SearchBox {
       // Listen for enter presses, and "click" target.
       window.addEventListener('keydown', event => {
         if (event.key === 'Enter') {
-          let target = elem.list.querySelector('button')
+          /*let target = elem.list.querySelector('button')
             ? elem.list.querySelector('button')
             : elem.list.querySelector('li')
           target.click()
-          event.preventDefault()
+          event.preventDefault()*/
+          let addNew = elem.list.querySelector('button')
+          let listItem = elem.list.querySelector('li')
+
+          if (addNew || listItem) {
+            if (addNew)
+              addNew.click()
+            else if (listItem)
+              listItem.click()
+            event.preventDefault()
+          }
         }
       })
     })
@@ -129,7 +151,7 @@ class SearchBox {
       }
     })
     window.addEventListener('click', event => {
-      if (!event.target.closest(this.className))
+      if (!event.target.closest(`.${this.className}`))
         this.nodeList.forEach(searchBox => {
           this.close(searchBox.box)
         })
@@ -196,7 +218,7 @@ class SearchList {
     // Create list item element.
     let item = document.createElement('li')
     // Set item content.
-    item.innerText = data[1].style()
+    item.innerText = style(`${data[1]}`)
     // Set item data-value.
     item.setAttribute('data-value', data[0])
     // Return list item.
@@ -218,5 +240,7 @@ String.prototype.style = function() {
 String.prototype.deStyle = function() {
   return this.replace(' ', '_').toLowerCase()
 }
+const style = string => string.replace('_', ' ').capitalize()
+const deStyle = string => string.replace(' ', '_').toLowerCase()
 
 new SearchBox('.form__group--searchbox')

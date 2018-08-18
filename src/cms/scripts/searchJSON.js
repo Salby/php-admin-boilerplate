@@ -42,14 +42,20 @@ class SearchJSON {
     return objects
   }
 
-  static match(json, needle) {
+  static match(json, needle, searchKey = '') {
     let found = []
     let re = new RegExp(needle, 'i')
     json.forEach((item, ix) => {
       Object.keys(item).forEach(key => {
-        if (typeof item[key] !== 'string')
+        /*if (typeof item[key] !== 'string')
           return
         if (item[key].match(re))
+          if (found.indexOf(ix) === -1)
+            found.push(ix)*/
+        let queryKey = searchKey.length
+          ? searchKey
+          : key
+        if (item[queryKey].toString().match(re))
           if (found.indexOf(ix) === -1)
             found.push(ix)
       })

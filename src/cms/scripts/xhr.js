@@ -19,37 +19,68 @@ SOFTWARE.
 */
 
 class xhr {
-  static send(obj) {
+  static config(obj) {
+    let data,
+      get,
+      post,
+      url,
+      method
 
-    let params
-    let GET = obj.method.toUpperCase() === 'GET'
-    let POST = obj.method.toUpperCase() === 'POST'
     if (obj.data) {
-      params = obj.data === 'string'
+      data = obj.data === 'string'
         ? obj.data
         : Object.keys(obj.data).map(key => {
           return encodeURIComponent(key) + '=' + encodeURIComponent(obj.data[key])
         }).join('&')
     } else {
-      params = ''
+      data = ''
     }
+
+    if (obj.method) {
+      get = obj.method.toUpperCase() === 'GET'
+      post = obj.method.toUpperCase() === 'POST'
+    } else {
+      get = true
+      post = false
+    }
+
+    if (obj.url) {
+      url = get
+        ? obj.url + '?' + data
+        : obj.url
+    }
+
+    method = get || post
+      ? obj.method.toUpperCase()
+      : 'GET'
+
+    return {
+      url: url,
+      method: method,
+      params: data
+    }
+  }
+
+  static send(obj) {
+
+    const config = xhr.config(obj)
+
     let request = window.XMLHttpRequest
       ? new XMLHttpRequest()
       : new ActiveXObject('Microsoft.XMLHTTP')
-    let u = GET
-      ? obj.url + '?' + params
-      : obj.url
-    const m = GET || POST
-      ? obj.method.toUpperCase()
-      : 'GET'
-    request.open(m, u)
+
+    request.open(config.method, config.url)
+
     request.onreadystatechange = () => {
-      if (request.readyState > 3 && request.status === 200) obj.success(request.responseText)
+      if (request.readyState > 3 && request.status === 200)
+        obj.success(request.responseText)
     }
+
     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-    if (POST) {
+
+    if (config.method === 'POST') {
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-      request.send(params)
+      request.send(config.params)
     } else {
       request.send()
     }
@@ -57,28 +88,15 @@ class xhr {
 
   static request(obj) {
     return new Promise((resolve, reject) => {
-      let params
-      let GET = obj.method.toUpperCase() === 'GET'
-      let POST = obj.method.toUpperCase() === 'POST'
-      if (obj.data) {
-        params = obj.data === 'string'
-          ? obj.data
-          : Object.keys(obj.data).map(key => {
-            return encodeURIComponent(key) + '=' + encodeURIComponent(obj.data[key])
-          }).join('&')
-      } else {
-        params = ''
-      }
+
+      const config = xhr.config(obj)
+
       let request = window.XMLHttpRequest
         ? new XMLHttpRequest()
         : new ActiveXObject('Microsoft.XMLHTTP')
-      const url = GET
-        ? obj.url + '?' + params
-        : obj.url
-      const method = GET || POST
-        ? obj.method.toUpperCase()
-        : 'GET'
-      request.open(method, url)
+
+      request.open(config.method, config.url)
+
       request.onload = () => {
         if (request.status >= 200 && request.status < 300) {
           resolve(request.response)
@@ -86,10 +104,12 @@ class xhr {
           reject(request.statusText)
         }
       }
+
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
-      if (POST) {
+
+      if (config.method === 'POST') {
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-        request.send(params)
+        request.send(config.params)
       } else {
         request.send()
       }
