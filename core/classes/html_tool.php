@@ -60,11 +60,13 @@ class html_tool {
                             </ul></li>
                         </ul>
                     </div>
-                    <table
-                        id='$config[element_id]'
-                        class='table'
-                        data-contextual='$config[element_id]-contextual'
-                    ></table>
+                    <div class='table__container'>
+                        <table
+                            id='$config[element_id]'
+                            class='table'
+                            data-contextual='$config[element_id]-contextual'
+                        ></table>
+                    </div>
                     <div class='table-footer'>
                         <button class='table-footer__next' id='$config[element_id]-next'><i class='material-icons'>chevron_right</i></button>
                         <button class='table-footer__next' id='$config[element_id]-prev'><i class='material-icons'>chevron_left</i></button>

@@ -189,7 +189,10 @@
 @media (max-width: 480px) {
   .table {
     table-layout: unset;
-    width: 100vw;
-    overflow-x: auto;
+
+    &__container {
+      width: 100vw;
+      overflow-x: auto;
+    }
   }
 }

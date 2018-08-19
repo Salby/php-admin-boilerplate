@@ -147,7 +147,9 @@ class SearchBox {
     elem.input.addEventListener('click', () => {
       if (!elem.box.classList.contains('open')) {
         this.open(elem.box)
-        elem.search.focus()
+        let vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0)
+        if (vw > 480)
+          elem.search.focus()
       }
     })
     window.addEventListener('click', event => {
