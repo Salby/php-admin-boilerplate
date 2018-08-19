@@ -71,7 +71,6 @@ class Menu {
     elem.button.addEventListener('click', (event) => {
       event.stopPropagation()
       this.closeAll(elem)
-      //elem.show()
       if (collapsed(elem)) {
         elem.show()
       } else {

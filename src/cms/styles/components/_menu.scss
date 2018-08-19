@@ -7,8 +7,6 @@
 
   &.active {
 
-    button { opacity: 0 }
-
     ul { opacity: 1 }
   }
 
@@ -75,6 +73,21 @@
         &:hover { background-color: rgba(black, .04) }
         &:active { background-color: rgba(black, .12) }
       }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .menu {
+    ul {
+      position: fixed;
+      top: auto !important;
+      bottom: 8px !important;
+      left: 8px !important;
+      right: auto !important;
+      width: calc(100vw - 16px) !important;
+      max-width: unset;
+      @include depth(5);
     }
   }
 }
