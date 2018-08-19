@@ -88,10 +88,27 @@ body {
   --header-height: 56px;
   --drawer-width: calc(100vw - 56px);
 }
+@media (max-width: 480px) {
+  body {
+    &.admin {
+      grid-template-rows: var(--header-height) auto !important;
+      grid-template-columns: auto !important;
+      grid-template-areas: unset !important;
+      --drawer-width: calc(100vw - 56px);
+    }
+  }
+  main {
+    transform: none !important;
+    .card {
+      margin: 8px 0;
+    }
+  }
+}
 
 main {
-  width: 100%;
+  width: 100vw;
   transform: translateY(-56px);
+  overflow-x: hidden;
 }
 @media only screen and (min-width: 960px) and (max-width: 1259px) {
   main {

@@ -33,7 +33,7 @@ function links($links, $activeName) {
     </head>
     <body class="admin">
 
-    <nav class="drawer">
+    <nav class="drawer" id="drawer-main">
         <div class="drawer__header">
             <h1 class="drawer__title">CMS 2.0</h1>
         </div>
@@ -93,6 +93,7 @@ function links($links, $activeName) {
     </nav>
 
     <header class="appbar">
+        <button id="drawer-open" data-drawer="drawer-main" class="button__icon--light"><i class="material-icons">menu</i></button>
         <h1><?=$pageTitle?></h1>
     </header>
 

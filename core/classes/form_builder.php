@@ -258,7 +258,6 @@ class form_builder extends dblyze {
         if (count($foreign_data) > 0) {
             foreach ($functions as $fun) {
                 if (starts_with('user_add', trim($fun))) {
-                    echo "Found function";
                     $user_add = $this -> trim_function($fun);
                     break;
                 }

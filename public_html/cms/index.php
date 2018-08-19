@@ -8,3 +8,5 @@
 require_once('incl/init.php');
 $pageTitle = 'Home';
 require_once('incl/header.php');
+?>
+<script src="assets/script.js"></script>

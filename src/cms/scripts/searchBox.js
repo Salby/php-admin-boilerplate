@@ -43,7 +43,7 @@ class SearchBox {
 
     // Set user-add bool.
     elem.userAdd = elem.box.dataset.userAdd === 'true'
-    elem.box.removeAttribute('data-user-add');
+    elem.box.removeAttribute('data-user-add')
 
     // JSON.
     elem.JSON = elem.box.getAttribute('data-list')

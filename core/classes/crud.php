@@ -42,15 +42,15 @@ class crud extends dblyze {
         // Get base table column info.
         $columns_base = parent::columns($this->table);
 
-        // Get relations going out.
-        $rel_out = parent::relations([
+        // Get relations coming in.
+        $rel_in = parent::relations([
             'REFERENCED_TABLE_NAME' => $this -> table
         ]);
         // Get column info from related tables (out).
-        $tables_out = [];
-        foreach ($rel_out as $rel) {
+        $tables_in = [];
+        foreach ($rel_in as $rel) {
             if ($rel['TABLE_NAME'] !== $this->table && !in_array($rel['TABLE_NAME'], $config['exclude']))
-                $tables_out[$rel['TABLE_NAME']] = parent::columns($rel['TABLE_NAME']);
+                $tables_in[$rel['TABLE_NAME']] = parent::columns($rel['TABLE_NAME']);
         }
 
         // Build select strings from base columns.
@@ -62,12 +62,23 @@ class crud extends dblyze {
         }
 
         // Build select strings from related table columns (out).
-        $query_select_out = $this -> query_select($tables_out);
+        $query_select_in = $this -> query_select($tables_in);
 
         $select_str = implode(', ', [
             implode(', ', $query_select_base),
-            implode(', ', $query_select_out)
+            implode(', ', $query_select_in)
         ]);
+        $select_str = trim($select_str, ', ');
+
+        $joins = [];
+        foreach ($rel_in as $rel) {
+            if (!in_array($rel['TABLE_NAME'], $config['exclude']))
+                $joins[] = "JOIN ".$rel['TABLE_NAME'].
+                    " ON ".$rel['REFERENCED_TABLE_NAME'].".".$rel['REFERENCED_COLUMN_NAME'].
+                    " = ".$rel['TABLE_NAME'].".".$rel['COLUMN_NAME'];
+        }
+
+        $joins_str = implode(' ', $joins);
 
         $params = [];
         $query_params = [];
@@ -87,13 +98,15 @@ class crud extends dblyze {
             : "";
 
         // Build SQL query.
-        $sql = "SELECT ".$select_str." FROM ".$this->table." ".$params_str;
-        $result = $this -> db -> fetch_array($sql, $params);
-        if (count($result) > 1) {
+        $sql = "SELECT ".$select_str." FROM ".$this->table." ".$joins_str." ".$params_str;
+        var_dump(trim($sql));
+        $result = $this -> db -> fetch_array(trim($sql), $params);
+        /*if (count($result) > 1) {
             return $result;
         } else {
             return call_user_func_array('array_merge', $result);
-        }
+        }*/
+        return $result;
     }
 
     public function query_select($tables) {

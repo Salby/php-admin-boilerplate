@@ -37,6 +37,7 @@
       @include transition(280ms, curve());
       td {
         width: 100%;
+        max-width: 150px;
         height: inherit;
         padding-right: 56px;
         color: rgba(black, .87);
@@ -182,5 +183,13 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    table-layout: unset;
+    width: 100vw;
+    overflow-x: auto;
   }
 }
