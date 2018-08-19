@@ -9,8 +9,12 @@ switch (strtoupper($mode)) {
     case 'GET_CITY':
         $crud = new crud('user');
         $city_list = $crud -> get([
-            'parameters' => [
+            'column_params' => [
                 'deleted' => 0
+            ],
+            'query_params' => [
+                'LIMIT' => 1,
+                'OFFSET' => 1
             ],
             'exclude' => [
                 'blog',

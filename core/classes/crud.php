@@ -26,15 +26,18 @@ class crud extends dblyze {
     /**
      * ## Config
      *
-     * **Array** *parameters*
+     * **Array** *column_params*
      *
      * **Array** *exclude*
      *
      * @param array $config
+     *
+     * @return array
      */
     public function get($config = []) {
         $defaults = [
-            'parameters' => [],
+            'column_params' => [],
+            'query_params' => [],
             'exclude' => []
         ];
         $config = array_merge($defaults, $config);
@@ -82,8 +85,8 @@ class crud extends dblyze {
 
         $params = [];
         $query_params = [];
-        if (!empty($config['parameters'])) {
-            foreach ($config['parameters'] as $column => $value) {
+        if (!empty($config['column_params'])) {
+            foreach ($config['column_params'] as $column => $value) {
                 $params[] = $value;
 
                 $column = substr_count($column, '.')
@@ -97,8 +100,16 @@ class crud extends dblyze {
             ? "WHERE ".implode(' AND ', $query_params)
             : "";
 
+
         // Build SQL query.
         $sql = "SELECT ".$select_str." FROM ".$this->table." ".$joins_str." ".$params_str;
+
+        if (!empty($config['query_params'])) {
+            foreach ($config['query_params'] as $param => $value) {
+                $sql .= " $param $value";
+            }
+        }
+
         var_dump(trim($sql));
         $result = $this -> db -> fetch_array(trim($sql), $params);
         /*if (count($result) > 1) {

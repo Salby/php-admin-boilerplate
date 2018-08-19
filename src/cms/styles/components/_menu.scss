@@ -41,6 +41,8 @@
     opacity: 0;
     transition: 300ms curve();
 
+    will-change: width, height, opacity;
+
     li, input[type='submit'] {
       user-select: none;
       cursor: pointer;

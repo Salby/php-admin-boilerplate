@@ -146,6 +146,8 @@ switch (strtoupper($mode)) {
                                             <input type="hidden" name="id" value="<?=$user['id']?>">
                                             <input type="submit" value="Edit">
                                         </form></li>
+                                    <li>Option 2</li>
+                                    <li>Option 3</li>
                                 </ul>
                             </div>
                         </td>
