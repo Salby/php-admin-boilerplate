@@ -41,6 +41,21 @@ class SearchBox {
     elem.box = elem.querySelector('.search-box')
     elem.list = elem.querySelector('.search-box__container')
 
+    elem.box.enter = event => {
+      if (event.key === 'Enter') {
+        let addNew = elem.list.querySelector('button')
+        let listItem = elem.list.querySelector('li')
+
+        if (addNew || listItem) {
+          if (addNew)
+            addNew.click()
+          else if (listItem)
+            listItem.click()
+          event.preventDefault()
+        }
+      }
+    }
+
     // Set user-add bool.
     elem.userAdd = elem.box.dataset.userAdd === 'true'
     elem.box.removeAttribute('data-user-add')
@@ -49,6 +64,10 @@ class SearchBox {
     elem.JSON = elem.box.getAttribute('data-list')
     // Remove data-list attribute.
     elem.box.removeAttribute('data-list')
+    elem.boxClosedEvent = new Event('box-closed')
+    elem.box.addEventListener('box-closed', () => {
+
+    })
 
     // Insert list function.
     elem.insertList = (indexes = []) => {
@@ -122,25 +141,7 @@ class SearchBox {
       }
 
       // Listen for enter presses, and "click" target.
-      window.addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-          /*let target = elem.list.querySelector('button')
-            ? elem.list.querySelector('button')
-            : elem.list.querySelector('li')
-          target.click()
-          event.preventDefault()*/
-          let addNew = elem.list.querySelector('button')
-          let listItem = elem.list.querySelector('li')
-
-          if (addNew || listItem) {
-            if (addNew)
-              addNew.click()
-            else if (listItem)
-              listItem.click()
-            event.preventDefault()
-          }
-        }
-      })
+      window.addEventListener('keydown', event => { elem.box.enter(event) })
     })
 
     // Open & close.
@@ -183,6 +184,7 @@ class SearchBox {
     box.classList.add('open')
   }
   close(box) {
+    window.removeEventListener('keydown', event => { box.enter(event) })
     box.classList.replace('open', 'closing')
     box.addEventListener('animationend', () => {
       box.classList.remove('closing')
