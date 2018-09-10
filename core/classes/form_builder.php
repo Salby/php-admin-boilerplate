@@ -82,17 +82,20 @@ class form_builder extends dblyze {
 
                 // Check if input is in exceptions.
                 if (array_key_exists($column['Field'], $this->exceptions)) {
-                    if ($this->exceptions[$column['Field']]) {
+                    if (!empty($this->exceptions[$column['Field']])) {
                         // Set input as  defined in exception.
                         $input = $this->exceptions[$column['Field']];
                         // Insert handled input.
                         $form .= $this -> handle_exception(
                             $input,
                             $icfg['id'],
+                            $icfg['name'],
                             $icfg['label'],
                             $icfg['required'],
                             $icfg['value']
                         );
+                    } else {
+                        continue;
                     }
                 } else {
                     // Handle many-to-many.
@@ -109,6 +112,8 @@ class form_builder extends dblyze {
 
                 }
 
+            } elseif (!empty($config['source'])) {
+                $form .= "<input type='hidden' name='$config[table]_$column[Field]' value='".$this->source[$column['Field']]."'>";
             }
         }
 
@@ -169,8 +174,12 @@ class form_builder extends dblyze {
             return $input -> textarea(7);
 
         // Toggle.
-        elseif ($column['Type'] == 'tinyint(1)')
-            return $input -> toggle($column['Default']);
+        elseif ($column['Type'] == 'tinyint(1)') {
+            $state = array_key_exists($column['Field'], $this->source)
+                ? $this->source[$column['Field']]
+                : $column['Default'];
+            return $input->toggle($state);
+        }
 
         // Number field.
         elseif ($column['Type'] == 'int(11)')
@@ -185,6 +194,8 @@ class form_builder extends dblyze {
         $config = [];
         // Define input id.
         $config['id'] = $this -> table."_".$column['Field'];
+        // Define input $name.
+        $config['name'] = $config['id'];
         // Define input label.
         $config['label'] = array_key_exists($column['Field'], $this->labels)
             // Set label as defined in labels array.
@@ -230,12 +241,12 @@ class form_builder extends dblyze {
         $functions = explode(';', $column[ 'Comment']);
 
         foreach ($functions as $fun) {
-            if (starts_with('merge', $fun)) {
+            if (starts_with('merge', trim($fun))) {
                 $guide = $this -> trim_function($fun);
                 $guide = explode(',', $guide);
 
                 foreach ($foreign_data as &$row) {
-                    $row["" . $guide[0] . ""] = $row["" . $guide[0] . ""] . " " . $row["" . $guide[1] . ""];
+                    $row["" . $guide[0] . ""] = $row["" . $guide[0] . "name"] . " " . $row["" . $guide[1] . ""];
                     unset($row["" . $guide[1] . ""]);
                 }
             }
@@ -255,7 +266,7 @@ class form_builder extends dblyze {
             'contained' => $input_config['contained']
         ]);
 
-        if (count($foreign_data) > 0) {
+        if (count($foreign_data) > 6) {
             foreach ($functions as $fun) {
                 if (starts_with('user_add', trim($fun))) {
                     $user_add = $this -> trim_function($fun);
@@ -274,13 +285,26 @@ class form_builder extends dblyze {
             foreach ($foreign_data as $row) {
                 $selected = array_key_exists($column['Field'], $this->source)
                 &&
-                $row[1] === $this->source[$column['Field']]
+                array_values($row)[0] === $this->source[$column['Field']]
                     ? "selected"
                     : "";
-                $options .= "<option value='$row[id]' $selected>$row[name]</option>";
+                $display = ucfirst($row['name']);
+                $options .= "<option value='$row[id]' $selected>$display</option>";
             }
+
+            $default = "None";
+            foreach ($functions as $fun) {
+                if (starts_with('default_option', trim($fun))) {
+                    if ($this->trim_function($fun) === 'false')
+                        $default = "";
+                }
+            }
+
             // Return select box.
-            return $input -> select([ 'options' => $options ]);
+            return $input -> select([
+                'options' => $options,
+                'default' => $default
+            ]);
         }
     }
 
@@ -329,16 +353,20 @@ class form_builder extends dblyze {
      *
      * @param $input - Template input.
      * @param $id
+     * @param $name
      * @param $label
      * @param $required
      * @param $value
      *
      * @return mixed
      */
-    public function handle_exception($input, $id, $label, $required, $value) {
+    public function handle_exception($input, $id, $name, $label, $required, $value) {
         if (strpos($input, '___id___'))
             // Replace id placeholder with actual id.
             $input = str_replace('___id___', $id, $input);
+        if (strpos($input, '___name___'))
+            // Replace name placeholder with actual name.
+            $input = str_replace('___name___', $name, $input);
         if (strpos($input, '___label___'))
             // Replace label placeholder with actual label.
             $input = str_replace('___label___', $label, $input);
