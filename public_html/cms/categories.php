@@ -38,12 +38,11 @@ switch (strtoupper($mode)) {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $pageTitle = 'Categories · Edit';
             $form_source = $category -> get_item($_POST['id']);
-            $labels['_form_title'] = 'Edit category';
-            $exceptions['deleted'] = '<input type="hidden" name="id" value="'.$_POST['id'].'">';
+            $labels['__form_title'] = 'Edit category';
         } else {
             $pageTitle = 'Categories · Create';
             $form_source = array();
-            $labels['_form_title'] = 'New category';
+            $labels['__form_title'] = 'New category';
         }
         require_once('incl/header.php');
         $form = new form_builder();
@@ -51,13 +50,18 @@ switch (strtoupper($mode)) {
 
         <main>
             <div class="card">
-                <?php
+                <?=
                 $form -> build([
-                    'table_name' => 'category',
+                    'table' => 'category',
                     'action' => 'categories.php?mode=save',
                     'method' => 'post',
-                    'source' => $form_source
-                ], $labels, $exceptions);
+                    'source' => $form_source,
+                    'labels' => $labels,
+                    'exceptions' => $exceptions,
+                    'exclude' => [
+                        'product_category'
+                    ]
+                ]);
                 ?>
             </div>
         </main>
@@ -74,8 +78,8 @@ switch (strtoupper($mode)) {
     case 'SAVE':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $category -> id = isset($_POST['id']) && !empty($_POST['id'])
-            ? $_POST['id']
+        $category -> id = isset($_POST['category_id']) && !empty($_POST['category_id'])
+            ? $_POST['category_id']
             : 0;
         $category -> name = $_POST['category_name'];
         $category -> image = $_FILES['category_image'];

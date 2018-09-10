@@ -37,7 +37,7 @@ switch (strtoupper($mode)) {
 
         $labels = array(
             'is_private' => 'Private',
-            'tag_tag_id' => 'Tag'
+            'tag_id' => 'Tag'
         );
         $exceptions = array(
             'deleted' => ''
@@ -46,40 +46,35 @@ switch (strtoupper($mode)) {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $pageTitle = "Posts · Edit";
             $form_source = $post -> get_item($_POST['id']);
-            $labels['_form_title'] = "Edit post";
+            $labels['__form_title'] = "Edit post";
         } else {
             $pageTitle = "Posts · Create";
             $form_source = [];
-            $labels['_form_title'] = "New post";
+            $labels['__form_title'] = "New post";
         }
         require_once('incl/header.php');
         $form = new form_builder();
-        ?>
-    <main>
-        <div class="card">
-            <?php
-            $form -> build([
-                'table_name' => 'blog',
-                'action' => 'posts.php?mode=save',
-                'method' => 'post',
-                'source' => $form_source
-            ], $labels, $exceptions);
-            ?>
-        </div>
-    </main>
-    <script src="assets/script.js"></script>
-    <script>
-        new Form('blog');
-    </script>
-        <?php
+        echo "<main><div class='card'>";
+        echo $form -> build([
+            'table' => 'blog',
+            'action' => 'posts.php?mode=save',
+            'method' => 'post',
+            'source' => $form_source,
+            'labels' => $labels,
+            'exceptions' => $exceptions,
+            'exclude' => [
+                'user'
+            ]
+        ]);
+        echo "</main></div><script src='assets/script.js'></script><script>new Form('blog')</script>";
         break;
 
 
     case 'SAVE':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $post -> id = isset($_POST['id']) && !empty($_POST['id'])
-            ? $_POST['id']
+        $post -> id = isset($_POST['blog_id']) && !empty($_POST['blog_id'])
+            ? $_POST['blog_id']
             : 0;
         $post -> author = $_POST['blog_author'];
         $post -> thumbnail = $_FILES['blog_thumbnail'];

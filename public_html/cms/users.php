@@ -71,8 +71,8 @@ switch (strtoupper($mode)) {
     case 'SAVE':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $user -> id = isset($_POST['id']) && !empty($_POST['id'])
-            ? $_POST['id']
+        $user -> id = isset($_POST['user_id']) && !empty($_POST['user_id'])
+            ? $_POST['user_id']
             : 0;
         $user -> name = $_POST['user_name'];
         $user -> password = isset($_POST['user_password']) && !empty($_POST['user_password'])

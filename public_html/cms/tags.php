@@ -40,41 +40,35 @@ switch (strtoupper($mode)) {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $pageTitle = "Tags · Edit";
             $form_source = $tag -> get_item($_POST['id']);
-            $labels['_form_title'] = "Edit tag";
+            $labels['__form_title'] = "Edit tag";
         } else {
             $pageTitle = "Tags · Create";
             $form_source = array();
-            $labels['_form_title'] = "New tag";
+            $labels['__form_title'] = "New tag";
         }
         require_once('incl/header.php');
         $form = new form_builder();
-        ?>
-    <main>
-        <div class="card">
-            <?php
-            $form -> build([
-                'table_name' => 'tag',
-                'action' => 'tags.php?mode=save',
-                'method' => 'post',
-                'source' => $form_source,
-                'standalone' => true
-            ], $labels, $exceptions);
-            ?>
-        </div>
-    </main>
-    <script src="assets/script.js"></script>
-    <script>
-        new Form('tag');
-    </script>
-        <?php
+        echo "<main><div class='card'>";
+        echo $form -> build([
+            'table' => 'tag',
+            'action' => 'tags.php?mode=save',
+            'method' => 'post',
+            'source' => $form_source,
+            'labels' => $labels,
+            'exceptions' => $exceptions,
+            'exclude' => [
+                'blog_tag'
+            ]
+        ]);
+        echo "</main></div><script src='assets/script.js'></script><script>new Form('tag')</script>";
         break;
 
 
     case 'SAVE':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $tag -> id = isset($_POST['id']) && !empty($_POST['id'])
-            ? $_POST['id']
+        $tag -> id = isset($_POST['tag_id']) && !empty($_POST['tag_id'])
+            ? $_POST['tag_id']
             : 0;
         $tag -> name = $_POST['tag_name'];
 

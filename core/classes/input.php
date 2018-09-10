@@ -197,6 +197,7 @@ class Input {
     public function select($config) {
         $defaults = [
             'options' => '',
+            'default' => 'None',
             'hovering' => true
         ];
         $config = array_merge($defaults, $config);
@@ -210,10 +211,10 @@ class Input {
                 name='$this->name'
                 id='$this->id'
                 $this->required
-            >
-                <option value='0'>None</option>
-                $config[options]
-            </select>
+            >";
+        if (!empty($config['default']))
+            $input .= "<option value='0'>$config[default]</option>";
+        $input .= "$config[options]</select>
             <label for='$this->id' $label_class>$this->label</label>
         ";
 
