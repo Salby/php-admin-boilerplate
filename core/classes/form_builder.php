@@ -277,8 +277,22 @@ class form_builder extends dblyze {
                 $user_add = 'true';
             // Encode foreign values as JSON.
             $json_list = json_encode($foreign_data);
+
+            // Search-box value.
+            $value = [];
+            $edit = array_key_exists($column['Field'], $this->source);
+            if ($edit) {
+                $target = $this->source[$column['Field']];
+                $row = substr_in_array($target, $foreign_data);
+                if (isset($row[0]) && isset($row[1]))
+                    $value = [
+                        'display' => $row[1],
+                        'value' => $row[0]
+                    ];
+            }
+
             // Return search box.
-            return $input -> search_box($json_list, $user_add);
+            return $input -> search_box($json_list, $user_add, $value);
         } else {
             // Build select box options from foreign data.
             $options = "";
@@ -450,4 +464,15 @@ class form_builder extends dblyze {
 function starts_with($needle, $haystack) {
     $length = strlen($needle);
     return substr($haystack, 0, $length) === $needle;
+}
+
+function substr_in_array($needle, $haystack) {
+    $haystack = array_values($haystack);
+    for ($i = 0; $i < count($haystack); $i++) {
+        $haystack[$i] = array_values($haystack[$i]);
+        for ($j = 0; $j < count($haystack[$i]); $j++) {
+            if (substr_count($haystack[$i][$j], $needle))
+                return $haystack[$i];
+        }
+    }
 }

@@ -38,7 +38,7 @@ class User extends file_upload {
 
         $sql = "SELECT user.*,
                   r.name AS role,
-                  c.name AS city_name
+                  c.name AS city
                   FROM user
                 JOIN role r ON user.role = r.id
                 JOIN city c ON user.city = c.id
@@ -56,7 +56,7 @@ class User extends file_upload {
         $params = array($id);
         $sql = "SELECT user.*,
                   role.name AS role,
-                  city.name AS city_name
+                  city.name AS city
                   FROM user
                 JOIN role
                   ON user.role = role.id

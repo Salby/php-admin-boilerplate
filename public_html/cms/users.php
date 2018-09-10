@@ -114,10 +114,11 @@ switch (strtoupper($mode)) {
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_NUMBER_INT);
 
-        $userList = $user -> get_list([
+        $user_list = $user -> get_list([
             'limit' => $_POST['limit'],
             'offset' => $_POST['offset']
         ]);
+
         ?>
                 <thead>
                     <tr>
@@ -131,7 +132,7 @@ switch (strtoupper($mode)) {
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($userList as $user) : ?>
+                <?php foreach ($user_list as $user) : ?>
                     <tr>
                         <td class="select"><input type="checkbox" name="users" class="table__checkbox" value="<?=$user['id']?>"></td>
                         <td class="type--align-right"><?=$user['id']?></td>
@@ -147,8 +148,6 @@ switch (strtoupper($mode)) {
                                             <input type="hidden" name="id" value="<?=$user['id']?>">
                                             <input type="submit" value="Edit">
                                         </form></li>
-                                    <li>Option 2</li>
-                                    <li>Option 3</li>
                                 </ul>
                             </div>
                         </td>

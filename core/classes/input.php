@@ -226,15 +226,23 @@ class Input {
         return $input;
     }
 
-    public function search_box($json, $user_add) {
+    public function search_box($json, $user_add, $value = []) {
+
+        $value = isset($value['display']) && isset($value['value'])
+            ? $value
+            : [
+                'display' => ucfirst(str_replace('_', ' ', $this->value)),
+                'value' => $this->value
+            ];
+
         $input = "
-            <button type='button' class='input'>".ucfirst(str_replace('_', ' ', $this->value))."</button>
+            <button type='button' class='input'>$value[display]</button>
             <label for='$this->id' class='label'>$this->label</label>
             <div class='search-box' data-list='$json' data-user-add='$user_add'>
                 <input class='search-box__input' type='text'>
                 <div class='search-box__container'></div>
             </div>
-            <input type='hidden' name='$this->name' value='$this->value'>
+            <input type='hidden' name='$this->name' value='$value[value]'>
         ";
 
         if ($this->contained)
