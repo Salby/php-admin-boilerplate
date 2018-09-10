@@ -13,6 +13,7 @@ class User extends file_upload {
     public $password;
     public $email;
     public $address;
+    public $city;
     public $avatar;
     public $role;
     public $suspended;
@@ -36,9 +37,11 @@ class User extends file_upload {
             : '';
 
         $sql = "SELECT user.*,
-                  r.name as role
+                  r.name AS role,
+                  c.name AS city_name
                   FROM user
-                JOIN role r on user.role = r.id
+                JOIN role r ON user.role = r.id
+                JOIN city c ON user.city = c.id
                 WHERE
                   user.deleted = 0
                   $search";
@@ -52,10 +55,13 @@ class User extends file_upload {
     public function get_item($id) {
         $params = array($id);
         $sql = "SELECT user.*,
-                  role.name AS role
+                  role.name AS role,
+                  city.name AS city_name
                   FROM user
                 JOIN role
                   ON user.role = role.id
+                JOIN city
+                  ON user.city = city.id
                 WHERE
                   user.id = ?";
         $row = $this -> db -> fetch_array($sql, $params);
@@ -87,6 +93,7 @@ class User extends file_upload {
                 $this -> name,
                 $this -> email,
                 $this -> address,
+                $this -> city,
                 $avatar,
                 $this -> role,
                 $this -> suspended,
@@ -96,6 +103,7 @@ class User extends file_upload {
                       name = ?,
                       email = ?,
                       address = ?,
+                      city = ?,
                       avatar = ?,
                       role = ?,
                       suspended = ?
@@ -119,15 +127,16 @@ class User extends file_upload {
                 $password_hashed,
                 $this -> email,
                 $this -> address,
+                $this -> city,
                 $avatar,
                 $this -> role,
                 $salt_string
             );
             $sql = "INSERT INTO 
                       user 
-                        (name, password, email, address, avatar, role, salt) 
+                        (name, password, email, address, city, avatar, role, salt) 
                     VALUES 
-                      (?, ?, ?, ?, ?, ?, ?)";
+                      (?, ?, ?, ?, ?, ?, ?, ?)";
             $this -> db -> query($sql, $params);
         }
     }

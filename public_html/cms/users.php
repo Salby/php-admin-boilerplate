@@ -80,6 +80,7 @@ switch (strtoupper($mode)) {
             : '';
         $user -> email = $_POST['user_email'];
         $user -> address = $_POST['user_address'];
+        $user -> city = $_POST['user_city'];
         $user -> avatar = $_FILES['user_avatar'];
         $user -> role = $_POST['user_role'];
         $user -> suspended = isset($_POST['user_suspended']) && !empty($_POST['user_suspended'])

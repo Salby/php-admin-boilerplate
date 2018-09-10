@@ -246,7 +246,7 @@ class form_builder extends dblyze {
                 $guide = explode(',', $guide);
 
                 foreach ($foreign_data as &$row) {
-                    $row["" . $guide[0] . ""] = $row["" . $guide[0] . "name"] . " " . $row["" . $guide[1] . ""];
+                    $row["" . $guide[0] . ""] = $row["" . $guide[0] . ""] . " " . $row["" . $guide[1] . ""];
                     unset($row["" . $guide[1] . ""]);
                 }
             }
@@ -283,13 +283,20 @@ class form_builder extends dblyze {
             // Build select box options from foreign data.
             $options = "";
             foreach ($foreign_data as $row) {
-                $selected = array_key_exists($column['Field'], $this->source)
-                &&
-                array_values($row)[0] === $this->source[$column['Field']]
+
+                $edit = array_key_exists($table, $this->source);
+
+                $target = is_string($this->source[$table])
+                    ? (string)array_values($row)[1]
+                    : (int)array_values($row)[0];
+
+                $selected = $edit && $this -> source[$table] === $target
                     ? "selected"
                     : "";
-                $display = ucfirst($row['name']);
-                $options .= "<option value='$row[id]' $selected>$display</option>";
+
+                $display = ucfirst(array_values($row)[1]);
+                $options .= "<option value='". array_values($row)[0] ."' $selected>$display</option>";
+
             }
 
             $default = "None";
