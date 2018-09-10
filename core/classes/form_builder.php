@@ -342,8 +342,6 @@ class form_builder extends dblyze {
         $columns = $column['Columns'];
         $title = ucfirst(str_replace('_', ' ', $foreign_table));
 
-        var_dump($columns);
-
         $class_name = count($columns) === 1
             // One column - inline inputs.
             ? "form__group-items"
