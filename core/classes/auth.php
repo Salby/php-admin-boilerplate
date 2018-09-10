@@ -57,8 +57,7 @@ class auth
         else {
             if (!$this->check_session()) {
                 if ($this->require_login) {
-                    echo $this->login_form();
-                    exit();
+                    $this->login_form();
                 }
             }
         }
@@ -93,13 +92,13 @@ class auth
             //If password doesn't match
             else {
                 //Send user back to login with error
-                echo $this->login_form(self::ERR_NOUSERFOUND);
+                $this->login_form(self::ERR_NOUSERFOUND);
             }
         }
         //If there isn't a User with this name
         else {
             //Send user back to login with error
-            echo $this->login_form(self::ERR_NOUSERFOUND);
+            $this->login_form(self::ERR_NOUSERFOUND);
         }
     }
 
@@ -160,7 +159,8 @@ class auth
         $str_error_msg = self::get_error($errCode);
         // Replaces the @ERRORMSG@ written in the login.php, with the error message or nothing
         $str_buffer = str_replace("@ERRORMSG@", $str_error_msg, $str_buffer);
-        return $str_buffer;
+        echo $str_buffer;
+        exit();
     }
 
     // - ERROR DESCRIPTIONS
