@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 7/30/18
- * Time: 1:15 PM
- */
 
 require_once('incl/init.php');
 
@@ -41,11 +35,13 @@ switch (strtoupper($mode)) {
         if (isset($_POST['id']) && !empty($_POST['id'])) {
             $pageTitle = "Products · Edit";
             $form_source = $product -> get_item($_POST['id']);
-            $labels['_form_title'] = "Edit product";
+            $labels['__form_title'] = "Edit product";
+            $labels['__submit_child'] = "Save changes";
         } else {
             $pageTitle = "Products · Create";
             $form_source = array();
-            $labels['_form_title'] = "New product";
+            $labels['__form_title'] = "New product";
+            $labels['__submit_child'] = "Create";
         }
         require_once('incl/header.php');
         $form = new form_builder();
