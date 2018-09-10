@@ -99,16 +99,22 @@ class form_builder extends dblyze {
                     }
                 } else {
                     // Handle many-to-many.
-                    if ($column['Key'] === 'MTM')
+                    if ($column['Key'] === 'MTM') {
                         $form .= $this -> many_to_many($column);
+                        continue;
+                    }
 
                     // Handle one-to-many.
-                    if ($column['Key'] === 'MUL')
+                    if ($column['Key'] === 'MUL') {
                         $form .= $this -> one_to_many($column, $icfg);
+                        continue;
+                    }
 
                     // Handle regular input.
-                    else
+                    else {
                         $form .= $this -> input($column, $icfg);
+                        continue;
+                    }
 
                 }
 
@@ -300,9 +306,11 @@ class form_builder extends dblyze {
 
                 $edit = array_key_exists($table, $this->source);
 
-                $target = is_string($this->source[$table])
-                    ? (string)array_values($row)[1]
-                    : (int)array_values($row)[0];
+                if ($edit) {
+                    $target = is_string($this->source[$table])
+                        ? (string)array_values($row)[1]
+                        : (int)array_values($row)[0];
+                }
 
                 $selected = $edit && $this -> source[$table] === $target
                     ? "selected"
@@ -334,6 +342,8 @@ class form_builder extends dblyze {
         $columns = $column['Columns'];
         $title = ucfirst(str_replace('_', ' ', $foreign_table));
 
+        var_dump($columns);
+
         $class_name = count($columns) === 1
             // One column - inline inputs.
             ? "form__group-items"
@@ -350,15 +360,21 @@ class form_builder extends dblyze {
             if ($column['Key'] !== 'PRI') {
 
                 // Define input config.
-                $icfg = $this -> input_config($column);
-                $icfg['name'] = $icfg['id']."[]";
+                $icfg = $this->input_config($column);
+                $icfg['name'] = $icfg['id'] . "[]";
                 $icfg['contained'] = false;
 
                 // Handle one-to-many.
-                $many_to_many .= $this -> one_to_many($column, $icfg, $foreign_table);
+                if ($column['Key'] == 'MUL') {
+                    $many_to_many .= $this->one_to_many($column, $icfg, $foreign_table);
+                    continue;
+                }
 
                 // Handle regular inputs.
-                $many_to_many .= $this -> input($column, $icfg);
+                else {
+                    $many_to_many .= $this->input($column, $icfg);
+                    continue;
+                }
 
             }
         }

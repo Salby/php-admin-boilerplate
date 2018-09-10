@@ -33,7 +33,7 @@ switch (strtoupper($mode)) {
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
         $labels = array(
             'is_private' => 'Private',
-            'category_category_id' => 'Category'
+            'category_id' => 'Category'
         );
         $exceptions = array(
             'deleted' => ''
@@ -51,14 +51,8 @@ switch (strtoupper($mode)) {
         $form = new form_builder();
         ?>
     <main><div class="card">
-            <?php
-            /*$form -> build([
-                'table_name' => 'product',
-                'action' => 'products.php?mode=save',
-                'method' => 'post',
-                'source' => $form_source
-            ], $labels, $exceptions);*/
-            echo $form -> build([
+            <?=
+            $form -> build([
                 'table' => 'product',
                 'action' => 'products.php?mode=save',
                 'method' => 'post',
