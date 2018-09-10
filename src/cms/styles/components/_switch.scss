@@ -62,7 +62,6 @@
 
     color: rgba(black, .87);
 
-    @extend .type;
-    font-size: 16px;
+    @include type('Roboto', regular, 16);
   }
 }

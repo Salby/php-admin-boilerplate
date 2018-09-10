@@ -49,7 +49,6 @@ class Table {
         new Menu('*[class^=menu]')
         callback()
       })
-      .catch(error => this.handleError(error))
 
       const ID = this.table.id
       this.next = document.getElementById(`${ID}-next`)
@@ -206,13 +205,6 @@ class Table {
     })
   }
 
-  handleError(message) {
-    new Toast({
-      message: message,
-      position: 'right'
-    })
-  }
-
 }
 
 let TableActions = {
@@ -225,7 +217,7 @@ let TableActions = {
       success: res => new Toast({
         message: res,
         position: 'right',
-        timeout: 100000
+        timeout: 3000000
       })
     })
     let ctable = new Table(tableId)

@@ -114,5 +114,6 @@ class xhr {
         request.send()
       }
     })
+
   }
 }

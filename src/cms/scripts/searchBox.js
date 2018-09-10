@@ -62,6 +62,7 @@ class SearchBox {
 
     // JSON.
     elem.JSON = elem.box.getAttribute('data-list')
+    console.table(JSON.parse(elem.JSON))
     // Remove data-list attribute.
     elem.box.removeAttribute('data-list')
     elem.boxClosedEvent = new Event('box-closed')
