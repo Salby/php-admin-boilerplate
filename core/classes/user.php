@@ -132,7 +132,6 @@ class User extends file_upload {
                 $this -> role,
                 $salt_string
             );
-            var_dump($avatar);
             $sql = "INSERT INTO 
                       user 
                         (name, password, email, address, city, avatar, role, salt) 
