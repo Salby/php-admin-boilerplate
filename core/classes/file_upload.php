@@ -18,51 +18,48 @@ class file_upload {
     );
 
     public function image($config) {
-        // Define defaults for configuration.
         $defaults = array(
             'type' => 'jpeg',
             'quality' => 80,
             'max_dimension' => 1920,
             'placeholder' => 'https://placem.at/places?txt=Image+not+found'
         );
-        // Merge defaults with user-defined config.
         $config = array_merge($defaults, $config);
 
-        if (!empty($_FILES)) {
+        if (array_values($_FILES)[0]['tmp_name'] === '') {
+            return false;
+        } else {
             foreach ($_FILES as $image) {
-                $tmp = $image['tmp_name']; // Get tmp name.
-                $info = getimagesize($tmp); // Get file info.
-                $mime = $info['mime']; // Get file mime.
-                if (in_array($mime, $this->allowed_mimes['image'])) { // Check if mime is allowed.
-                    $file = $this->file_exists($config['destination'] . $config['name'] . '.' . $config['type']); // Check if file already exists.
-                    save_image($tmp, $file.'.'.$config['type'], $config['type'], $config['quality'], $config['max_dimension']); // Save image.
-                    return $file . '.' . $config['type']; // Return image url.
+                $tmp = $image['tmp_name'];
+                $info = getimagesize($tmp);
+                $mime = $info['mime'];
+                if (in_array($mime, $this->allowed_mimes['image'])) {
+                    $extension = explode('.', $image['name']);
+                    $extension = $extension[count($extension) - 1];
+                    $file = $this->file_exists($config['destination'], $config['name'] . '.' . $extension);
+                    if (move_uploaded_file($tmp, $file))
+                        return $file;
                 } else {
                     return $config['placeholder'];
                 }
             }
-        } else {
-            return $config['placeholder'];
         }
     }
 
-    public function file_exists($name) {
-        $file = $name;
-        $exists = file_exists($file);
-
+    public function file_exists($destination, $name) {
+        $exists = file_exists($destination.$name);
         $i = 0;
         if ($exists) {
             while ($exists) {
                 $i++;
                 $exploded = explode('.', $name);
                 $new_file = $exploded[0] . '_' . $i . '.' . $exploded[1];
-                if (!file_exists($new_file)) {
-                    return explode('.', $new_file)[0];
-                    break;
+                if (!file_exists($destination . $new_file)) {
+                    return $new_file;
                 }
             }
         } else {
-            return explode('.', $file)[0];
+            return $destination.$name;
         }
     }
 }

@@ -88,6 +88,8 @@ switch (strtoupper($mode)) {
             : 0;
 
         $user -> save(DOCROOT.'/cms/upload/');
+        var_dump($_FILES);
+        var_dump(DOCROOT);
         header('Location: users.php');
 
         break;
