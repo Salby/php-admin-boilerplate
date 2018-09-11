@@ -70,7 +70,7 @@ class html_tool {
                     <div class='table-footer'>
                         <button class='table-footer__next' id='$config[element_id]-next'><i class='material-icons'>chevron_right</i></button>
                         <button class='table-footer__next' id='$config[element_id]-prev'><i class='material-icons'>chevron_left</i></button>
-                        <p class='table-footer__status' id='users-status'></p>
+                        <p class='table-footer__status' id='$config[element_id]-status'></p>
                     </div>
                 </div>
             </main>
