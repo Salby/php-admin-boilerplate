@@ -71,7 +71,7 @@ class auth
         $params = array($this->auth_username);
         $sql = "SELECT id, password, salt 
                 FROM user 
-                WHERE name = ? 
+                WHERE username = ? 
                 AND deleted = 0";
         //If there is a User with this name
         if ($row = $this->db->fetch_array($sql, $params)) {

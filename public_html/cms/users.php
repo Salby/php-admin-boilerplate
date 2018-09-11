@@ -75,6 +75,7 @@ switch (strtoupper($mode)) {
             ? $_POST['user_id']
             : 0;
         $user -> name = $_POST['user_name'];
+        $user -> username = $_POST['user_username'];
         $user -> password = isset($_POST['user_password']) && !empty($_POST['user_password'])
             ? $_POST['user_password']
             : '';
@@ -138,7 +139,7 @@ switch (strtoupper($mode)) {
                     <tr>
                         <td class="select"><input type="checkbox" name="users" class="table__checkbox" value="<?=$user['id']?>"></td>
                         <td class="type--align-right"><?=$user['id']?></td>
-                        <td><?=$user['name']?></td>
+                        <td><?=$user['username']?></td>
                         <td><?=$user['email']?></td>
                         <td><?=$user['role']?></td>
                         <td class="type--align-right"><?=$user['suspended']?></td>

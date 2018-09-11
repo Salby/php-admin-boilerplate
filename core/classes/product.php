@@ -108,9 +108,9 @@ class Product extends file_upload {
             $original = $this -> get_item($this->id);
 
             // Update image if set.
-            $image_url = !empty($this->image)
-                ? parent::image($image_config)
-                : $original['image'];
+            $image_url = empty(array_values($_FILES)[0]['name'])
+                ? $original['image']
+                : parent::image($image_config);
 
             // Set parameters and SQL query.
             $params = array(

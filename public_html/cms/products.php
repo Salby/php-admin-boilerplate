@@ -67,15 +67,17 @@ switch (strtoupper($mode)) {
     case 'SAVE':
 
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-        $product -> id = isset($_POST['id']) && !empty($_POST['id'])
-            ? $_POST['id']
+        $product -> id = isset($_POST['product_id']) && !empty($_POST['product_id'])
+            ? $_POST['product_id']
             : 0;
         $product -> name = $_POST['product_name'];
         $product -> description = $_POST['product_description'];
         $product -> summary = $_POST['product_summary'];
         $product -> image = $_FILES['product_image']['tmp_name'];
         $product -> price = $_POST['product_price'];
-        $product -> is_private = $_POST['product_is_private'];
+        $product -> is_private = isset($_POST['product_is_private'])
+            ? $_POST['product_is_private']
+            : 0;
 
         $product -> category = $_POST['product_category_id'];
 

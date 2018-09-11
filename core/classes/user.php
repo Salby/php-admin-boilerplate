@@ -9,6 +9,7 @@
 class User extends file_upload {
 
     public $id;
+    public $username;
     public $name;
     public $password;
     public $email;
@@ -90,6 +91,7 @@ class User extends file_upload {
 
             // Set parameters.
             $params = array(
+                $this -> username,
                 $this -> name,
                 $this -> email,
                 $this -> address,
@@ -100,7 +102,8 @@ class User extends file_upload {
                 $this -> id
             );
             $sql = "UPDATE user SET
-                      name = ?,
+                      username = ?,
+                      username = ?,
                       email = ?,
                       address = ?,
                       city = ?,
@@ -123,6 +126,7 @@ class User extends file_upload {
             $password_hashed = password_hash($this->password . $salt_string, PASSWORD_BCRYPT);
 
             $params = array(
+                $this -> username,
                 $this -> name,
                 $password_hashed,
                 $this -> email,
@@ -134,9 +138,9 @@ class User extends file_upload {
             );
             $sql = "INSERT INTO 
                       user 
-                        (name, password, email, address, city, avatar, role, salt) 
+                        (username, username, password, email, address, city, avatar, role, salt) 
                     VALUES 
-                      (?, ?, ?, ?, ?, ?, ?, ?)";
+                      (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $this -> db -> query($sql, $params);
         }
     }

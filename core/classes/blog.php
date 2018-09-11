@@ -46,7 +46,7 @@ class Blog extends file_upload {
             : '';
 
         $sql = "SELECT blog.*,
-                  user.name AS author,
+                  user.username AS author,
                   GROUP_CONCAT(tag.name SEPARATOR '-----') AS tag
                   FROM blog
                 JOIN user
@@ -83,7 +83,7 @@ class Blog extends file_upload {
             ? ' AND is_private = ?'
             : '';
         $sql = "SELECT blog.*,
-                  user.name,
+                  user.username,
                   GROUP_CONCAT(tag.name SEPARATOR '-----') AS tag
                   FROM blog
                 JOIN user
