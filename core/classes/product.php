@@ -212,6 +212,17 @@ class Product extends file_upload {
         // Execute query.
         $this -> db -> query($sql);
 
+        if ($permanent) {
+
+            $sql = "DELETE
+                      FROM cms_test.product_category
+                    WHERE
+                      product_id IN ($rows)";
+
+            $this -> db -> query($sql);
+
+        }
+
     }
 
 }

@@ -1,0 +1,11 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "rules": {
+    "semi": [2, "never"],
+    "camelcase": [2, { "properties": "always" }]
+  }
+}

@@ -5,26 +5,23 @@
   "main": "public_html/index.php",
   "author": "Sander Dalby Larsen",
   "license": "MIT",
+  "scripts": {
+    "dev": "gulp watch"
+  },
   "devDependencies": {
-    "@babel/register": "^7.0.0-beta.54",
-    "autoprefixer": "latest",
+    "autoprefixer": "^9.1.2",
     "babel-core": "^6.26.3",
     "babel-env": "^2.4.1",
     "babel-eslint": "^8.2.6",
     "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "cssnano": "latest",
-    "gulp": "latest",
-    "gulp-babel": "latest",
-    "gulp-concat": "latest",
+    "cssnano": "^4.0.5",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
     "gulp-eslint": "^5.0.0",
-    "gulp-postcss": "latest",
-    "gulp-sass": "latest",
-    "gulp-sourcemaps": "latest",
-    "gulp-uglify": "latest",
-    "gulp-util": "latest"
-  },
-  "dependencies": {
-    "npm": "^6.4.0"
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1"
   }
 }
