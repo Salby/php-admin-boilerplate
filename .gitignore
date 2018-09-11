@@ -7,3 +7,7 @@ node_modules
 # File uploads
 public_html/cms/upload/*
 public_html/upload/*
+
+# Composer packages (Take up space)
+vendor
+core/vendor
