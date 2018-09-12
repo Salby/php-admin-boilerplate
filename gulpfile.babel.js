@@ -36,14 +36,14 @@ gulp.task('js', () => {
     .pipe(gulp.dest(`${paths.dest}assets/`))
 });
 gulp.task('js-admin', () => {
-  return gulp.src(`${paths.src}admin/scripts/*.js`)
+  return gulp.src(`${paths.src}cms/scripts/*.js`)
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(babel({ presets: ['es2015'] }))
     .on('error', swallowError)
     .pipe(uglify())
     .pipe(concat('script.js'))
-    .pipe(gulp.dest(`${paths.dest}admin/assets/`))
+    .pipe(gulp.dest(`${paths.dest}cms/assets/`))
 });
 
 gulp.task('sass', () => {
@@ -54,11 +54,11 @@ gulp.task('sass', () => {
     .pipe(gulp.dest(`${paths.dest}assets/`))
 });
 gulp.task('sass-admin', () => {
-  return gulp.src(`${paths.src}admin/styles/master.scss`)
+  return gulp.src(`${paths.src}cms/styles/master.scss`)
     .pipe(sass({ outputStyle: 'compressed' }))
     .on('error', swallowError)
     .pipe(postcss(postcssPlugins))
-    .pipe(gulp.dest(`${paths.dest}admin/assets/`))
+    .pipe(gulp.dest(`${paths.dest}cms/assets/`))
 });
 
 gulp.task('watch', function() {
@@ -66,8 +66,8 @@ gulp.task('watch', function() {
   Gulp is watching for files...
   `);
   // ... Admin ...
-  gulp.watch(`${paths.src}admin/styles/**/*.scss`, ['sass-admin']);
-  gulp.watch(`${paths.src}admin/scripts/*.js`, ['js-admin']);
+  gulp.watch(`${paths.src}cms/styles/**/*.scss`, ['sass-admin']);
+  gulp.watch(`${paths.src}cms/scripts/*.js`, ['js-admin']);
   // ... Site ...
   gulp.watch(`${paths.src}styles/**/*.scss`, ['sass']);
   gulp.watch(`${paths.src}scripts/*.js`, ['js']);

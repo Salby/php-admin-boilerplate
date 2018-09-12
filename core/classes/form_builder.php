@@ -362,15 +362,20 @@ class form_builder extends dblyze {
                 $icfg['name'] = $icfg['id'] . "[]";
                 $icfg['contained'] = false;
 
+
                 // Handle one-to-many.
                 if ($column['Key'] == 'MUL') {
+                    if (count($columns) > 1) $many_to_many .= "<div class='items-group__input'>";
                     $many_to_many .= $this->one_to_many($column, $icfg, $foreign_table);
+                    if (count($columns) > 1) $many_to_many .= "</div>";
                     continue;
                 }
 
                 // Handle regular inputs.
                 else {
+                    if (count($columns) > 1) $many_to_many .= "<div class='items-group__input'>";
                     $many_to_many .= $this->input($column, $icfg);
+                    if (count($columns) > 1) $many_to_many .= "</div>";
                     continue;
                 }
 
