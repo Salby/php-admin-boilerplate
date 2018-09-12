@@ -30,6 +30,28 @@
   }
 }
 
+@function contains($list, $var) {
+  @return (null == index($list, $var));
+}
+// Grid mixin.
+@mixin grid($rows, $columns, $config: ()) {
+
+  display: grid;
+  grid-template-rows: $rows;
+  grid-template-columns: $columns;
+
+  @if contains($config, gap) {
+    grid-gap: map-get($config, gap);
+  }
+  @if contains($config, row-gap) {
+    grid-row-gap: map-get($config, row-gap);
+  }
+  @if contains($config, column-gap) {
+    grid-column-gap: map-get($config, column-gap);
+  }
+
+}
+
 // Curve function
 @function curve($name: standard, $curve: null) {
   @if $name == standard {

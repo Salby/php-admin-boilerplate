@@ -247,4 +247,4 @@ String.prototype.deStyle = function() {
 const style = string => string.replace('_', ' ').capitalize()
 const deStyle = string => string.replace(' ', '_').toLowerCase()
 
-new SearchBox('.form__group--searchbox')
+new SearchBox('.form__group--searchbox, .searchbox')
