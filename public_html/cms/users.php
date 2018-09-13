@@ -134,13 +134,17 @@ switch (strtoupper($mode)) {
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($user_list as $user) : ?>
+                <?php foreach ($user_list as $user) :
+                    $suspended = $user['suspended']
+                        ? "True"
+                        : "False";
+                ?>
                     <tr>
                         <td class="select"><input type="checkbox" name="users" class="table__checkbox" value="<?=$user['id']?>"></td>
                         <td><?=$user['username']?></td>
                         <td><?=$user['email']?></td>
                         <td><?=$user['role']?></td>
-                        <td class="type--align-right"><?=$user['suspended']?></td>
+                        <td class="type--align-right"><?=$suspended?></td>
                         <td align="right" class="options">
                             <div class="menu--right">
                                 <button><i class="material-icons">more_vert</i></button>

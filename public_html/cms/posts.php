@@ -40,6 +40,7 @@ switch (strtoupper($mode)) {
             'tag_id' => 'Tag'
         );
         $exceptions = array(
+            'created' => '',
             'deleted' => ''
         );
         $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);

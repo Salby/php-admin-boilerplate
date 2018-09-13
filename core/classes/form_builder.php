@@ -272,7 +272,7 @@ class form_builder extends dblyze {
             'contained' => $input_config['contained']
         ]);
 
-        if (count($foreign_data) > 6) {
+        if (count($foreign_data) > 0) {
             foreach ($functions as $fun) {
                 if (starts_with('user_add', trim($fun))) {
                     $user_add = $this -> trim_function($fun);
