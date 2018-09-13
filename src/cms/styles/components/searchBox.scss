@@ -1,9 +1,22 @@
-.form__group--searchbox {
+.form__group--searchbox, .searchbox {
   @extend .form__group;
 
   .input {
     cursor: text;
     text-align: left;
+  }
+}
+
+.searchbox {
+  padding: 0;
+  margin: 0 8px 8px 0;
+
+  label {
+    left: 12px !important;
+  }
+
+  .search-box {
+    left: 12px !important;
   }
 }
 
