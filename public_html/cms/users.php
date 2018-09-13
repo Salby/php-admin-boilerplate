@@ -74,8 +74,8 @@ switch (strtoupper($mode)) {
         $user -> id = isset($_POST['user_id']) && !empty($_POST['user_id'])
             ? $_POST['user_id']
             : 0;
-        $user -> name = $_POST['user_name'];
         $user -> username = $_POST['user_username'];
+        $user -> name = $_POST['user_name'];
         $user -> password = isset($_POST['user_password']) && !empty($_POST['user_password'])
             ? $_POST['user_password']
             : '';
@@ -126,7 +126,6 @@ switch (strtoupper($mode)) {
                 <thead>
                     <tr>
                         <th class='select'><input type='checkbox' name='users' class='table__checkbox master'></th>
-                        <th class="type--align-right">Id</th>
                         <th>Username</th>
                         <th>Email</th>
                         <th>Role</th>
@@ -138,7 +137,6 @@ switch (strtoupper($mode)) {
                 <?php foreach ($user_list as $user) : ?>
                     <tr>
                         <td class="select"><input type="checkbox" name="users" class="table__checkbox" value="<?=$user['id']?>"></td>
-                        <td class="type--align-right"><?=$user['id']?></td>
                         <td><?=$user['username']?></td>
                         <td><?=$user['email']?></td>
                         <td><?=$user['role']?></td>

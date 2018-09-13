@@ -103,7 +103,7 @@ class User extends file_upload {
             );
             $sql = "UPDATE user SET
                       username = ?,
-                      username = ?,
+                      name = ?,
                       email = ?,
                       address = ?,
                       city = ?,
@@ -138,7 +138,7 @@ class User extends file_upload {
             );
             $sql = "INSERT INTO 
                       user 
-                        (username, username, password, email, address, city, avatar, role, salt) 
+                        (username, name, password, email, address, city, avatar, role, salt) 
                     VALUES 
                       (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $this -> db -> query($sql, $params);
