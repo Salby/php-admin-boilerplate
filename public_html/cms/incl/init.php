@@ -1,17 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sander
- * Date: 7/20/18
- * Time: 2:37 PM
- */
+
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
 // Define document root
 define("DOCROOT", filter_input(INPUT_SERVER, "DOCUMENT_ROOT", FILTER_SANITIZE_STRING));
+
 // Define core root
 define("COREPATH", substr(DOCROOT, 0, strrpos(DOCROOT, "/")) . "/core");
+
+// Define vendor root.
+define("VENDORPATH", substr(DOCROOT, 0, strrpos(DOCROOT, '/')) . '/vendor');
+
 // Class autoloader
 require_once COREPATH . '/classes/auto_loader.php';
 // Initialize database

@@ -1,4 +1,4 @@
 <?php
 spl_autoload_register(function ($class) {
-    include COREPATH . '/classes/' . strtolower($class). '.php';
+    include COREROOT . '/classes/' . strtolower($class). '.php';
 });

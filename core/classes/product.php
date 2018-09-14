@@ -159,17 +159,25 @@ class Product extends file_upload {
             // Insert.
             $this -> db -> query($sql, $params);
 
+
             if (!empty($this->category)) {
                 // Build parameters and SQL query for categories.
                 $product_id = $this -> db -> getinsertid();
                 $params = array();
                 $markers = array();
                 foreach ($this->category as $category) {
-                    if ($category != 0) {
-                        $params[] =  $product_id;
-                        $params[] = $category;
-                        $markers[] = "(?, ?)";
+
+                    // Create new category if $category isn't an id.
+                    if (!is_numeric($category)) {
+                        $parameters = [$category];
+                        $sql = "INSERT INTO category (name) VALUES (?)";
+                        $this -> db -> query($sql, $parameters);
+                        $category = $this -> db -> getinsertid();
                     }
+
+                    $params[] = $product_id;
+                    $params[] = $category;
+                    $markers[] = "(?, ?)";
                 }
                 $markers  = implode(', ', $markers);
                 $sql = "INSERT INTO
@@ -177,6 +185,7 @@ class Product extends file_upload {
                             (product_id, category_id) 
                         VALUES
                           $markers";
+                echo $sql;
 
                 // Insert.
                 $this -> db -> query($sql, $params);
