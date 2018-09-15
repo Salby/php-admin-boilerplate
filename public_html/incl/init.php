@@ -14,9 +14,18 @@ define("COREPATH", substr(DOCROOT, 0, strrpos(DOCROOT, "/")) . "/core");
 define("VENDORPATH", substr(DOCROOT, 0, strrpos(DOCROOT, '/')) . '/vendor');
 
 // Class autoloader
-require_once COREPATH . '/classes/auto_loader.php';
+require_once(COREPATH . '/classes/auto_loader.php');
+
+// Packages autoload.
+require_once(VENDORPATH . '/autoload.php');
+
 // Initialize database
 $db = new db_conf();
+
+// Initialize WIP CRUD package.
+$crud = new \salby\cruddery\cruddery($db);
+
+// Initialize auth (login not required).
 $auth = new auth(false);
 $auth -> authenticate();
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {

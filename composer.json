@@ -1,0 +1,10 @@
+{
+    "name": "sander/php-admin-boilerplate",
+    "description": "PHPx project template for school",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+        "salby/cruddery": "dev-heinzdb"
+    }
+}

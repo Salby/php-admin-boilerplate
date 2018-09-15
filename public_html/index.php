@@ -1,4 +1,8 @@
 <?php
 require_once('incl/init.php');
 
-phpinfo();
+$users = $crud -> read([
+    'table' => 'product',
+]);
+
+var_dump($users);

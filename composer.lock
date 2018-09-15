@@ -1,0 +1,89 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "7f4656414318874475d530bd146dcfcb",
+    "packages": [
+        {
+            "name": "salby/cruddery",
+            "version": "dev-heinzdb",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Salby/cruddery.git",
+                "reference": "43ebc0cf01b5ef3f1655c85b85983d59e93a349e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Salby/cruddery/zipball/43ebc0cf01b5ef3f1655c85b85983d59e93a349e",
+                "reference": "43ebc0cf01b5ef3f1655c85b85983d59e93a349e",
+                "shasum": ""
+            },
+            "require": {
+                "salby/dblyze": "dev-heinzdb"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "salby\\cruddery\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Salby",
+                    "email": "sander.salamander.larsen@gmail.com"
+                }
+            ],
+            "description": "A CRUD library for PHP and MySQL",
+            "time": "2018-09-14T19:54:07+00:00"
+        },
+        {
+            "name": "salby/dblyze",
+            "version": "dev-heinzdb",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Salby/dblyze.git",
+                "reference": "4d0336b72fc869e8f11b97670faa25eacfb2f34a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Salby/dblyze/zipball/4d0336b72fc869e8f11b97670faa25eacfb2f34a",
+                "reference": "4d0336b72fc869e8f11b97670faa25eacfb2f34a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "salby\\dblyze\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Salby",
+                    "email": "sander.salamander.larsen@gmail.com"
+                }
+            ],
+            "description": "A database analyzer library for PHP and MySQL",
+            "time": "2018-09-15T08:46:31+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "salby/cruddery": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
