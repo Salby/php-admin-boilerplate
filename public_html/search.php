@@ -1,8 +1,8 @@
 <?php
 
 require_once('incl/init.php');
-?>
 
+?>
 
 <div>
     <input type="text" name="q" placeholder="search">
